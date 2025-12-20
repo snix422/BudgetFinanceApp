@@ -13,7 +13,6 @@ namespace BudgetWebApi.Domain.Models
         public Category Category { get; set; }
         public int BudgetId { get; set; }
         public Budget Budget { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+       
     }
 }

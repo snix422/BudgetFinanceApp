@@ -10,8 +10,7 @@ namespace BudgetWebApi.Domain.Models
         public decimal TotalAmount { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string UserId { get; set; }
         public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
         public ICollection<Income> Incomes { get; set; } = new List<Income>();
     }

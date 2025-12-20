@@ -1,4 +1,5 @@
-﻿using BudgetWebApi.Domain.Interfaces.MainInterface;
+﻿using BudgetApp.Domain.Interfaces;
+using BudgetWebApi.Domain.Interfaces.MainInterface;
 using BudgetWebApi.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Infrastructure.Repository
 {
-    public class IncomeRepository : IMainInterface<Income>
+    public class IncomeRepository : IIncomeInterface
     {
         private readonly Context _context;
 
@@ -16,50 +17,70 @@ namespace BudgetApp.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task AddAsync(Income item)
+        public async Task AddAsync(Income item, CancellationToken cancellationToken = default)
         {
             _context.Incomes.Add(item);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<int> Delete(int id, CancellationToken cancellationToken = default)
         {
             return await _context
                 .Incomes
                 .Where(i => i.Id == id)
-                .ExecuteDeleteAsync();
+                .ExecuteDeleteAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Income>> GetAllAsync()
+        public async Task<IEnumerable<Income>> GetAllAsync(string userId, int budgetId, CancellationToken cancellationToken)
         {
-            var incomes = await _context
+            var query = _context
                 .Incomes
-                .Include(i => i.Category)
-                .Include(i => i.Budget)
-                .Include(i => i.User)
-                .AsNoTracking()
-                .ToListAsync();
+                .Include(e => e.Category)
+                .Include(e => e.Budget)
+                .AsNoTracking();
 
-            return incomes;
+
+            query = query.Where(e => e.BudgetId == budgetId);
+
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                query = query.Where(e => e.Budget.UserId == userId);
+            }
+
+            return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<Income?> GetByIdAsync(int id)
+        
+
+        public async Task<Income?> GetByIdAsync(int id, string userId, int budgetId, CancellationToken cancellationToken)
         {
-            var income = await _context
+            var query = _context
                 .Incomes
-                .Include(i => i.Category)
-                .Include(i => i.Budget)
-                .Include(i => i.User)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .Include(e => e.Category)
+                .Include(e => e.Budget)
+                .AsNoTracking();
 
-            return income;
+
+
+            query = query.Where(b => b.Id == id);
+
+            query = query.Where(b => b.BudgetId == budgetId);
+
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                query = query.Where(b => b.Budget.UserId == userId);
+            }
+
+            return await query.FirstOrDefaultAsync(cancellationToken);
+
         }
 
-        public async Task Update(Income item)
+        public async Task Update(Income item, CancellationToken cancellationToken = default)
         {
             _context.Incomes.Update(item);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 

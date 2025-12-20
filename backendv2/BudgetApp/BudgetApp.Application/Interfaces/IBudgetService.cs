@@ -11,6 +11,7 @@ namespace BudgetApp.Application.Interfaces
     public interface IBudgetService
     {
         Task<IEnumerable<Budget>> GetAllAsync();
+        Task<IEnumerable<Budget>> GetMyBudgetByUserIdAsync();
         Task<Budget> GetByIdAsync(int id);
         Task<int> CreateAsync(CreateBudgetDTO item);
         Task UpdateAsync(int id, UpdateBudgetDTO item);

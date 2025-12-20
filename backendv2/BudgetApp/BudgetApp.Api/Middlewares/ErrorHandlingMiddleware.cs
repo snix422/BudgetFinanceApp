@@ -1,4 +1,5 @@
 ﻿using BudgetApp.Domain.Expectations;
+using FluentValidation;
 using System.Net;
 using System.Text.Json;
 
@@ -35,6 +36,15 @@ namespace BudgetApp.Api.Middlewares
             var result = string.Empty;
             switch (exception)
             {
+                case ValidationException validationException:
+                    code = StatusCodes.Status400BadRequest;
+                    // Zwracamy listę błędów, a nie tylko jeden komunikat
+                    result = JsonSerializer.Serialize(new
+                    {
+                        error = "Validation error",
+                        details = validationException.Errors.Select(e => e.ErrorMessage)
+                    });
+                    break;
                 case NotFoundException notFoundException:
                     code = (int)HttpStatusCode.NotFound; // 404
                     result = JsonSerializer.Serialize(new { error = notFoundException.Message });

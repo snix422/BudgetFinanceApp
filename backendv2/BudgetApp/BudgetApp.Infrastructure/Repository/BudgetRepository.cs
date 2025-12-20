@@ -1,4 +1,5 @@
-﻿using BudgetWebApi.Domain.Interfaces.MainInterface;
+﻿using BudgetApp.Domain.Interfaces;
+using BudgetWebApi.Domain.Interfaces.MainInterface;
 using BudgetWebApi.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Infrastructure.Repository
 {
-    public class BudgetRepository : IMainInterface<Budget>
+    public class BudgetRepository : IBudgetInterface
     {
         private readonly Context _context;
 
@@ -18,54 +19,78 @@ namespace BudgetApp.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task AddAsync(Budget item)
+        public async Task AddAsync(Budget item, CancellationToken cancellationToken = default)
         {
             _context.Budgets.Add(item);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<int> Delete(int id, CancellationToken cancellationToken = default)
         {
             return await _context.Budgets
                 .Where(i => i.Id == id)
-                .ExecuteDeleteAsync();
+                .ExecuteDeleteAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Budget>> GetAllAsync()
+        public async Task<IEnumerable<Budget>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var budgets = await _context
                 .Budgets
-                .Include(b => b.User)
                 .Include(b => b.Expenses)
                     .ThenInclude(e => e.Category)
                 .Include(b => b.Incomes)
                     .ThenInclude(i => i.Category)
                 .AsNoTracking()
                 .AsSplitQuery()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             
             return budgets;
         }
 
-        public async Task<Budget?> GetByIdAsync(int id)
+        public async Task<IEnumerable<Budget>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {
-            var budget = await _context
+            var budgets = await _context
                 .Budgets
-                .Include(b => b.User)
+                .Where(b => b.UserId == userId)
                 .Include(b => b.Expenses)
                     .ThenInclude(e => e.Category)
                 .Include(b => b.Incomes)
                     .ThenInclude(i => i.Category)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(i => i.Id == id);
-            return budget;
+                .AsSplitQuery()
+                .ToListAsync(cancellationToken);
+
+            return budgets;
+        }
+
+        public async Task<Budget?> GetByIdAsync(int id, string? userId = null, CancellationToken cancellationToken = default)
+        {
+            var query = _context.Budgets
+                .Include(b => b.Incomes)
+                    .ThenInclude(i => i.Category)
+                .Include(b => b.Expenses)
+                    .ThenInclude(e => e.Category)
+                .AsNoTracking()
+                .AsSplitQuery();
+
+
+           
+            query = query.Where(b => b.Id == id);
+
+           
+            if (!string.IsNullOrEmpty(userId))
+            {
+                query = query.Where(b => b.UserId == userId);
+            }
+
+            return await query.FirstOrDefaultAsync(cancellationToken);
 
         }
 
-        public Task Update(Budget item)
+        public Task Update(Budget item, CancellationToken cancellationToken = default)
         {
             _context.Budgets.Update(item);
-            return _context.SaveChangesAsync();
+            return _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

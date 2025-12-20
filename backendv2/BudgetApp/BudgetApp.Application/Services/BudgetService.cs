@@ -15,6 +15,13 @@ namespace BudgetApp.Application.Services
     public class BudgetService : IBudgetService
     {
         private readonly IMainInterface<Budget> _budgetRepository;
+        private readonly ICurrentUserService _currentUserService;
+
+        public BudgetService(IMainInterface<Budget> budgetRepository, ICurrentUserService currentUserService)
+        {
+            _budgetRepository = budgetRepository;
+            _currentUserService = currentUserService;
+        }
 
         public async Task<int> CreateAsync(CreateBudgetDTO item)
         {
@@ -48,16 +55,25 @@ namespace BudgetApp.Application.Services
             return budgets;
         }
 
+        public async Task<IEnumerable<Budget>> GetMyBudgetByUserIdAsync()
+        {
+            var userId =  _currentUserService.UserId;
+            var budgets = await _budgetRepository.GetAllAsync();
+            return budgets;
+        }
+
         public async Task<Budget> GetByIdAsync(int id)
         {
-            var budget = await _budgetRepository.GetByIdAsync(id);
+            var userId = _currentUserService.UserId;
+            var budget = await _budgetRepository.GetByIdAsync(id, userId);
 
             return budget;
         }
 
         public async Task UpdateAsync(int id, UpdateBudgetDTO item)
         {
-            var existingBudget = _budgetRepository.GetByIdAsync(id);
+            var userId = _currentUserService.UserId;
+            var existingBudget = _budgetRepository.GetByIdAsync(id,userId);
 
             if(existingBudget == null)
             {

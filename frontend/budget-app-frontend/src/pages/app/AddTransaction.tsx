@@ -1,7 +1,5 @@
-import React from 'react'
+const AddTransaction = () => {
+  return <main>AddTransaction</main>;
+};
 
-export const AddTransaction = () => {
-  return (
-    <main>AddTransaction</main>
-  )
-}
+export default AddTransaction;

@@ -5,7 +5,7 @@ export const signUpSchema = z
     email: z
       .string()
       .min(1, 'Email jest wymagany')
-      .min(6, 'Hasło musi mieć co najmniej 6 znaków')
+      .min(6, 'Email musi mieć co najmniej 6 znaków')
       .email('Niepoprawny format adresu email'),
     password: z
       .string()
@@ -14,8 +14,12 @@ export const signUpSchema = z
     confirmPassword: z
       .string()
       .min(1, 'Pole potwierdź hasło jest wymagane')
-      .min(6, 'Hasło musi mieć co najmniej 6 znaków'),
-    name: z.string().min(1, 'Imię jest wymagane').min(3, 'Imię musi mieć co najmniej 3 znaków'),
+      .min(6, 'Pole potwierdź hasło musi mieć co najmniej 6 znaków'),
+    firstName: z
+      .string()
+      .min(1, 'Imię jest wymagane')
+      .min(3, 'Imię musi mieć co najmniej 3 znaków'),
+    lastName: z.string().min(1, 'Imię jest wymagane').min(3, 'Imię musi mieć co najmniej 3 znaków'),
     phone: z
       .string()
       .length(9, 'Numer telefonu musi mieć dokładnie 9 cyfr')

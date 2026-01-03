@@ -4,6 +4,9 @@ import { lazy } from 'react';
 // Layouts
 import MainLayout from '../layouts/MainLayout';
 import SuspenseLayout from '../components/SuspenseLayout';
+import { ErrorPage } from '../pages/ErrorPage';
+import Register from '../pages/public/Register';
+import Dashboard from '../pages/app/Dashboard';
 //import AppLayout from '../layouts/AppLayout';
 
 // Guards (Strażnicy)
@@ -18,33 +21,46 @@ const Login = lazy(() => import('../pages/public/Login'));
 
 // Prosty loader do wyświetlania kółka ładowania przy Lazy Loadingu
 
-export const router = createBrowserRouter([
-  // 1. Ścieżki Publiczne (Landing Page, Login)
+export const router = createBrowserRouter(
+  [
+    // 1. Ścieżki Publiczne (Landing Page, Login)
+    {
+      path: '/',
+      element: <MainLayout />,
+      errorElement: <ErrorPage />, // Error Boundary
+      children: [
+        {
+          index: true,
+          element: (
+            <SuspenseLayout>
+              <Home />
+            </SuspenseLayout>
+          ),
+        },
+        {
+          path: 'login',
+          element: (
+            <SuspenseLayout>
+              <Login />
+            </SuspenseLayout>
+          ),
+        },
+        { path: 'register', element: <Register /> },
+        { path: 'dashboard', element: <Dashboard /> },
+      ],
+    },
+  ],
   {
-    path: '/',
-    element: <MainLayout />,
-    errorElement: <div>Ups! Błąd 404 lub inny crash.</div>, // Error Boundary
-    children: [
-      {
-        index: true,
-        element: (
-          <SuspenseLayout>
-            <Home />
-          </SuspenseLayout>
-        ),
-      },
-      {
-        path: 'login',
-        element: (
-          <SuspenseLayout>
-            <Login />
-          </SuspenseLayout>
-        ),
-      },
-      { path: 'register', element: <div>Rejestracja</div> },
-    ],
+    future: {
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+    },
   },
-]);
+);
 // 2. Aplikacja Użytkownika (wymaga logowania)
 /*{
     path: '/app',

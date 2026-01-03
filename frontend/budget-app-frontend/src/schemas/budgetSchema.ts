@@ -6,10 +6,13 @@ export const BudgetSchema = z.object({
     invalid_type_error: 'Pole musi być liczbą',
   }),
   title: z.string().trim().min(1, 'Tytuł jest wymagany'),
-  amount: z.coerce
+  totalAmount: z.coerce
     .number({ invalid_type_error: 'Wpisz liczbę' })
     .positive('Kwota musi być dodatnia'),
-  date: z.string().refine((val) => !isNaN(Date.parse(val)), {
+  startDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: 'Nieprawidłowy format daty',
+  }),
+  endDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'Nieprawidłowy format daty',
   }),
 });

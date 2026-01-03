@@ -2,6 +2,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { signInSchema, type SignInFormValues } from '../schemas/signInSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAuth from '../hooks/useAuth';
+import Input from './ui/Input';
+import Button from './ui/Button';
 
 const SignInForm = () => {
   const {
@@ -11,20 +13,35 @@ const SignInForm = () => {
   } = useForm<SignInFormValues>({ resolver: zodResolver(signInSchema) });
 
   const { login, loginIsLoading, loginError } = useAuth();
-
   const onSubmit: SubmitHandler<SignInFormValues> = async (data) => {
     console.log(data);
-    await login(data);
+    login(data);
   };
 
+  console.log(loginError);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('email')} type='text' placeholder='E-mail' />
-      <input {...register('password')} type='text' placeholder='Password' />
-      <button type='submit'>{loginIsLoading ? 'Logowanie...' : 'Zaloguj się'}</button>
-      {errors.email && <span>{errors.email.message}</span>}
-      {errors.password && <span>{errors.password.message}</span>}
-      {loginError && <span>{loginError.message}</span>}
+    <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+      <Input
+        label='Adres e-mail'
+        type='email'
+        placeholder='jan@kowalski.pl'
+        error={errors.email?.message}
+        {...register('email')}
+      />
+      <Input
+        label='Hasło'
+        type='password'
+        placeholder='Write password...'
+        error={errors.password?.message}
+        {...register('password')}
+      />
+      <Button type='submit' className='w-full mt-2' isLoading={loginIsLoading}>
+        {loginIsLoading ? 'Logowanie...' : 'Zaloguj się'}
+      </Button>
+      {loginError?.response?.data.message && (
+        <p className='text-red-500'>{loginError.response.data.message}</p>
+      )}
     </form>
   );
 };

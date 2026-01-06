@@ -25,7 +25,7 @@ const BudgetDetails = () => {
   const [isOpenIncomeModal, setIsOpenIncomeModal] = useState(false);
   const [isOpenExpenseModal, setIsOpenExpenseModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TransactionItem | null>(null);
-  console.log(budget);
+  console.log(budget, 'budget');
   console.log(isLoading);
   console.log(error);
 
@@ -34,22 +34,23 @@ const BudgetDetails = () => {
     ...(expenses || []).map((e: Expense) => ({ ...e, type: 'expense' as const })),
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   console.log(allTransactions);
+
   return (
     <main className='w-full h-full flex flex-col items-center gap-4 py-10 bg-white '>
       <h1 className='text-3xl font-bold underline'>Nazwa budżetu: {budget?.title}</h1>
       <div className='w-4/5 flex flex-col items-center gap-5 min-h-auto p-4'>
         <div className='w-full flex justify-center gap-6'>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm'>
+          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-green-50'>
             <h2 className='text-2xl text-green-500'>Wpływy</h2>
-            <h3 className='text-base font-bold text-green-500'>1000 zł</h3>
+            <h3 className='text-base font-bold text-green-500'>{budget?.totalEarned} zł</h3>
           </div>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm'>
+          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-red-50'>
             <h2 className='text-2xl text-red-500'>Wydatki</h2>
-            <h3 className='text-base font-bold text-red-500'>1000 zł</h3>
+            <h3 className='text-base font-bold text-red-500'>{budget?.totalSpent} zł</h3>
           </div>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm'>
+          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-blue-50'>
             <h2 className='text-2xl text-blue-500'>Oszczędności</h2>
-            <h3 className='text-base font-bold text-blue-500'>1000 zł</h3>
+            <h3 className='text-base font-bold text-blue-500'>{budget?.remainingAmount} zł</h3>
           </div>
         </div>
         {incomes && expenses && (
@@ -121,20 +122,20 @@ const BudgetDetails = () => {
         />
       )}
 
-      <div className='w-4/5 flex flex-col items-center gap-5'>
-        <h2>Kącik inwestycyjny (50/30/20)</h2>
-        <div className='w-full flex justify-center'>
-          <div className='w-1/4 rounded p-4 shadow'>
-            <h2 className='text-2xl'>50 - Rachunki </h2>
-            <h3 className='text-base font-bold'>1000 zł</h3>
+      <div className='w-4/5 flex flex-col items-center gap-5 min-h-auto p-4 mt-5'>
+        <h2 className='text-2xl'>Kącik inwestycyjny (50/30/20)</h2>
+        <div className='w-full flex justify-center gap-6'>
+          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-red-50'>
+            <h2 className='text-2xl text-red-600'>50 - Rachunki </h2>
+            <h3 className='text-base font-bold text-red-600'>1000 zł</h3>
           </div>
-          <div className='w-1/4 rounded p-4 shadow'>
-            <h2 className='text-2xl'>30 - Przyjemności</h2>
-            <h3 className='text-base font-bold'>1000 zł</h3>
+          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-yellow-50'>
+            <h2 className='text-2xl text-yellow-600'>30 - Przyjemności</h2>
+            <h3 className='text-base font-bold text-yellow-600'>1000 zł</h3>
           </div>
-          <div className='w-1/4 rounded p-4 shadow'>
-            <h2 className='text-2xl'>20 Oszczędności</h2>
-            <h3 className='text-base font-bold'>1000 zł</h3>
+          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-blue-50'>
+            <h2 className='text-2xl text-blue-600'>20 Oszczędności</h2>
+            <h3 className='text-base font-bold text-blue-600'>1000 zł</h3>
           </div>
         </div>
         <div className='w-full flex justify-between'>

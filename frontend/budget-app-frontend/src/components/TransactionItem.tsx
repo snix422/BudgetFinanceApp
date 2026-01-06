@@ -64,11 +64,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
       {/* Ukrywamy na bardzo małych ekranach, pokazujemy od md w górę */}
       <div className='hidden md:flex flex-1 justify-center'>
         {isExpense && data.categoryName && (
-          <div>
-            <span className='bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-medium border border-gray-200'>
+          <div className='flex gap-4'>
+            <span className='bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-medium border border-gray-200'>
               Wydatek
             </span>
-            <span className='bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-medium border border-gray-200'>
+            <span className='bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-medium border border-gray-200'>
               {data.categoryName}
             </span>
           </div>
@@ -88,21 +88,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
         </span>
 
         <div className='flex items-center gap-1'>
-          <Button
-            variant='primary'
-            size='md'
-            onClick={handleClickUpdate}
-            className='h-8 w-8 text-gray-400 px-10'
-          >
+          <Button variant='edit' size='md' onClick={handleClickUpdate} className='h-8 w-8  px-10'>
             Edit
           </Button>
 
-          <Button
-            variant='primary'
-            size='md'
-            onClick={handleClickDelete}
-            className='h-8 w-8 text-gray-400 px-10'
-          >
+          <Button variant='delete' size='md' onClick={handleClickDelete} className='h-8 w-8 px-10'>
             Delete
           </Button>
         </div>

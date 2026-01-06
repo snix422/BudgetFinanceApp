@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const AppLayout = () => {
-  return (
-    <main>AppLayout</main>
-  )
-}
+  return <main className='font-sans'>AppLayout</main>;
+};
 
-export default AppLayout
+export default AppLayout;

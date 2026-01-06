@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const AdminLayout = () => {
-  return (
-    <main>AdminLayout</main>
-  )
-}
+  return <main className='font-sans'>AdminLayout</main>;
+};
 
-export default AdminLayout
+export default AdminLayout;

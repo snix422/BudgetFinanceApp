@@ -10,11 +10,12 @@ import useGetExpenses from '@/hooks/useGetExpenses';
 
 type EditExpenseFormProps = {
   values: UpdateIncomeDto;
-  budgetId: number;
+  id: number;
   onClose: () => void;
+  budgetId: number;
 };
 
-const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, budgetId, onClose }) => {
+const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, budgetId }) => {
   const {
     register,
     handleSubmit,
@@ -24,19 +25,18 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, budgetId, onC
     resolver: zodResolver(UpdateIncomeSchema),
     defaultValues: {
       title: values.title,
-      totalAmount: values.amount,
-      startDate: values.date,
-      endDate: values.date,
+      amount: values.amount,
+      date: values.date,
     },
   });
   console.log(errors);
 
-  const { updateExpense, updateExpenseLoading, updateExpenseError } = useGetExpenses();
+  const { updateExpense, updateExpenseLoading, updateExpenseError } = useGetExpenses(budgetId);
 
   const onSubmit: SubmitHandler<UpdateIncomeDto> = (data) => {
     console.log('test');
     console.log(data);
-    updateExpense({ id: budgetId, dto: data });
+    updateExpense({ id, dto: data, budgetId });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 py-4'>
@@ -52,24 +52,17 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, budgetId, onC
           type='number'
           id='amount'
           label='Amount'
-          error={errors.totalAmount?.message}
+          error={errors.amount?.message}
           placeholder='np. 1000'
-          {...register('totalAmount')}
+          {...register('amount')}
         />
         <Input
           type='date'
           id='date'
           label='data'
-          error={errors.startDate?.message}
+          error={errors.date?.message}
           placeholder='np.20.01.2026'
-          {...register('startDate')}
-        />
-        <Input
-          type='date'
-          id='date'
-          label='End Date'
-          error={errors.endDate?.message}
-          {...register('endDate')}
+          {...register('date')}
         />
       </div>
       <DialogFooter>

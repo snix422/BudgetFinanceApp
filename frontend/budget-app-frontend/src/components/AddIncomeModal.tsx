@@ -13,50 +13,49 @@ import { CreateBudgetSchema, type CreateBudgetDto } from '@/schemas/budgetSchema
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import useGetBudgets from '@/hooks/useGetBudgets';
 import { Loader2 } from 'lucide-react';
+import useGetIncomes from '@/hooks/useGetIncomes';
+import { CreateIncomeSchema, type CreateIncomeDto } from '@/schemas/incomeSchema';
 
 type BudgetModalProps = {
   isOpenModal: boolean;
   onClose: () => void;
   isEditMode: boolean;
+  budgetId: number;
 };
 
-const BudgetModal: React.FC<BudgetModalProps> = ({ isOpenModal, isEditMode, onClose }) => {
+const AddIncomeModal: React.FC<BudgetModalProps> = ({
+  isOpenModal,
+  isEditMode,
+  onClose,
+  budgetId,
+}) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateBudgetDto>({
-    resolver: zodResolver(CreateBudgetSchema),
-    defaultValues: { title: '', startDate: '', endDate: '' },
+  } = useForm<CreateIncomeDto>({
+    resolver: zodResolver(CreateIncomeSchema),
+    defaultValues: { title: '', amount: 0, date: '' },
   });
   console.log(errors);
-  const {
-    addBudget,
-    addBudgetLoading,
-    addBudgetError,
-    updateBudget,
-    updateBudgetLoading,
-    updateBudgetError,
-  } = useGetBudgets();
 
-  const onSubmit: SubmitHandler<CreateBudgetDto> = (data) => {
+  const { addIncome, addIncomeLoading, addIncomeError } = useGetIncomes(budgetId);
+
+  const onSubmit: SubmitHandler<CreateIncomeDto> = (dto) => {
     console.log('test');
-    addBudget(data);
-    console.log(data);
+    addIncome({ dto, budgetId });
+    onClose();
+    console.log(dto);
   };
 
   return (
     <Dialog open={isOpenModal} onOpenChange={onClose}>
       <DialogContent className='sm:max-w-[425px] bg-white'>
         <DialogHeader>
-          <DialogTitle className='text-black'>
-            {isEditMode ? 'Edytuj budżet' : 'Nowy budżet'}
-          </DialogTitle>
+          <DialogTitle className='text-black'>Nowy wpływ</DialogTitle>
           <DialogDescription className='text-black'>
-            {isEditMode
-              ? 'Zmień ustawienia wybranego budżetu.'
-              : 'Wypełnij dane, aby utworzyć nową kategorię wydatków.'}
+            Wypełnij dane, aby utworzyć nowy wpływ
           </DialogDescription>
         </DialogHeader>
 
@@ -70,19 +69,19 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isOpenModal, isEditMode, onCl
               {...register('title')}
             />
             <Input
-              type='date'
-              id='date'
-              label='data'
-              error={errors.startDate?.message}
+              type='number'
+              id='amount'
+              label='Amount'
+              error={errors.amount?.message}
               placeholder='np.20.01.2026'
-              {...register('startDate')}
+              {...register('amount')}
             />
             <Input
               type='date'
               id='date'
-              label='End Date'
-              error={errors.endDate?.message}
-              {...register('endDate')}
+              label='Data'
+              error={errors.date?.message}
+              {...register('date')}
             />
           </div>
 
@@ -90,11 +89,11 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isOpenModal, isEditMode, onCl
             <Button type='button' variant='primary' onClick={onClose}>
               Anuluj
             </Button>
-            <Button type='submit' disabled={addBudgetLoading}>
-              {addBudgetLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+            <Button type='submit' disabled={addIncomeLoading}>
+              {addIncomeLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
               {isEditMode ? 'Zapisz zmiany' : 'Utwórz'}
             </Button>
-            {addBudgetError && <p className='text-base text-red-500'>{addBudgetError.message}</p>}
+            {addIncomeError && <p className='text-base text-red-500'>{addIncomeError.message}</p>}
           </DialogFooter>
         </form>
       </DialogContent>
@@ -102,4 +101,4 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isOpenModal, isEditMode, onCl
   );
 };
 
-export default BudgetModal;
+export default AddIncomeModal;

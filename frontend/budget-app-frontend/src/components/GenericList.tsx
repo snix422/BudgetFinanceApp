@@ -13,7 +13,11 @@ const GenericList = <T,>({
 }: GenericListProps<T>) => {
   //if (!data?.length || !data) return <h2 className='text-white text-2xl'>{emptyMessage}</h2>;
 
-  return <div>{data && data.map((item, index) => renderItem(item, index))}</div>;
+  return (
+    <div className='w-full flex flex-col items-center'>
+      {data && data.map((item, index) => renderItem(item, index))}
+    </div>
+  );
 };
 
 export default GenericList;

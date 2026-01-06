@@ -19,34 +19,42 @@ import useGetIncomes from '@/hooks/useGetIncomes';
 import { EditIncomeForm } from './EditIncomeForm';
 import EditExpenseForm from './EditExpenseForm';
 
-type BudgetModalProps = {
+type EditTransactionModalProps = {
   isOpenModal: boolean;
   onClose: () => void;
-  values: UpdateExpenseDto;
+  selectedItem: any;
   budgetId: number;
-  type: 'income' | 'expense';
 };
 
-const EditTransactionModal: React.FC<BudgetModalProps> = ({
+const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
   isOpenModal,
   onClose,
-  values,
+  selectedItem,
   budgetId,
-  type,
 }) => {
   return (
     <Dialog open={isOpenModal} onOpenChange={onClose}>
       <DialogContent className='sm:max-w-[425px] bg-white'>
         <DialogHeader>
-          <DialogTitle className='text-black'>{'Edytuj budżet'}</DialogTitle>
+          <DialogTitle className='text-black'>Edytuj budżet</DialogTitle>
           <DialogDescription className='text-black'>
             Zmień ustawienia wybranego budżetu.
           </DialogDescription>
         </DialogHeader>
-        {type == 'income' ? (
-          <EditIncomeForm values={values} budgetId={budgetId} onClose={onClose} />
+        {selectedItem.type == 'income' ? (
+          <EditIncomeForm
+            values={selectedItem}
+            id={selectedItem.id}
+            onClose={onClose}
+            budgetId={budgetId}
+          />
         ) : (
-          <EditExpenseForm values={values} budgetId={budgetId} onClose={onClose} />
+          <EditExpenseForm
+            values={selectedItem}
+            id={selectedItem.id}
+            onClose={onClose}
+            budgetId={budgetId}
+          />
         )}
       </DialogContent>
     </Dialog>

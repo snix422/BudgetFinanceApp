@@ -8,7 +8,7 @@ type BudgetCardProps = {
 const BudgetCard: React.FC<BudgetCardProps> = ({ data }) => {
   console.log('dsa');
   return (
-    <div className='bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center gap-4 transition-all hover:shadow-md hover:border-blue-200'>
+    <div className='bg-white p-14 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center gap-4 transition-all hover:shadow-md hover:border-blue-200'>
       <div className='w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-1'>
         <svg
           xmlns='http://www.w3.org/2000/svg'

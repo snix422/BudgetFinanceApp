@@ -7,6 +7,7 @@ import SuspenseLayout from '../components/SuspenseLayout';
 import { ErrorPage } from '../pages/ErrorPage';
 import Register from '../pages/public/Register';
 import Dashboard from '../pages/app/Dashboard';
+import BudgetDetails from '@/pages/app/BudgetDetails';
 //import AppLayout from '../layouts/AppLayout';
 
 // Guards (Strażnicy)
@@ -47,6 +48,7 @@ export const router = createBrowserRouter(
         },
         { path: 'register', element: <Register /> },
         { path: 'dashboard', element: <Dashboard /> },
+        { path: 'budgets/:id', element: <BudgetDetails /> },
       ],
     },
   ],

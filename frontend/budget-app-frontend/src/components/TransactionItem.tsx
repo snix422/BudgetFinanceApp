@@ -8,16 +8,22 @@ type TransactionItem = {
   amount: number;
   date: string;
   type: string;
-  categoryName: string;
+  categoryName?: string;
 };
 
 interface TransactionItemProps {
   data: TransactionItem;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  onOpenEditModal: () => void;
+  onOpenDeleteModal: () => void;
+  selectItem: (item: TransactionItem) => void;
 }
 
-const TransactionItem: React.FC<TransactionItemProps> = ({ data, onDelete, onEdit }) => {
+const TransactionItem: React.FC<TransactionItemProps> = ({
+  data,
+  onOpenDeleteModal,
+  onOpenEditModal,
+  selectItem,
+}) => {
   // Formatowanie daty na polski format (np. 12.05.2024)
   const formattedDate = new Date(data.date).toLocaleDateString('pl-PL', {
     day: '2-digit',
@@ -27,8 +33,18 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ data, onDelete, onEdi
 
   const isExpense = data.type === 'expense';
 
+  const handleClickDelete = () => {
+    selectItem(data);
+    onOpenDeleteModal();
+  };
+
+  const handleClickUpdate = () => {
+    selectItem(data);
+    onOpenEditModal();
+  };
+
   return (
-    <div className='group flex flex-col sm:flex-row sm:items-center justify-between p-4 mb-3 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200'>
+    <div className='w-4/5 group flex flex-col sm:flex-row sm:items-center justify-between p-4 mb-3 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200'>
       {/* --- LEWA STRONA: IKONA I OPIS --- */}
       <div className='flex items-center gap-4 mb-3 sm:mb-0'>
         {/* Ikona: Czerwona dla wydatku, Zielona dla wpływu */}
@@ -71,23 +87,23 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ data, onDelete, onEdi
           {data.amount.toFixed(2)} zł
         </span>
 
-        <div className='flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200'>
+        <div className='flex items-center gap-1'>
           <Button
             variant='primary'
             size='md'
-            onClick={() => onEdit(data.id)}
-            className='h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full'
+            onClick={handleClickUpdate}
+            className='h-8 w-8 text-gray-400 px-10'
           >
-            <Pencil size={16} />
+            Edit
           </Button>
 
           <Button
             variant='primary'
             size='md'
-            onClick={() => onDelete(data.id)}
-            className='h-8 w-8 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full'
+            onClick={handleClickDelete}
+            className='h-8 w-8 text-gray-400 px-10'
           >
-            <Trash2 size={16} />
+            Delete
           </Button>
         </div>
       </div>

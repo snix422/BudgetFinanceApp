@@ -1,7 +1,11 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: 'Josefin Sans', 'ui-sans-serif', 'system-ui', 'sans-serif';
+}
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

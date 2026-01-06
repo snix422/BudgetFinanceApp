@@ -15,7 +15,7 @@ const useGetBudgets = () => {
   });
 
   const addBudget = useMutation({
-    mutationFn: createBudget,
+    mutationFn: (data: CreateBudgetDto) => createBudget(data),
     onMutate: async (variables: CreateBudgetDto) => {
       await queryClient.cancelQueries({ queryKey: ['budgets-query-key'] });
       const previousBudget = queryClient.getQueryData(['budgets-query-key']);

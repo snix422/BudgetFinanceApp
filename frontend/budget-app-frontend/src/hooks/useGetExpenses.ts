@@ -3,7 +3,7 @@ import { createExpense, deleteExpense, getExpenses, updateExpense } from '../api
 import { toast } from 'sonner';
 import type { CreateExpenseDto, Expense, UpdateExpenseDto } from '../schemas/expenseSchema';
 
-const useGetExpenses = () => {
+const useGetExpenses = (budgetId: number) => {
   const queryClient = useQueryClient();
 
   const {
@@ -12,18 +12,21 @@ const useGetExpenses = () => {
     error,
   } = useQuery({
     queryKey: ['expenses-query-key'],
-    queryFn: getExpenses,
+    queryFn: () => getExpenses(budgetId),
   });
 
   const addExpense = useMutation({
-    mutationFn: (dto: CreateExpenseDto) => createExpense(dto),
+    mutationFn: ({ dto, budgetId }: { dto: CreateExpenseDto; budgetId: number }) =>
+      createExpense(dto, budgetId),
     onMutate: async (variables, context) => {
       await queryClient.cancelQueries({ queryKey: ['expenses-query-key'] });
       const previousExpenses = queryClient.getQueryData(['expenses-query-key']);
       queryClient.setQueryData(['expenses-query-key'], (old: Expense[] = []) => {
         const optimisticExpense = {
           id: Math.floor(Math.random() * 100000),
-          ...variables,
+          title: variables.dto.title,
+          amount: variables.dto.amount,
+          date: variables.dto.date,
         };
         return [...old, optimisticExpense];
       });
@@ -31,12 +34,12 @@ const useGetExpenses = () => {
     },
     onSuccess(data, variables, onMutateResult, context) {
       console.log('ID nowego wydatku:', data);
-      console.log('Dodano wydatek pomyślnie:', variables.title);
+      console.log('Dodano wydatek pomyślnie:', variables.dto.title);
       toast.success('Dodano wydatek pomyślnie!');
     },
 
     onError(error, variables, onMutateResult, context) {
-      console.log(`Błąd przy dodawaniu "${variables.title}":`, error);
+      console.log(`Błąd przy dodawaniu "${variables.dto.title}":`, error);
       toast.error('Wystąpił błąd z dodawaniem wydatku!');
       if (onMutateResult?.previousExpenses) {
         queryClient.setQueryData(['expenses-quere-key'], onMutateResult.previousExpenses);
@@ -49,8 +52,12 @@ const useGetExpenses = () => {
   });
 
   const editExpense = useMutation({
-    mutationFn: ({ id, dto }: { id: number; dto: UpdateExpenseDto }) => updateExpense(id, dto),
-    onMutate: async (variables: { id: number; dto: UpdateExpenseDto }, context) => {
+    mutationFn: ({ id, dto, budgetId }: { id: number; dto: UpdateExpenseDto; budgetId: number }) =>
+      updateExpense(id, dto, budgetId),
+    onMutate: async (
+      variables: { id: number; dto: UpdateExpenseDto; budgetId: number },
+      context,
+    ) => {
       await queryClient.cancelQueries({ queryKey: ['expenses-query-key'] });
       const previousExpense = queryClient.getQueryData(['expenses-query-key']);
       queryClient.setQueryData(['expenses-query-key'], (old: Expense[] = []) => {
@@ -84,13 +91,13 @@ const useGetExpenses = () => {
   });
 
   const removeExpense = useMutation({
-    mutationFn: (id: number) => deleteExpense(id),
+    mutationFn: ({ id, budgetId }: { id: number; budgetId: number }) => deleteExpense(id, budgetId),
     onMutate(variables, context) {
       queryClient.cancelQueries({ queryKey: ['expenses-query-key'] });
       const previousExpenses = queryClient.getQueryData(['expenses-query-key']);
 
       queryClient.setQueryData(['expenses-query-key'], (old: Expense[]) => {
-        return old ? old.filter((expense) => expense.id !== variables) : [];
+        return old ? old.filter((expense) => expense.id !== variables.id) : [];
       });
 
       return { previousExpenses };
@@ -116,7 +123,11 @@ const useGetExpenses = () => {
     isLoading,
     error,
     addExpense: addExpense.mutate,
+    addExpenseLoading: addExpense.isPending,
+    addExpenseError: addExpense.error,
     updateExpense: editExpense.mutate,
+    updateExpenseLoading: editExpense.isPending,
+    updateExpenseError: editExpense.error,
     deleteExpense: removeExpense.mutate,
   };
 };

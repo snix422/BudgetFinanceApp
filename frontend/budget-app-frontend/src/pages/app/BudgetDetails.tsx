@@ -14,6 +14,11 @@ import type { Expense } from '@/schemas/expenseSchema';
 import Button from '@/components/ui/Button';
 import AddIncomeModal from '@/components/AddIncomeModal';
 import AddExpenseModal from '@/components/AddExpenseModal';
+import useGetCategories from '@/hooks/useGetCategories';
+import { calculateBudgetSplit } from '@/utils/calculateBudgetSplit';
+import { CategoryRule } from '@/types/enums';
+import BudgetSplitChart from '@/components/BudgetSplitChart';
+import { calculateRuleSplit } from '@/utils/calculateRuleSplit';
 
 const BudgetDetails = () => {
   const { id: budgetId } = useParams();
@@ -25,6 +30,7 @@ const BudgetDetails = () => {
   const [isOpenIncomeModal, setIsOpenIncomeModal] = useState(false);
   const [isOpenExpenseModal, setIsOpenExpenseModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TransactionItem | null>(null);
+  const { categories } = useGetCategories();
   console.log(budget, 'budget');
   console.log(isLoading);
   console.log(error);
@@ -34,29 +40,95 @@ const BudgetDetails = () => {
     ...(expenses || []).map((e: Expense) => ({ ...e, type: 'expense' as const })),
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   console.log(allTransactions);
+  /*const groupedData = expenses?.reduce((acc: any[], curr) => {
+    const existingCategory = acc.find((item) => item.name === curr.categoryName);
+    if (existingCategory) {
+      existingCategory.value += curr.amount;
+    } else {
+      acc.push({ name: curr.categoryName, value: curr.amount });
+    }
+    return acc;
+  }, []);*/
+
+  const groupedData = categories?.map((category: any) => {
+    // A. Dla KAŻDEJ kategorii z bazy, szukamy pasujących wydatków
+    // (Najbezpieczniej łączyć po ID, nie po nazwie)
+    const matchingExpenses =
+      expenses?.filter((expense) => expense.categoryId === category.id) || [];
+
+    // B. Sumujemy te wydatki (jeśli ich nie ma, wyjdzie 0)
+    const totalAmount = matchingExpenses.reduce((sum, current) => sum + current.amount, 0);
+
+    // C. Zwracamy obiekt gotowy dla wykresu
+    return {
+      name: category.name,
+      value: totalAmount,
+    };
+  });
+
+  const resultRules = calculateRuleSplit(expenses);
+
+  const { needs, wants, savings } = calculateBudgetSplit(budget?.totalEarned);
+  console.log(groupedData, 'groupedData');
+
+  const formatMoney = (amount: number = 0) => {
+    return new Intl.NumberFormat('pl-PL', {
+      style: 'currency',
+      currency: 'PLN',
+      maximumFractionDigits: 0, // lub 2, jeśli chcesz grosze
+    }).format(amount);
+  };
 
   return (
     <main className='w-full h-full flex flex-col items-center gap-4 py-10 bg-white '>
-      <h1 className='text-3xl font-bold underline'>Nazwa budżetu: {budget?.title}</h1>
+      <h1 className='text-3xl font-extrabold tracking-tight text-gray-900'>
+        Budżet: <span className='text-primary'>{budget?.title}</span>
+      </h1>
       <div className='w-4/5 flex flex-col items-center gap-5 min-h-auto p-4'>
         <div className='w-full flex justify-center gap-6'>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-green-50'>
-            <h2 className='text-2xl text-green-500'>Wpływy</h2>
-            <h3 className='text-base font-bold text-green-500'>{budget?.totalEarned} zł</h3>
+          {/* KARTA: WPŁYWY */}
+          <div className='w-1/4 flex flex-col justify-center items-center rounded-xl p-6 border border-green-200 bg-green-50/50'>
+            <h2 className='text-xs font-bold uppercase tracking-wider text-green-600 mb-1'>
+              Wpływy
+            </h2>
+            <h3 className='text-3xl font-black tracking-tight text-gray-900'>
+              {budget?.totalEarned} zł
+            </h3>
           </div>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-red-50'>
-            <h2 className='text-2xl text-red-500'>Wydatki</h2>
-            <h3 className='text-base font-bold text-red-500'>{budget?.totalSpent} zł</h3>
+
+          {/* KARTA: WYDATKI */}
+          <div className='w-1/4 flex flex-col justify-center items-center rounded-xl p-6 border border-red-200 bg-red-50/50'>
+            <h2 className='text-xs font-bold uppercase tracking-wider text-red-600 mb-1'>
+              Wydatki
+            </h2>
+            <h3 className='text-3xl font-black tracking-tight text-gray-900'>
+              {budget?.totalSpent} zł
+            </h3>
           </div>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-blue-50'>
-            <h2 className='text-2xl text-blue-500'>Oszczędności</h2>
-            <h3 className='text-base font-bold text-blue-500'>{budget?.remainingAmount} zł</h3>
+
+          {/* KARTA: OSZCZĘDNOŚCI (Remaining) */}
+          <div className='w-1/4 flex flex-col justify-center items-center rounded-xl p-6 border border-blue-200 bg-blue-50/50'>
+            <h2 className='text-xs font-bold uppercase tracking-wider text-blue-600 mb-1'>
+              Pozostało
+            </h2>
+            <h3 className='text-3xl font-black tracking-tight text-gray-900'>
+              {budget?.remainingAmount} zł
+            </h3>
           </div>
         </div>
-        {incomes && expenses && (
+
+        {budget && (
           <div className='w-full flex justify-between'>
-            <BudgetChart />
-            <ExpensesChart />
+            <BudgetChart
+              income={budget?.totalEarned}
+              expenses={budget.totalSpent}
+              savings={budget.remainingAmount}
+            />
+          </div>
+        )}
+        {groupedData && (
+          <div className='w-full flex justify-between'>
+            <ExpensesChart data={groupedData} />
           </div>
         )}
       </div>
@@ -122,26 +194,82 @@ const BudgetDetails = () => {
         />
       )}
 
-      <div className='w-4/5 flex flex-col items-center gap-5 min-h-auto p-4 mt-5'>
-        <h2 className='text-2xl'>Kącik inwestycyjny (50/30/20)</h2>
-        <div className='w-full flex justify-center gap-6'>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-red-50'>
-            <h2 className='text-2xl text-red-600'>50 - Rachunki </h2>
-            <h3 className='text-base font-bold text-red-600'>1000 zł</h3>
+      <div className='w-4/5 flex flex-col items-center gap-10 min-h-auto p-4 mt-20'>
+        <div className='flex flex-col items-center gap-4 space-y-2'>
+          <h2 className='text-3xl font-bold tracking-tight'>Zasada 50/30/20</h2>
+          <p className='text-muted-foreground max-w-2xl text-center mx-auto'>
+            Twój budżet został podzielony na trzy kluczowe obszary. Górne karty pokazują{' '}
+            <strong>sugerowane limity</strong> wyliczone na podstawie Twoich przychodów.
+          </p>
+        </div>
+
+        <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-6'>
+          {/* Needs */}
+          <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-red-100 bg-red-50/50'>
+            <span className='text-sm font-medium text-red-600 uppercase tracking-wider mb-1'>
+              Limit na Rachunki (50%)
+            </span>
+            <h3 className='text-3xl font-bold text-gray-900'>{needs} zł</h3>
+            <p className='text-xs text-red-400 mt-2 text-center'>Opłaty stałe, czynsz, jedzenie</p>
           </div>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-yellow-50'>
-            <h2 className='text-2xl text-yellow-600'>30 - Przyjemności</h2>
-            <h3 className='text-base font-bold text-yellow-600'>1000 zł</h3>
+
+          {/* Wants */}
+          <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-yellow-100 bg-yellow-50/50'>
+            <span className='text-sm font-medium text-yellow-600 uppercase tracking-wider mb-1'>
+              Limit na Przyjemności (30%)
+            </span>
+            <h3 className='text-3xl font-bold text-gray-900'>{wants} zł</h3>
+            <p className='text-xs text-yellow-500 mt-2 text-center'>Rozrywka, wyjścia, hobby</p>
           </div>
-          <div className='w-1/4 flex flex-col justify-center items-center rounded p-6 shadow-sm bg-blue-50'>
-            <h2 className='text-2xl text-blue-600'>20 Oszczędności</h2>
-            <h3 className='text-base font-bold text-blue-600'>1000 zł</h3>
+
+          {/* Savings */}
+          <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-blue-100 bg-blue-50/50'>
+            <span className='text-sm font-medium text-blue-600 uppercase tracking-wider mb-1'>
+              Cel Oszczędności (20%)
+            </span>
+            <h3 className='text-3xl font-bold text-gray-900'>{savings} zł</h3>
+            <p className='text-xs text-blue-400 mt-2 text-center'>Poduszka finansowa, inwestycje</p>
           </div>
         </div>
-        <div className='w-full flex justify-between'>
-          <BudgetChart />
-          <ExpensesChart />
+
+        {/* 3. WYKRESY (REALIZACJA) */}
+        <div className='w-full flex flex-col items-center gap-4'>
+          <h3 className='text-xl font-semibold'>Bieżące wykorzystanie budżetu</h3>
+          <p className='text-md text-muted-foreground mb-4'>
+            Poniższe wykresy pokazują, ile już wydałeś w stosunku do powyższych limitów.
+          </p>
+
+          {expenses ? (
+            <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-8'>
+              {/* Pamiętaj, żeby przekazać 'spentAmount' i 'limitAmount' zgodnie z naszą poprzednią rozmową */}
+              <BudgetSplitChart
+                ruleAmount={resultRules.totalAmountNeeds} // Ile wydałeś faktycznie
+                total={needs} // Twój limit z karty wyżej
+                label='Rachunki'
+                name='needs'
+              />
+              <BudgetSplitChart
+                ruleAmount={resultRules.totalAmountWants}
+                total={wants}
+                label='Przyjemności'
+                name='wants'
+              />
+              <BudgetSplitChart
+                ruleAmount={resultRules.totalAmountSavings}
+                total={savings}
+                label='Oszczędności'
+                name='savings'
+              />
+            </div>
+          ) : (
+            <div className='p-10 text-center bg-gray-50 rounded-lg w-full'>
+              <h2 className='text-gray-500'>
+                Brak wydatków w tym miesiącu. Dodaj pierwszy wydatek, aby zobaczyć postęp.
+              </h2>
+            </div>
+          )}
         </div>
+
         <div className='w-full flex justify-start px-4'>
           <p className='text-base'></p>
         </div>

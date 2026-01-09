@@ -30,11 +30,11 @@ const useAuth = () => {
 
   const loginMutation = useMutation<ResponseLogin, AxiosError<BackendError>, SignInFormValues>({
     mutationFn: (dto: SignInFormValues) => signIn(dto),
-    onSuccess(data, variables, onMutateResult, context) {
+    onSuccess: async (data, variables, onMutateResult, context) => {
       toast.success('Zalogowano pomyślnie!');
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+      await queryClient.invalidateQueries({ queryKey: ['user'] });
       console.log(data);
-      navigate('/');
+      navigate('/app/dashboard');
     },
     onError(error, variables, onMutateResult, context) {
       toast.error(error.response?.data.message || 'Błąd logowania');

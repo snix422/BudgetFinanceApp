@@ -34,7 +34,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ data }) => {
       <h3 className='text-xl font-bold text-gray-800'>{data.title}</h3>
 
       <Link
-        to={`/budgets/${data.id}`}
+        to={`/app/budgets/${data.id}`}
         className='px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors w-full sm:w-auto'
       >
         Zobacz szczegóły

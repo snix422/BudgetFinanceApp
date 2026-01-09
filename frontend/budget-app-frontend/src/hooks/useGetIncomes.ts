@@ -11,7 +11,7 @@ const useGetIncomes = (budgetId: number) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['incomes-query-key'],
+    queryKey: ['incomes-query-key', budgetId],
     queryFn: () => getIncomes(budgetId),
   });
 
@@ -19,9 +19,9 @@ const useGetIncomes = (budgetId: number) => {
     mutationFn: ({ dto, budgetId }: { dto: CreateIncomeDto; budgetId: number }) =>
       createIncome(dto, budgetId),
     onMutate: async (variables, context) => {
-      await queryClient.cancelQueries({ queryKey: ['incomes-query-key'] });
+      await queryClient.cancelQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
       const previousIncomes = queryClient.getQueryData(['incomes-query-key']);
-      queryClient.setQueryData(['incomes-query-key'], (old: Income[] = []) => {
+      queryClient.setQueryData(['incomes-query-key', variables.budgetId], (old: Income[] = []) => {
         const optimisticIncome = {
           id: Math.floor(Math.random() * 100000),
           title: variables.dto.title,
@@ -45,7 +45,8 @@ const useGetIncomes = (budgetId: number) => {
       }
     },
     onSettled(data, error, variables, onMutateResult, context) {
-      queryClient.invalidateQueries({ queryKey: ['incomes-query-key'] });
+      queryClient.invalidateQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
+      queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
   });
 
@@ -80,7 +81,8 @@ const useGetIncomes = (budgetId: number) => {
       }
     },
     onSettled(data, error, variables, onMutateResult, context) {
-      queryClient.invalidateQueries({ queryKey: ['incomes-query-key'] });
+      queryClient.invalidateQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
+      queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
   });
 
@@ -106,7 +108,8 @@ const useGetIncomes = (budgetId: number) => {
       }
     },
     onSettled(data, error, variables, onMutateResult, context) {
-      queryClient.invalidateQueries({ queryKey: ['incomes-query-key'] });
+      queryClient.invalidateQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
+      queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
   });
 

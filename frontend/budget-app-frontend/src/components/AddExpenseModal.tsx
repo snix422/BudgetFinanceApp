@@ -58,7 +58,7 @@ const AddExpenseModal: React.FC<BudgetModalProps> = ({
     console.log('test');
     console.log(dto);
     addExpense({ dto, budgetId });
-    onClose;
+    onClose();
   };
 
   return (
@@ -143,7 +143,7 @@ const AddExpenseModal: React.FC<BudgetModalProps> = ({
             </Button>
             <Button type='submit' disabled={addExpenseLoading}>
               {addExpenseLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-              {isEditMode ? 'Zapisz zmiany' : 'Utwórz'}
+              Utwórz
             </Button>
             {addExpenseError && <p className='text-base text-red-500'>{addExpenseError.message}</p>}
           </DialogFooter>

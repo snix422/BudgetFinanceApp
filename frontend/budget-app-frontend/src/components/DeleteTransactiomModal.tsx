@@ -22,11 +22,11 @@ const DeleteTransactionModal: React.FC<DeleteTransactionModalProps> = ({
   const { deleteExpense } = useGetExpenses(budgetId);
   return (
     <Dialog open={isOpenModal} onOpenChange={onClose}>
-      <DialogContent className='sm:max-w-[425px] bg-white'>
+      <DialogContent className='sm:max-w-[425px] bg-white flex flex-col gap-10'>
         <DialogHeader>
-          <DialogTitle className='text-black'>Usuń budżet</DialogTitle>
+          <DialogTitle className='text-black text-center'>Usuń budżet</DialogTitle>
         </DialogHeader>
-        <div>
+        <div className='w-full flex justify-center items-center gap-4'>
           <Button
             onClick={
               type == 'income'

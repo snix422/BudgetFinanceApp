@@ -32,11 +32,15 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
   selectedItem,
   budgetId,
 }) => {
+  console.log(selectedItem);
+  console.log(budgetId);
   return (
     <Dialog open={isOpenModal} onOpenChange={onClose}>
       <DialogContent className='sm:max-w-[425px] bg-white'>
         <DialogHeader>
-          <DialogTitle className='text-black'>Edytuj budżet</DialogTitle>
+          <DialogTitle className='text-black'>
+            Edytuj {selectedItem.type == 'income' ? 'Wpływ' : 'Wydatek'}
+          </DialogTitle>
           <DialogDescription className='text-black'>
             Zmień ustawienia wybranego budżetu.
           </DialogDescription>

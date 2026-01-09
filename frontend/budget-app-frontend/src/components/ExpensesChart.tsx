@@ -38,7 +38,7 @@ export const ExpensesChart: React.FC<ExpensesChart> = ({ data }) => {
   const sortedData = useMemo(() => {
     return [...data].sort((a, b) => b.value - a.value).slice(0, 15);
   }, [data]);
-
+  console.log(data);
   const chartConfig = {
     amount: {
       label: 'Kwota',

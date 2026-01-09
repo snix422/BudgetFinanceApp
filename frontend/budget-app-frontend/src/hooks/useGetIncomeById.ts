@@ -7,7 +7,7 @@ const useIncomeById = (id: number, budgetId: number) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['incomeById-query-key', id],
+    queryKey: ['income-query-key', budgetId, id],
     queryFn: () => getIncomeById(id, budgetId),
   });
 

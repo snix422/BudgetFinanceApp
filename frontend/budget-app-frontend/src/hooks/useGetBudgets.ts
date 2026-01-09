@@ -65,6 +65,7 @@ const useGetBudgets = () => {
 
     onSuccess: (data, variables, onMutateResult, context) => {
       console.log('Edytowano budżet pomyślnie. ID:', variables.id);
+      queryClient.invalidateQueries({ queryKey: ['budgets-query-key'] });
       toast.success('Edytowano budżet pomyślnie!');
     },
 

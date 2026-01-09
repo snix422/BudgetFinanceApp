@@ -9,7 +9,7 @@ const Navbar = () => {
   // Opcjonalne: do aktywnego linku
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
-
+  console.log(user, 'user');
   return (
     // Sticky header z efektem rozmycia (backdrop-blur)
     <header className='sticky h-[10vh] top-0 z-50 max-w-full border-b border-gray-200 bg-yellow-50 backdrop-blur-md'>
@@ -27,7 +27,7 @@ const Navbar = () => {
           {isAuthenticated && (
             <nav className='hidden md:flex items-center gap-6'>
               <Link
-                to='/dashboard'
+                to='app/dashboard'
                 className={`text-sm font-medium transition-colors hover:text-blue-600 ${isActive('/dashboard') ? 'text-blue-600' : 'text-gray-600'}`}
               >
                 <div className='flex items-center gap-2'>
@@ -69,7 +69,7 @@ const Navbar = () => {
                 className='gap-2'
               >
                 <LogOut size={16} />
-                <span className='hidden sm:inline'>Wyloguj</span>
+                <span className='hidden sm:inline text-white'>Wyloguj</span>
               </Button>
             </>
           ) : (

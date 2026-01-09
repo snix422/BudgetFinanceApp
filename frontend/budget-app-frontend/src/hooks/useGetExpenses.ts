@@ -11,7 +11,7 @@ const useGetExpenses = (budgetId: number) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['expenses-query-key'],
+    queryKey: ['expenses-query-key', budgetId],
     queryFn: () => getExpenses(budgetId),
   });
 
@@ -19,17 +19,20 @@ const useGetExpenses = (budgetId: number) => {
     mutationFn: ({ dto, budgetId }: { dto: CreateExpenseDto; budgetId: number }) =>
       createExpense(dto, budgetId),
     onMutate: async (variables, context) => {
-      await queryClient.cancelQueries({ queryKey: ['expenses-query-key'] });
-      const previousExpenses = queryClient.getQueryData(['expenses-query-key']);
-      queryClient.setQueryData(['expenses-query-key'], (old: Expense[] = []) => {
-        const optimisticExpense = {
-          id: Math.floor(Math.random() * 100000),
-          title: variables.dto.title,
-          amount: variables.dto.amount,
-          date: variables.dto.date,
-        };
-        return [...old, optimisticExpense];
-      });
+      await queryClient.cancelQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
+      const previousExpenses = queryClient.getQueryData(['expenses-query-key', variables.budgetId]);
+      queryClient.setQueryData(
+        ['expenses-query-key', variables.budgetId],
+        (old: Expense[] = []) => {
+          const optimisticExpense = {
+            id: Math.floor(Math.random() * 100000),
+            title: variables.dto.title,
+            amount: variables.dto.amount,
+            date: variables.dto.date,
+          };
+          return [...old, optimisticExpense];
+        },
+      );
       return { previousExpenses };
     },
     onSuccess(data, variables, onMutateResult, context) {
@@ -47,7 +50,8 @@ const useGetExpenses = (budgetId: number) => {
     },
 
     onSettled(data, error, variables, onMutateResult, context) {
-      queryClient.invalidateQueries({ queryKey: ['expenses-query-key'] });
+      queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
+      queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
   });
 
@@ -63,7 +67,14 @@ const useGetExpenses = (budgetId: number) => {
       queryClient.setQueryData(['expenses-query-key'], (old: Expense[] = []) => {
         return old.map((expense) => {
           if (expense.id == variables.id) {
-            return { ...expenses, ...variables };
+            return {
+              ...expenses,
+              id: variables.id,
+              title: variables.dto.title,
+              amount: variables.dto.amount,
+              date: variables.dto.amount,
+              type: 'expense',
+            };
           }
           return expense;
         });
@@ -86,7 +97,8 @@ const useGetExpenses = (budgetId: number) => {
     },
 
     onSettled(data, error, variables, onMutateResult, context) {
-      queryClient.invalidateQueries({ queryKey: ['expenses-query-key'] });
+      queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
+      queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
     },
   });
 
@@ -114,7 +126,8 @@ const useGetExpenses = (budgetId: number) => {
       }
     },
     onSettled(data, error, variables, onMutateResult, context) {
-      queryClient.invalidateQueries({ queryKey: ['expenses-query-key'] });
+      queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
+      queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
   });
 

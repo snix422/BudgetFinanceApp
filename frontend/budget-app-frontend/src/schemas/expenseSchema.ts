@@ -25,10 +25,6 @@ export const ExpenseFormSchema = z.object({
     })
     .int()
     .positive({ message: 'Wybierz poprawną kategorię' }), // ID musi być > 0
-  categoryRule: z.number({
-    required_error: 'Wybierz rolę',
-    invalid_type_error: 'Musisz wybrać rolę',
-  }),
 });
 
 export type Expense = z.infer<typeof ExpenseSchema>;

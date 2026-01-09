@@ -7,7 +7,7 @@ const useGetBudgetById = (id: number) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['budgetById-query-key', id],
+    queryKey: ['budget-query-key', id],
     queryFn: () => getBudgetById(id),
     enabled: !!id,
   });

@@ -37,7 +37,7 @@ export const EditIncomeForm: React.FC<EditIncomeFormProps> = ({
   console.log(errors);
 
   const { updateIncome, updateIncomeLoading, updateIncomeError } = useGetIncomes(budgetId);
-
+  console.log(id, 'id');
   const onSubmit: SubmitHandler<UpdateIncomeDto> = (data) => {
     console.log('test');
     console.log(data);

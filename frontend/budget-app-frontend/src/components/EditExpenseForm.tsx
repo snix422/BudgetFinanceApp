@@ -7,6 +7,11 @@ import { DialogFooter } from './ui/dialog';
 import Button from './ui/Button';
 import { Loader2 } from 'lucide-react';
 import useGetExpenses from '@/hooks/useGetExpenses';
+import type { UpdateExpenseDto } from '@/schemas/expenseSchema';
+import { Select } from './ui/Select';
+import { CategoryRule, CategoryRuleLabels } from '@/types/enums';
+import useGetCategories from '@/hooks/useGetCategories';
+import type { Category } from '@/schemas/categorySchema';
 
 type EditExpenseFormProps = {
   values: UpdateIncomeDto;
@@ -21,7 +26,7 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, 
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UpdateIncomeDto>({
+  } = useForm<UpdateExpenseDto>({
     resolver: zodResolver(UpdateIncomeSchema),
     defaultValues: {
       title: values.title,
@@ -32,8 +37,13 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, 
   console.log(errors);
 
   const { updateExpense, updateExpenseLoading, updateExpenseError } = useGetExpenses(budgetId);
-
-  const onSubmit: SubmitHandler<UpdateIncomeDto> = (data) => {
+  const { categories } = useGetCategories();
+  const groupedCategories = {
+    needs: categories && categories.filter((c: Category) => c.rule === CategoryRule.Needs), // 1 to Needs
+    wants: categories && categories.filter((c: Category) => c.rule === CategoryRule.Wants), // 2 to Wants
+    savings: categories && categories.filter((c: Category) => c.rule === CategoryRule.Savings), // 3 to Savings
+  };
+  const onSubmit: SubmitHandler<UpdateExpenseDto> = (data) => {
     console.log('test');
     console.log(data);
     updateExpense({ id, dto: data, budgetId });
@@ -56,6 +66,41 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, 
           placeholder='np. 1000'
           {...register('amount')}
         />
+        <Select
+          id='categoryId'
+          label='Kategoria'
+          error={errors.categoryId?.message}
+          {...register('categoryId', { valueAsNumber: true })}
+          defaultValue={0}
+        >
+          <option value='' disabled>
+            -- Wybierz kategorię --
+          </option>
+          <optgroup label={CategoryRuleLabels[CategoryRule.Needs]}>
+            {groupedCategories.needs &&
+              groupedCategories.needs.map((cat: any) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+          </optgroup>
+          <optgroup label={CategoryRuleLabels[CategoryRule.Wants]}>
+            {groupedCategories.wants &&
+              groupedCategories.wants.map((cat: any) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+          </optgroup>
+          <optgroup label={CategoryRuleLabels[CategoryRule.Wants]}>
+            {groupedCategories.savings &&
+              groupedCategories.savings.map((cat: any) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+          </optgroup>
+        </Select>
         <Input
           type='date'
           id='date'

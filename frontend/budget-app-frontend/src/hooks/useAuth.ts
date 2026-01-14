@@ -33,8 +33,17 @@ const useAuth = () => {
     onSuccess: async (data, variables, onMutateResult, context) => {
       toast.success('Zalogowano pomyślnie!');
       await queryClient.invalidateQueries({ queryKey: ['user'] });
+      const user = queryClient.getQueryData<any>(['user']);
+
+      const isAdmin = user?.roleName?.toUpperCase() === 'ADMIN';
+
+      /*if (isAdmin) {
+        navigate('/admin/dashboard'); // Lub /admin/dashboard
+      } else {
+        navigate('/app/dashboard');
+      }*/
+      navigate('/');
       console.log(data);
-      navigate('/app/dashboard');
     },
     onError(error, variables, onMutateResult, context) {
       toast.error(error.response?.data.message || 'Błąd logowania');

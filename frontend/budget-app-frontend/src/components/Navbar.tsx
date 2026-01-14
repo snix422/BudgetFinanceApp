@@ -27,7 +27,7 @@ const Navbar = () => {
           {isAuthenticated && (
             <nav className='hidden md:flex items-center gap-6'>
               <Link
-                to='app/dashboard'
+                to={user?.roleName == 'Admin' ? '/admin/dashboard' : '/app/dashboard'}
                 className={`text-sm font-medium transition-colors hover:text-blue-600 ${isActive('/dashboard') ? 'text-blue-600' : 'text-gray-600'}`}
               >
                 <div className='flex items-center gap-2'>

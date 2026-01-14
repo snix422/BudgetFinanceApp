@@ -11,6 +11,10 @@ export const getCurrentUser = async (): Promise<User> => {
   return await api.get('/auth/me');
 };
 
+export const getAllUsers = async (): Promise<void> => {
+  return await api.get('/auth/users');
+};
+
 export const signIn = async (dto: SignInFormValues): Promise<ResponseLogin> => {
   return await api.post('auth/login', dto);
 };

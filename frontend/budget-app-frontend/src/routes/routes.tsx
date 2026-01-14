@@ -11,6 +11,9 @@ import BudgetDetails from '@/pages/app/BudgetDetails';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/layouts/AppLayout';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
+import AdminLayout from '@/layouts/AdminLayout';
+import UserDetails from '@/pages/admin/UserDetails';
+import AdminBudgetDetails from '@/pages/admin/AdminBudgetDetails';
 //import AppLayout from '../layouts/AppLayout';
 
 // Guards (Strażnicy)
@@ -79,15 +82,31 @@ export const router = createBrowserRouter([
     path: '/admin',
     element: (
       <ProtectedRoute allowedRoles={['Admin']}>
-        <div style={{ background: '#f0f0f0', minHeight: '100vh' }}>Admin Panel</div>
+        <AdminLayout />
       </ProtectedRoute>
     ),
     children: [
       {
-        path: 'users',
+        path: 'dashboard',
         element: (
           <SuspenseLayout>
             <AdminDashboard />
+          </SuspenseLayout>
+        ),
+      },
+      {
+        path: 'users/:id',
+        element: (
+          <SuspenseLayout>
+            <UserDetails />
+          </SuspenseLayout>
+        ),
+      },
+      {
+        path: 'users/:userId/budgets/:id',
+        element: (
+          <SuspenseLayout>
+            <AdminBudgetDetails />
           </SuspenseLayout>
         ),
       },

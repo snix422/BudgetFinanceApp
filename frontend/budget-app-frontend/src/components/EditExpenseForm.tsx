@@ -46,6 +46,7 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, 
   const onSubmit: SubmitHandler<UpdateExpenseDto> = (data) => {
     console.log('test');
     console.log(data);
+
     updateExpense({ id, dto: data, budgetId });
   };
   return (

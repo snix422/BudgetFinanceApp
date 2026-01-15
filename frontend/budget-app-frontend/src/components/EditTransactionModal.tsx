@@ -24,6 +24,7 @@ type EditTransactionModalProps = {
   onClose: () => void;
   selectedItem: any;
   budgetId: number;
+  isAdmin?: boolean;
 };
 
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
@@ -31,6 +32,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
   onClose,
   selectedItem,
   budgetId,
+  isAdmin = false,
 }) => {
   console.log(selectedItem);
   console.log(budgetId);
@@ -58,6 +60,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             id={selectedItem.id}
             onClose={onClose}
             budgetId={budgetId}
+            isAdmin={isAdmin}
           />
         )}
       </DialogContent>

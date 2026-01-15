@@ -1,3 +1,6 @@
+import DeleteTransactionModal from '@/components/DeleteTransactiomModal';
+import EditBudgetModal from '@/components/EditBudgetModal';
+import EditTransactionModal from '@/components/EditTransactionModal';
 import GenericList from '@/components/GenericList';
 import TransactionItem from '@/components/TransactionItem';
 import useAuth from '@/hooks/useAuth';
@@ -80,6 +83,25 @@ const AdminBudgetDetails = () => {
               )}
             />
           </div>
+        )}
+
+        {isOpenUpdateModal && budget && (
+          <EditBudgetModal
+            isOpenModal={isOpenUpdateModal}
+            onClose={() => setIsOpenUpdateModal(false)}
+            id={Number(budgetId)}
+            data={budget}
+          />
+        )}
+
+        {isOpenDeleteModal && selectedItem && (
+          <DeleteTransactionModal
+            isOpenModal={isOpenDeleteModal}
+            onClose={() => setIsOpenDeleteModal(false)}
+            type={selectedItem.type}
+            id={selectedItem.id}
+            budgetId={Number(budgetId)}
+          />
         )}
       </div>
     </main>

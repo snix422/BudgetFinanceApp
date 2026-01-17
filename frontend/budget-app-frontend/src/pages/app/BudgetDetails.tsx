@@ -4,8 +4,7 @@ import BudgetChart from '@/components/BudgetChart';
 import { ExpensesChart } from '@/components/ExpensesChart';
 import GenericList from '@/components/GenericList';
 import TransactionItem from '@/components/TransactionItem';
-import { useState } from 'react';
-import DeleteTransactionModal from '@/components/DeleteTransactiomModal';
+import DeleteTransactionModal from '@/components/DeleteModal';
 import EditTransactionModal from '@/components/EditTransactionModal';
 import useGetExpenses from '@/hooks/useGetExpenses';
 import useGetIncomes from '@/hooks/useGetIncomes';
@@ -19,17 +18,27 @@ import { calculateBudgetSplit } from '@/utils/calculateBudgetSplit';
 import { CategoryRule } from '@/types/enums';
 import BudgetSplitChart from '@/components/BudgetSplitChart';
 import { calculateRuleSplit } from '@/utils/calculateRuleSplit';
+import EditIncomeModal from '@/components/EditIncomeModal';
+import EditExpenseModal from '@/components/EditExpenseModal';
+import { useModal } from '@/hooks/useModal';
+import { useSelectedItem } from '@/hooks/useSelectedItem';
 
 const BudgetDetails = () => {
   const { id: budgetId } = useParams();
   const { budget, isLoading, error } = useGetBudgetById(Number(budgetId));
   const { expenses } = useGetExpenses(Number(budgetId));
   const { incomes } = useGetIncomes(Number(budgetId));
-  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
-  const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
-  const [isOpenIncomeModal, setIsOpenIncomeModal] = useState(false);
-  const [isOpenExpenseModal, setIsOpenExpenseModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<TransactionItem | null>(null);
+
+  // Modale
+  const deleteModal = useModal();
+  const addIncomeModal = useModal();
+  const addExpenseModal = useModal();
+  const editIncomeModal = useModal();
+  const editExpenseModal = useModal();
+
+  // Wybrany element
+  const { selectedItem, selectItem, clearSelection } = useSelectedItem();
+
   const { categories } = useGetCategories();
   console.log(budget, 'budget');
   console.log(isLoading);
@@ -142,53 +151,78 @@ const BudgetDetails = () => {
               <TransactionItem
                 key={`${item.type}-${item.id}`}
                 data={item}
-                onOpenDeleteModal={() => setIsOpenDeleteModal(true)}
-                onOpenEditModal={() => setIsOpenUpdateModal(true)}
-                selectItem={(item: TransactionItem) => setSelectedItem(item)}
+                onOpenDeleteModal={() => {
+                  selectItem(item);
+                  deleteModal.open();
+                }}
+                onOpenEditModal={() => {
+                  selectItem(item);
+                  if (item.type === 'income') {
+                    editIncomeModal.open();
+                  } else {
+                    editExpenseModal.open();
+                  }
+                }}
+                selectItem={selectItem}
               />
             )}
           />
         </div>
       )}
       <div className='w-full flex justify-center items-center gap-4'>
-        <Button variant='primary' size='md' onClick={() => setIsOpenIncomeModal(true)}>
+        <Button variant='primary' size='md' onClick={addIncomeModal.open}>
           Dodaj wpływ
         </Button>
-        <Button variant='primary' size='md' onClick={() => setIsOpenExpenseModal(true)}>
+        <Button variant='primary' size='md' onClick={addExpenseModal.open}>
           Dodaj wydatek
         </Button>
       </div>
-      {isOpenDeleteModal && selectedItem && (
+
+      {deleteModal.isOpen && selectedItem && (
         <DeleteTransactionModal
-          isOpenModal={isOpenDeleteModal}
-          onClose={() => setIsOpenDeleteModal(false)}
+          isOpenModal={deleteModal.isOpen}
+          onClose={deleteModal.close}
           type={selectedItem.type}
           id={selectedItem.id}
           budgetId={Number(budgetId)}
         />
       )}
 
-      {isOpenUpdateModal && (
-        <EditTransactionModal
-          isOpenModal={isOpenUpdateModal}
-          onClose={() => setIsOpenUpdateModal(false)}
-          selectedItem={selectedItem}
+      {editIncomeModal.isOpen && selectedItem && selectedItem.type === 'income' && (
+        <EditIncomeModal
+          isOpenModal={editIncomeModal.isOpen}
+          onClose={editIncomeModal.close}
+          id={selectedItem.id}
           budgetId={Number(budgetId)}
+          data={selectedItem as any}
+          isAdmin={false}
         />
       )}
-      {isOpenIncomeModal && (
+
+      {editExpenseModal.isOpen && selectedItem && selectedItem.type === 'expense' && (
+        <EditExpenseModal
+          isOpenModal={editExpenseModal.isOpen}
+          onClose={editExpenseModal.close}
+          id={selectedItem.id}
+          budgetId={Number(budgetId)}
+          data={selectedItem as any}
+          isAdmin={false}
+        />
+      )}
+
+      {addIncomeModal.isOpen && (
         <AddIncomeModal
-          isOpenModal={isOpenIncomeModal}
-          onClose={() => setIsOpenIncomeModal(false)}
+          isOpenModal={addIncomeModal.isOpen}
+          onClose={addIncomeModal.close}
           isEditMode={false}
           budgetId={Number(budgetId)}
         />
       )}
 
-      {isOpenExpenseModal && (
+      {addExpenseModal.isOpen && (
         <AddExpenseModal
-          isOpenModal={isOpenExpenseModal}
-          onClose={() => setIsOpenExpenseModal(false)}
+          isOpenModal={addExpenseModal.isOpen}
+          onClose={addExpenseModal.close}
           isEditMode={false}
           budgetId={Number(budgetId)}
         />

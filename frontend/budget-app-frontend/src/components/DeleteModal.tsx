@@ -68,6 +68,8 @@ import Button from './ui/Button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import useGetExpenses from '@/hooks/useGetExpenses';
 import { useAdminTransactionMutations } from '@/hooks/useAdminTransactionMutations';
+import { useState } from 'react';
+import useGetBudgets from '@/hooks/useGetBudgets';
 
 const DELETE_TYPE = {
   INCOME: 'income',
@@ -78,8 +80,8 @@ const DELETE_TYPE = {
 type DeleteType = (typeof DELETE_TYPE)[keyof typeof DELETE_TYPE];
 
 type DeleteModalProps = {
-  isOpenModal: boolean;
-  onClose: () => void;
+  isOpenModal?: boolean;
+  onClose?: () => void;
   type: DeleteType;
   id: number;
   budgetId?: number;
@@ -98,6 +100,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   const { deleteExpense } = useGetExpenses(budgetId || 0);
   const { deleteExpense: deleteExpenseAdmin, deleteIncome: deleteIncomeAdmin } =
     useAdminTransactionMutations(budgetId || 0);
+  const { deleteBudget } = useGetBudgets();
 
   const getTitleLabel = (): string => {
     switch (type) {
@@ -126,8 +129,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         deleteExpense({ id, budgetId: budgetId || 0 });
       }
     } else if (type === DELETE_TYPE.BUDGET) {
-      // TODO: Dodaj hook do usuwania budżetu
-      // deleteBudget(id);
+      deleteBudget(id);
     }
   };
 

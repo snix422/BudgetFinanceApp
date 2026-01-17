@@ -23,7 +23,7 @@ export const useAdminTransactionMutations = (budgetId: string | number) => {
   // --- UPDATE EXPENSE (Nowość!) ---
   const updateExpenseMutation = useMutation({
     // Payload to obiekt zawierający ID i dane do zmiany
-    mutationFn: (payload: { id: number; data: UpdateExpenseDto }) =>
+    mutationFn: (payload: { id: number; data: UpdateExpenseDto; budgetId: number }) =>
       updateExpense(Number(budgetId), payload.id, payload.data),
 
     onSuccess: () => {
@@ -38,8 +38,8 @@ export const useAdminTransactionMutations = (budgetId: string | number) => {
 
   // --- UPDATE INCOME (Nowość!) ---
   const updateIncomeMutation = useMutation({
-    mutationFn: (payload: { id: number; data: UpdateIncomeDto }) =>
-      updateIncome(Number(budgetId), payload.id, payload.data),
+    mutationFn: (payload: { id: number; data: UpdateIncomeDto; budgetId: number }) =>
+      updateIncome(Number(payload.budgetId), payload.id, payload.data),
 
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
     onError: (error) => alert('Nie udało się zaktualizować wpływu.'),
@@ -49,7 +49,9 @@ export const useAdminTransactionMutations = (budgetId: string | number) => {
     deleteExpense: deleteExpenseMutation.mutate,
     deleteIncome: deleteIncomeMutation.mutate,
     updateExpense: updateExpenseMutation.mutate, // Eksportujemy funkcję
+    updateExpenseLoading: updateExpenseMutation.isPending,
     updateIncome: updateIncomeMutation.mutate, // Eksportujemy funkcję
+    updateIncomeLoading: updateIncomeMutation.isPending,
 
     // Stany ładowania (przydatne do zablokowania formularza)
     isUpdating: updateExpenseMutation.isPending || updateIncomeMutation.isPending,

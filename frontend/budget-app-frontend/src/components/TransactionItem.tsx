@@ -1,5 +1,6 @@
 import { ArrowDownCircle, ArrowUpCircle, Pencil, Trash2 } from 'lucide-react';
 import Button from './ui/Button';
+import type { DeleteType } from './DeleteModal';
 // Zakładam, że Button masz zainstalowany
 
 type TransactionItem = {
@@ -7,7 +8,7 @@ type TransactionItem = {
   title: string;
   amount: number;
   date: string;
-  type: string;
+  type: DeleteType;
   categoryName?: string;
 };
 

@@ -13,14 +13,25 @@ import { CreateBudgetSchema, type CreateBudgetDto } from '@/schemas/budgetSchema
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import useGetBudgets from '@/hooks/useGetBudgets';
 import { Loader2 } from 'lucide-react';
+import { useState } from 'react';
 
 type BudgetModalProps = {
-  isOpenModal: boolean;
-  onClose: () => void;
+  isOpenModal?: boolean;
+  onClose?: () => void;
   isEditMode: boolean;
 };
 
-const BudgetModal: React.FC<BudgetModalProps> = ({ isOpenModal, isEditMode, onClose }) => {
+const BudgetModal: React.FC<BudgetModalProps> = ({
+  isOpenModal: externalIsOpen = false,
+  isEditMode,
+  onClose: externalOnClose,
+}) => {
+  const [isOpen, setIsOpen] = useState(externalIsOpen);
+  const isOpenState = externalIsOpen !== undefined ? externalIsOpen : isOpen;
+  const handleClose = () => {
+    setIsOpen(false);
+    externalOnClose?.();
+  };
   const {
     register,
     handleSubmit,
@@ -47,7 +58,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isOpenModal, isEditMode, onCl
   };
 
   return (
-    <Dialog open={isOpenModal} onOpenChange={onClose}>
+    <Dialog open={isOpenState} onOpenChange={handleClose}>
       <DialogContent className='sm:max-w-[425px] bg-white'>
         <DialogHeader>
           <DialogTitle className='text-black'>
@@ -87,7 +98,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isOpenModal, isEditMode, onCl
           </div>
 
           <DialogFooter>
-            <Button type='button' variant='primary' onClick={onClose}>
+            <Button type='button' variant='primary' onClick={handleClose}>
               Anuluj
             </Button>
             <Button type='submit' disabled={addBudgetLoading}>

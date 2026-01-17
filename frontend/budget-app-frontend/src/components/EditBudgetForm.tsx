@@ -6,6 +6,7 @@ import { DialogFooter } from './ui/dialog';
 import type { CreateBudgetDto, UpdateBudgetDto } from '@/schemas/budgetSchema';
 import { UpdateBudgetSchema } from '@/schemas/budgetSchema';
 import Input from './ui/Input';
+import useGetBudgets from '@/hooks/useGetBudgets';
 // import { useBudgetMutations } from '@/hooks/useBudgetMutations';
 
 type EditBudgetFormProps = {
@@ -28,11 +29,11 @@ export const EditBudgetForm: React.FC<EditBudgetFormProps> = ({ values, id, onCl
     },
   });
 
-  // const { updateBudget, updateBudgetLoading, updateBudgetError } = useBudgetMutations();
+  const { updateBudget, updateBudgetLoading, updateBudgetError } = useGetBudgets();
 
   const onSubmit: SubmitHandler<UpdateBudgetDto> = (data) => {
     console.log(data);
-    // updateBudget({ id, dto: data });
+    updateBudget({ id, dto: data });
   };
 
   return (

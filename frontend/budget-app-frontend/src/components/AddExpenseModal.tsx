@@ -19,20 +19,27 @@ import useGetCategories from '@/hooks/useGetCategories';
 import { Select } from './ui/Select';
 import type { Category } from '@/schemas/categorySchema';
 import { CategoryRule, CategoryRuleLabels } from '@/types/enums';
+import { useState } from 'react';
 
 type BudgetModalProps = {
-  isOpenModal: boolean;
-  onClose: () => void;
+  isOpenModal?: boolean;
+  onClose?: () => void;
   isEditMode: boolean;
   budgetId: number;
 };
 
 const AddExpenseModal: React.FC<BudgetModalProps> = ({
-  isOpenModal,
+  isOpenModal: externalIsOpen = false,
   isEditMode,
-  onClose,
+  onClose: externalOnClose,
   budgetId,
 }) => {
+  const [isOpen, setIsOpen] = useState(externalIsOpen);
+  const isOpenState = externalIsOpen !== undefined ? externalIsOpen : isOpen;
+  const handleClose = () => {
+    setIsOpen(false);
+    externalOnClose?.();
+  };
   const {
     register,
     handleSubmit,
@@ -58,11 +65,11 @@ const AddExpenseModal: React.FC<BudgetModalProps> = ({
     console.log('test');
     console.log(dto);
     addExpense({ dto, budgetId });
-    onClose();
+    handleClose();
   };
 
   return (
-    <Dialog open={isOpenModal} onOpenChange={onClose}>
+    <Dialog open={isOpenState} onOpenChange={handleClose}>
       <DialogContent className='sm:max-w-[425px] bg-white'>
         <DialogHeader>
           <DialogTitle className='text-black'>Nowy wydatek</DialogTitle>
@@ -138,7 +145,7 @@ const AddExpenseModal: React.FC<BudgetModalProps> = ({
           </div>
 
           <DialogFooter>
-            <Button type='button' variant='primary' onClick={onClose}>
+            <Button type='button' variant='primary' onClick={handleClose}>
               Anuluj
             </Button>
             <Button type='submit' disabled={addExpenseLoading}>

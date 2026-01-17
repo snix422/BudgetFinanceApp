@@ -1,8 +1,12 @@
 import BudgetCard from '@/components/BudgetCard';
 import BudgetsSkeleton from '@/components/BudgetsSkeleton';
+import DeleteModal from '@/components/DeleteModal';
+import EditBudgetModal from '@/components/EditBudgetModal';
 import ErrorState from '@/components/ErrorState';
 import GenericList from '@/components/GenericList';
 import useGetBudgetsByUserId from '@/hooks/useGetBudgetsByUserId';
+import { useModal } from '@/hooks/useModal';
+import { useSelectedItem } from '@/hooks/useSelectedItem';
 import type { Budget } from '@/schemas/budgetSchema';
 import { useNavigate, useParams } from 'react-router';
 
@@ -11,6 +15,9 @@ const UserDetails = () => {
   const navigate = useNavigate();
   const { budgets, isLoading, error } = useGetBudgetsByUserId(userId);
   console.log(budgets);
+  const editModal = useModal(false);
+  const deleteModal = useModal(false);
+  const { selectedItem, selectItem } = useSelectedItem();
 
   if (isLoading) return <BudgetsSkeleton lines={6} height={100} />;
 
@@ -40,7 +47,20 @@ const UserDetails = () => {
         <GenericList
           data={budgets || []}
           renderItem={(budget: Budget) => (
-            <BudgetCard key={budget.id} data={budget} isAdmin={true} userId={userId} />
+            <BudgetCard
+              key={budget.id}
+              data={budget}
+              isAdmin={true}
+              userId={userId}
+              onEdit={() => {
+                selectItem({ ...budget, type: 'budget' } as any);
+                editModal.open();
+              }}
+              onDelete={() => {
+                selectItem({ ...budget, type: 'budget' } as any);
+                deleteModal.open();
+              }}
+            />
           )}
           className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
           emptyState={
@@ -50,6 +70,22 @@ const UserDetails = () => {
           }
         />
       </section>
+      {editModal.isOpen && selectedItem && (
+        <EditBudgetModal
+          isOpenModal={editModal.isOpen}
+          onClose={editModal.close}
+          id={selectedItem.id}
+          data={selectedItem as Budget}
+        />
+      )}
+      {deleteModal.isOpen && selectedItem && (
+        <DeleteModal
+          isOpenModal={deleteModal.isOpen}
+          onClose={deleteModal.close}
+          type={selectedItem.type as any}
+          id={selectedItem.id}
+        />
+      )}
     </main>
   );
 };

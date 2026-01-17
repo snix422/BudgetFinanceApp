@@ -4,7 +4,7 @@ import type { Budget } from '../schemas/budgetSchema';
 type BudgetCardProps = {
   data: Budget;
   isAdmin?: boolean; // 👈 Nowa flaga: czy to widok admina?
-  onDelete?: (id: number) => void; // 👈 Funkcja usuwania
+  onDelete?: () => void; // 👈 Funkcja usuwania
   onEdit?: (budget: Budget) => void; // 👈 Funkcja edycji
   userId?: any;
 };
@@ -84,7 +84,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
 
           {/* Przycisk USUWANIA */}
           <button
-            onClick={() => onDelete && onDelete(data.id)}
+            onClick={() => onDelete && onDelete()}
             className='flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors'
           >
             <svg

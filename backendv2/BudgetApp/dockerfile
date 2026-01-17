@@ -1,0 +1,28 @@
+# ETAP 1: Budowanie (używamy obrazu SDK - on jest duży, ma wszystko)
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Najpierw kopiujemy TYLKO plik projektu i pobieramy biblioteki.
+# Dzięki temu Docker "zapamięta" ten krok. Jak zmienisz kod, a nie biblioteki,
+# to ten etap wykona się w ułamku sekundy (cache).
+COPY ["TwojaNazwaProjektu.csproj", "./"]
+RUN dotnet restore "TwojaNazwaProjektu.csproj"
+
+# Dopiero teraz kopiujemy resztę kodu
+COPY . .
+
+# Budujemy wersję Release (zoptymalizowaną)
+RUN dotnet publish "TwojaNazwaProjektu.csproj" -c Release -o /app/publish
+
+# ETAP 2: Uruchomienie (używamy obrazu Runtime - jest malutki, tylko to co niezbędne)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+
+# Kopiujemy z Etapu 1 tylko gotowe pliki .dll i configi
+COPY --from=build /app/publish .
+
+# .NET 8 domyślnie nasłuchuje na porcie 8080
+EXPOSE 8080
+
+# To jest komenda, która startuje aplikację
+ENTRYPOINT ["dotnet", "TwojaNazwaProjektu.dll"]

@@ -7,12 +7,14 @@ import Input from './ui/Input';
 import { DialogFooter } from './ui/dialog';
 import Button from './ui/Button';
 import { Loader2 } from 'lucide-react';
+import { useAdminTransactionMutations } from '@/hooks/useAdminTransactionMutations';
 
 type EditIncomeFormProps = {
   values: UpdateIncomeDto;
   id: number;
   onClose: () => void;
   budgetId: number;
+  isAdmin?: boolean;
 };
 
 export const EditIncomeForm: React.FC<EditIncomeFormProps> = ({
@@ -20,6 +22,7 @@ export const EditIncomeForm: React.FC<EditIncomeFormProps> = ({
   id,
   onClose,
   budgetId,
+  isAdmin = false,
 }) => {
   const {
     register,
@@ -34,14 +37,20 @@ export const EditIncomeForm: React.FC<EditIncomeFormProps> = ({
       date: values.date,
     },
   });
-  console.log(errors);
 
   const { updateIncome, updateIncomeLoading, updateIncomeError } = useGetIncomes(budgetId);
-  console.log(id, 'id');
+  const { updateIncome: updateIncomeAdmin, updateIncomeLoading: updateIncomeAdminLoading } = isAdmin
+    ? useAdminTransactionMutations(budgetId)
+    : { updateIncome: null, updateIncomeLoading: false };
+
   const onSubmit: SubmitHandler<UpdateIncomeDto> = (data) => {
-    console.log('test');
-    console.log(data);
-    updateIncome({ id, dto: data, budgetId: budgetId });
+    if (isAdmin && updateIncomeAdmin) {
+      console.log('admin update');
+      updateIncomeAdmin({ id, data, budgetId });
+    } else {
+      console.log('normal update');
+      updateIncome({ id, dto: data, budgetId });
+    }
   };
 
   return (
@@ -75,8 +84,10 @@ export const EditIncomeForm: React.FC<EditIncomeFormProps> = ({
         <Button type='button' variant='primary' onClick={onClose}>
           Anuluj
         </Button>
-        <Button type='submit' disabled={updateIncomeLoading}>
-          {updateIncomeLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+        <Button type='submit' disabled={isAdmin ? updateIncomeAdminLoading : updateIncomeLoading}>
+          {(isAdmin ? updateIncomeAdminLoading : updateIncomeLoading) && (
+            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+          )}
           {'Zapisz zmiany'}
         </Button>
         {updateIncomeError && <p className='text-base text-red-500'>{updateIncomeError.message}</p>}

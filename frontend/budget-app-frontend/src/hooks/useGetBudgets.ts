@@ -39,7 +39,7 @@ const useGetBudgets = () => {
     onError: (data, newBudget, context) => {
       console.log(`Błąd przy dodawaniu "${newBudget.title}":`, error);
       toast.error('Wystąpił błąd z dodaniem budżetu!');
-      queryClient.setQueryData(['budgets-query-key'], newBudget);
+      queryClient.setQueryData(['budgets-query-key'], context?.previousBudget);
     },
 
     onSettled: () => {
@@ -83,7 +83,7 @@ const useGetBudgets = () => {
   });
 
   const removeBudget = useMutation({
-    mutationFn: deleteBudget,
+    mutationFn: (id: number) => deleteBudget(id),
     onMutate: async (id: number) => {
       await queryClient.cancelQueries({ queryKey: ['budgets-query-key'] });
       const previousBudget = await queryClient.getQueryData(['budgets-query-key']);

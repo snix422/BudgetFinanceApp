@@ -15,20 +15,27 @@ import useGetBudgets from '@/hooks/useGetBudgets';
 import { Loader2 } from 'lucide-react';
 import useGetIncomes from '@/hooks/useGetIncomes';
 import { CreateIncomeSchema, type CreateIncomeDto } from '@/schemas/incomeSchema';
+import { useState } from 'react';
 
 type BudgetModalProps = {
-  isOpenModal: boolean;
-  onClose: () => void;
+  isOpenModal?: boolean;
+  onClose?: () => void;
   isEditMode: boolean;
   budgetId: number;
 };
 
 const AddIncomeModal: React.FC<BudgetModalProps> = ({
-  isOpenModal,
+  isOpenModal: externalIsOpen = false,
   isEditMode,
-  onClose,
+  onClose: externalOnClose,
   budgetId,
 }) => {
+  const [isOpen, setIsOpen] = useState(externalIsOpen);
+  const isOpenState = externalIsOpen !== undefined ? externalIsOpen : isOpen;
+  const handleClose = () => {
+    setIsOpen(false);
+    externalOnClose?.();
+  };
   const {
     register,
     handleSubmit,
@@ -45,12 +52,12 @@ const AddIncomeModal: React.FC<BudgetModalProps> = ({
   const onSubmit: SubmitHandler<CreateIncomeDto> = (dto) => {
     console.log('test');
     addIncome({ dto, budgetId });
-    onClose();
+    handleClose();
     console.log(dto);
   };
 
   return (
-    <Dialog open={isOpenModal} onOpenChange={onClose}>
+    <Dialog open={isOpenState} onOpenChange={handleClose}>
       <DialogContent className='sm:max-w-[425px] bg-white'>
         <DialogHeader>
           <DialogTitle className='text-black'>Nowy wpływ</DialogTitle>
@@ -86,7 +93,7 @@ const AddIncomeModal: React.FC<BudgetModalProps> = ({
           </div>
 
           <DialogFooter>
-            <Button type='button' variant='primary' onClick={onClose}>
+            <Button type='button' variant='primary' onClick={handleClose}>
               Anuluj
             </Button>
             <Button type='submit' disabled={addIncomeLoading}>

@@ -12,15 +12,23 @@ import { Select } from './ui/Select';
 import { CategoryRule, CategoryRuleLabels } from '@/types/enums';
 import useGetCategories from '@/hooks/useGetCategories';
 import type { Category } from '@/schemas/categorySchema';
+import { useAdminTransactionMutations } from '@/hooks/useAdminTransactionMutations';
 
 type EditExpenseFormProps = {
   values: UpdateIncomeDto;
   id: number;
   onClose: () => void;
   budgetId: number;
+  isAdmin?: boolean;
 };
 
-const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, budgetId }) => {
+const EditExpenseForm: React.FC<EditExpenseFormProps> = ({
+  values,
+  id,
+  onClose,
+  budgetId,
+  isAdmin = false,
+}) => {
   const {
     register,
     handleSubmit,
@@ -37,6 +45,10 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, 
   console.log(errors);
 
   const { updateExpense, updateExpenseLoading, updateExpenseError } = useGetExpenses(budgetId);
+  const { updateExpense: updateExpenseAdmin, updateExpenseLoading: updateExpenseAdminLoading } =
+    isAdmin
+      ? useAdminTransactionMutations(budgetId)
+      : { updateExpense: null, updateExpenseLoading: false };
   const { categories } = useGetCategories();
   const groupedCategories = {
     needs: categories && categories.filter((c: Category) => c.rule === CategoryRule.Needs), // 1 to Needs
@@ -47,7 +59,11 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, 
     console.log('test');
     console.log(data);
 
-    updateExpense({ id, dto: data, budgetId });
+    if (isAdmin && updateExpenseAdmin) {
+      updateExpenseAdmin({ id, dto: data, budgetId });
+    } else {
+      updateExpense({ id, dto: data, budgetId });
+    }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 py-4'>
@@ -115,8 +131,10 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ values, id, onClose, 
         <Button type='button' variant='primary' onClick={onClose}>
           Anuluj
         </Button>
-        <Button type='submit' disabled={updateExpenseLoading}>
-          {updateExpenseLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+        <Button type='submit' disabled={isAdmin ? updateExpenseAdminLoading : updateExpenseLoading}>
+          {(isAdmin ? updateExpenseAdminLoading : updateExpenseLoading) && (
+            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+          )}
           {'Zapisz zmiany'}
         </Button>
         {updateExpenseError && (

@@ -1,0 +1,23 @@
+# --- Zależności (KRYTYCZNE!) ---
+# To musi zostać na Twoim kompie. Kontener pobierze swoje wersje.
+node_modules/
+
+# --- Wyniki budowania ---
+dist/
+build/
+
+# --- Logi błędów ---
+npm-debug.log
+yarn-error.log
+
+# --- Ustawienia IDE (VS Code) ---
+.vscode/
+.idea/
+
+# --- Git ---
+.git/
+.gitignore
+
+# --- Docker ---
+Dockerfile
+.dockerignore

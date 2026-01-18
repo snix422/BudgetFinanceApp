@@ -49,26 +49,11 @@ const BudgetDetails = () => {
     ...(expenses || []).map((e: Expense) => ({ ...e, type: 'expense' as const })),
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   console.log(allTransactions);
-  /*const groupedData = expenses?.reduce((acc: any[], curr) => {
-    const existingCategory = acc.find((item) => item.name === curr.categoryName);
-    if (existingCategory) {
-      existingCategory.value += curr.amount;
-    } else {
-      acc.push({ name: curr.categoryName, value: curr.amount });
-    }
-    return acc;
-  }, []);*/
 
   const groupedData = categories?.map((category: any) => {
-    // A. Dla KAŻDEJ kategorii z bazy, szukamy pasujących wydatków
-    // (Najbezpieczniej łączyć po ID, nie po nazwie)
     const matchingExpenses =
       expenses?.filter((expense) => expense.categoryId === category.id) || [];
-
-    // B. Sumujemy te wydatki (jeśli ich nie ma, wyjdzie 0)
     const totalAmount = matchingExpenses.reduce((sum, current) => sum + current.amount, 0);
-
-    // C. Zwracamy obiekt gotowy dla wykresu
     return {
       name: category.name,
       value: totalAmount,

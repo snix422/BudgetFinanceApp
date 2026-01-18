@@ -1,0 +1,18 @@
+# --- Foldery tymczasowe .NET (Najważniejsze!) ---
+# Ignorujemy je, bo kontener zbuduje sobie własne, czyste wersje.
+bin/
+obj/
+
+# --- Ustawienia IDE (Visual Studio) ---
+.vs/
+*.user
+*.suo
+.vscode/
+
+# --- Git ---
+.git/
+.gitignore
+
+# --- Docker ---
+Dockerfile
+.dockerignore

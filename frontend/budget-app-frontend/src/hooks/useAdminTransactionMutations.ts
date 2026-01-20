@@ -5,9 +5,9 @@ import type { UpdateExpenseDto } from '@/schemas/expenseSchema';
 import { deleteExpense, updateExpense } from '@/api/admin/expenses';
 import type { UpdateIncomeDto } from '@/schemas/incomeSchema';
 
-export const useAdminTransactionMutations = (budgetId: string | number) => {
+export const useAdminTransactionMutations = (budgetId: number) => {
   const queryClient = useQueryClient();
-  const queryKey = ['admin', 'budget', String(budgetId)];
+  const queryKey = ['admin', 'budget'];
 
   // --- DELETE (To już mieliśmy) ---
   const deleteExpenseMutation = useMutation({

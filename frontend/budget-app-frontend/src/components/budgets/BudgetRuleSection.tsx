@@ -1,4 +1,4 @@
-import BudgetSplitChart from '../BudgetSplitChart';
+import BudgetSplitChart from './charts/BudgetSplitChart';
 
 // components/budget/BudgetRuleSection.tsx
 type Props = {
@@ -19,16 +19,31 @@ export const BudgetRuleSection = ({ needs, wants, savings, resultRules, hasExpen
         </p>
       </div>
 
-      {/* KARTY LIMITÓW */}
       <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-6'>
-        {/* ... Tutaj wklej te 3 divy z Needs, Wants, Savings ... */}
+        {/* Needs */}
         <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-red-100 bg-red-50/50'>
           <span className='text-sm font-medium text-red-600 uppercase tracking-wider mb-1'>
             Limit na Rachunki (50%)
           </span>
           <h3 className='text-3xl font-bold text-gray-900'>{needs} zł</h3>
+          <p className='text-xs text-red-400 mt-2 text-center'>Opłaty stałe, czynsz, jedzenie</p>
         </div>
-        {/* ... reszta kart ... */}
+        {/* Wants */}
+        <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-yellow-100 bg-yellow-50/50'>
+          <span className='text-sm font-medium text-yellow-600 uppercase tracking-wider mb-1'>
+            Limit na Przyjemności (30%)
+          </span>
+          <h3 className='text-3xl font-bold text-gray-900'>{wants} zł</h3>
+          <p className='text-xs text-yellow-500 mt-2 text-center'>Rozrywka, wyjścia, hobby</p>
+        </div>
+        {/* Savings */}
+        <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-blue-100 bg-blue-50/50'>
+          <span className='text-sm font-medium text-blue-600 uppercase tracking-wider mb-1'>
+            Cel Oszczędności (20%)
+          </span>
+          <h3 className='text-3xl font-bold text-gray-900'>{savings} zł</h3>
+          <p className='text-xs text-blue-400 mt-2 text-center'>Poduszka finansowa, inwestycje</p>
+        </div>
       </div>
 
       {/* WYKRESY */}

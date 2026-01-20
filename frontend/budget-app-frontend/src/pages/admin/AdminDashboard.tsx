@@ -1,9 +1,5 @@
-import useGetBudgets from '../../hooks/useGetBudgets';
-import BudgetsSkeleton from '../../components/BudgetsSkeleton';
-import ErrorState from '../../components/ErrorState';
-import GenericList from '../../components/GenericList';
 import useGetAllUsers from '@/hooks/useGetAllUsers';
-import UsersTable from '@/components/UsersTable';
+import UsersTable from '@/components/admin/users/UsersTable';
 
 const AdminDashboard = () => {
   const { users, isLoading, error } = useGetAllUsers();

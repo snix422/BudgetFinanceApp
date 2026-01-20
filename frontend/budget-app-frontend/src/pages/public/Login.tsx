@@ -1,5 +1,5 @@
+import SignInForm from '@/components/auth/SignInForm';
 import { Link } from 'react-router';
-import SignInForm from '../../components/SignInForm';
 
 const Login = () => {
   return (

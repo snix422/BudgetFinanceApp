@@ -68,3 +68,15 @@ export const calculateRuleSplit = (expenses: any[] | null | undefined) => {
     totalAmountSavings,
   };
 };
+
+export const groupCategoriesByRule = (categories: Category[] | undefined) => {
+  if (!categories) {
+    return { needs: [], wants: [], savings: [] };
+  }
+
+  return {
+    needs: categories.filter((c) => c.rule === CategoryRule.Needs),
+    wants: categories.filter((c) => c.rule === CategoryRule.Wants),
+    savings: categories.filter((c) => c.rule === CategoryRule.Savings),
+  };
+};

@@ -1,19 +1,26 @@
 import useGetBudgets from '../../hooks/useGetBudgets';
-import GenericList from '../../components/GenericList';
+import GenericList from '../../components/ui/GenericList';
 import BudgetsSkeleton from '../../components/BudgetsSkeleton';
-import ErrorState from '../../components/ErrorState';
+import ErrorState from '../../components/layout/ErrorState';
 import Button from '../../components/ui/Button';
 import { useState } from 'react';
-import BudgetModal from '@/components/AddBudgetModal';
-import BudgetCard from '@/components/BudgetCard';
+
+import BudgetCard from '@/components/budgets/cards/BudgetCard';
+import BudgetModal from '@/components/budgets/modals/AddBudgetModal';
+import TransactionSkeleton from '@/components/TransactionSkeleton';
 
 export const Dashboard = () => {
   const { budgets, isLoading, error } = useGetBudgets();
   const [isOpenModal, setIsOpenModal] = useState(false);
-  if (isLoading) return <BudgetsSkeleton lines={6} height={300} />;
+  if (isLoading)
+    return (
+      <div className='w-full flex justify-center items-center mt-10 gap-10 flex-wrap'>
+        <BudgetsSkeleton lines={6} height={300} />;
+      </div>
+    );
   if (error) return <ErrorState message={error.message} />;
   return (
-    <main className='w-full h-full bg-red-200 flex flex-col items-center pt-20 gap-20 font-sans'>
+    <main className='w-full h-full bg-red-200 flex flex-col items-center pt-20 gap-20 font-sans p-8'>
       {budgets && budgets.length > 0 ? (
         <div className='flex flex-col items-center gap-4'>
           <h1 className='text-2xl font-bold'>Twoje budżety: </h1>
@@ -25,11 +32,7 @@ export const Dashboard = () => {
       <Button variant='primary' size='md' onClick={() => setIsOpenModal(true)}>
         Dodaj budżet
       </Button>
-      <BudgetModal
-        isOpenModal={isOpenModal}
-        onClose={() => setIsOpenModal(false)}
-        isEditMode={false}
-      />
+      <BudgetModal isOpenModal={isOpenModal} onClose={() => setIsOpenModal(false)} />
     </main>
   );
 };

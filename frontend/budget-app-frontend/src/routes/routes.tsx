@@ -2,16 +2,17 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { lazy } from 'react';
 
 // Layouts
-import MainLayout from '../layouts/MainLayout';
-import SuspenseLayout from '../components/SuspenseLayout';
-import { ErrorPage } from '../pages/ErrorPage';
-import Register from '../pages/public/Register';
-import Dashboard from '../pages/app/Dashboard';
-import BudgetDetails from '@/pages/app/BudgetDetails';
-import ProtectedRoute from '@/components/ProtectedRoute';
+
+import SuspenseLayout from '@/components/layout/SuspenseLayout';
+import MainLayout from '@/layouts/MainLayout';
+import { ErrorPage } from '@/pages/ErrorPage';
+import Register from '@/pages/public/Register';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import AppLayout from '@/layouts/AppLayout';
-import AdminDashboard from '@/pages/admin/AdminDashboard';
+import Dashboard from '@/pages/app/Dashboard';
+import BudgetDetails from '@/pages/app/BudgetDetails';
 import AdminLayout from '@/layouts/AdminLayout';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
 import UserDetails from '@/pages/admin/UserDetails';
 import AdminBudgetDetails from '@/pages/admin/AdminBudgetDetails';
 //import AppLayout from '../layouts/AppLayout';

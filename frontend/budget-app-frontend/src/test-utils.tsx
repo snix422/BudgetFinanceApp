@@ -1,18 +1,18 @@
-// Dodajemy słówko 'type' przed importem typów
 import type { ReactElement, ReactNode } from 'react';
-import { render } from '@testing-library/react';
+import { render as rtlRender } from '@testing-library/react'; // [1] Importujemy z inną nazwą
 import type { RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-
-// Alternatywnie można to zapisać w jednej linii tak:
-// import { render, type RenderOptions } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 const AllTheProviders = ({ children }: { children: ReactNode }) => {
   return <BrowserRouter>{children}</BrowserRouter>;
 };
 
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
-  render(ui, { wrapper: AllTheProviders, ...options });
+  rtlRender(ui, { wrapper: AllTheProviders, ...options });
+
+// [2] Eksportujemy wszystko poza oryginalnym renderem
 
 export * from '@testing-library/react';
-export { customRender as render };
+// [3] Eksportujemy nasze własne render
+export { customRender as render, userEvent };

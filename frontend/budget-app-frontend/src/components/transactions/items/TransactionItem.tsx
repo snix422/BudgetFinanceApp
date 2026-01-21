@@ -51,7 +51,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
         <div
           className={`p-3 rounded-full ${isExpense ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'}`}
         >
-          {isExpense ? <ArrowDownCircle size={24} /> : <ArrowUpCircle size={24} />}
+          {isExpense ? (
+            <ArrowDownCircle data-testid='arrow-down' size={24} />
+          ) : (
+            <ArrowUpCircle data-testid='arrow-up' size={24} />
+          )}
         </div>
 
         <div className='flex flex-col'>

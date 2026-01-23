@@ -41,7 +41,7 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
         <Input
           type='date'
           id='date'
-          label='data'
+          label='Start date'
           error={errors.startDate?.message}
           placeholder='np.20.01.2026'
           {...register('startDate')}

@@ -101,7 +101,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ budgetId, onClose }) =>
         </Button>
         <Button type='submit' disabled={addExpenseLoading}>
           {addExpenseLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-          Utwórz
+          Dodaj wydatek
         </Button>
         {addExpenseError && <p className='text-base text-red-500'>{addExpenseError.message}</p>}
       </DialogFooter>

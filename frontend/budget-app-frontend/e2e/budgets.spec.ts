@@ -11,7 +11,10 @@ test.describe('Budgets Page', () => {
     await page.getByRole('link', { name: 'Budżety' }).click();
     expect(page).toHaveURL('http://localhost:3000/budgets');
   });
-
+  test('should properly render budgets page', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Twoje Budżety' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Utwórz nowy budżet' })).toBeVisible();
+  });
   test('should create a new budget', async ({ page }) => {
     const budgetName = `Budżet ${Math.floor(Math.random() * 1000)}`;
     await page.getByRole('button', { name: budgetName }).click();
@@ -22,6 +25,20 @@ test.describe('Budgets Page', () => {
     await expect(page.getByText(budgetName)).toBeVisible();
   });
 
+  test('should open details of the first budget on the list', async ({ page }) => {
+    // Szukamy pierwszej karty budżetu, nieważne jak się nazywa
+    const firstBudgetCard = page.locator('.budget-card').first();
+
+    // Wyciągamy jej tekst, żeby wiedzieć czego szukać w nagłówku później (opcjonalnie)
+    const name = await firstBudgetCard.locator('h3').innerText();
+
+    await firstBudgetCard.getByRole('button', { name: /szczegóły/i }).click();
+
+    await expect(page.getByRole('heading', { name: 'Szczegóły budżetu' })).toBeVisible();
+    // Możesz sprawdzić czy nazwa w detalu zgadza się z tą z karty
+    await expect(page.locator('body')).toContainText(name);
+  });
+
   test('should show validation errors when creating a budget with empty fields', async ({
     page,
   }) => {
@@ -30,10 +47,5 @@ test.describe('Budgets Page', () => {
     await expect(page.getByText('Title jest wymagany')).toBeVisible();
     await expect(page.getByText('Start date jest wymagany')).toBeVisible();
     await expect(page.getByText('End date jest wymagany')).toBeVisible();
-  });
-
-  test('should properly render budgets page', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Twoje Budżety' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Utwórz nowy budżet' })).toBeVisible();
   });
 });

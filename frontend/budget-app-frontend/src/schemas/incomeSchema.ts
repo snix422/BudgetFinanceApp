@@ -13,7 +13,7 @@ export const IncomeFormSchema = z.object({
     .number({ invalid_type_error: 'Wpisz liczbę' })
     .positive('Kwota musi być dodatnia'),
   date: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: 'Wybierz datę',
+    message: 'Data jest wymagana',
   }),
 });
 

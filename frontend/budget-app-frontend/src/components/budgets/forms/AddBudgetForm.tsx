@@ -60,7 +60,7 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
         </Button>
         <Button type='submit' disabled={addBudgetLoading}>
           {addBudgetLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-          'Utwórz'
+          Utwórz
         </Button>
         {addBudgetError && <p className='text-base text-red-500'>{addBudgetError.message}</p>}
       </DialogFooter>

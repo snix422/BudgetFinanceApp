@@ -12,16 +12,14 @@ export const ExpenseSchema = z.object({
 
 export const ExpenseFormSchema = z.object({
   title: z.string().trim().min(1, 'Tytuł jest wymagany'),
-  amount: z.coerce
-    .number({ invalid_type_error: 'Wpisz liczbę' })
-    .positive('Kwota musi być dodatnia'),
+  amount: z.coerce.number({ invalid_type_error: 'Wpisz liczbę' }).positive('Kwota jest wymagana'),
   date: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: 'Wybierz datę początkową',
+    message: 'Wybierz datę',
   }),
   categoryId: z
     .number({
-      required_error: 'Wybierz kategorię',
-      invalid_type_error: 'Musisz wybrać kategorię', // To zadziała, jeśli user nic nie wybierze
+      required_error: 'Kategoria jest wymagana',
+      invalid_type_error: 'Kategoria jest wymagana', // To zadziała, jeśli user nic nie wybierze
     })
     .int()
     .positive({ message: 'Wybierz poprawną kategorię' }), // ID musi być > 0

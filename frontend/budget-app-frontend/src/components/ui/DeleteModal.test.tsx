@@ -18,7 +18,6 @@ describe("DeleteModal", () => {
         const cancelButton = screen.getByText('Anuluj');
         cancelButton.click();
         expect(onCloseMock).toHaveBeenCalledTimes(1);
-    
     }
 
 });  

@@ -5,9 +5,9 @@ import { render, screen, userEvent } from '@/test-utils';
 describe('AddBudgetForm', () => {
   it('should render form inputs and buttons', () => {
     render(<AddBudgetForm onClose={vi.fn()} />);
-    expect(screen.getByLabelText('Title')).toBeInTheDocument();
-    expect(screen.getByLabelText('Start date')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    expect(screen.getByLabelText('Nazwa budżetu')).toBeInTheDocument();
+    expect(screen.getByLabelText('Data rozpoczęcia')).toBeInTheDocument();
+    expect(screen.getByLabelText('Data zakończenia')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Anuluj/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Utwórz/i })).toBeInTheDocument();
   });
@@ -29,9 +29,9 @@ describe('AddBudgetForm', () => {
   it('should submit form with valid data', async () => {
     const user = userEvent.setup();
     render(<AddBudgetForm onClose={vi.fn()} />);
-    await user.type(screen.getByLabelText('Title'), 'Mój budżet');
-    await user.type(screen.getByLabelText('Start date'), '2024-01-01');
-    await user.type(screen.getByLabelText('End Date'), '2024-12-31');
+    await user.type(screen.getByLabelText('Nazwa budżetu'), 'Mój budżet');
+    await user.type(screen.getByLabelText('Data rozpoczęcia'), '2024-01-01');
+    await user.type(screen.getByLabelText('Data zakończenia'), '2024-12-31');
     const submitButton = screen.getByRole('button', { name: /Utwórz/i });
     await user.click(submitButton);
     expect(screen.queryByText(/jest wymagany/i)).not.toBeInTheDocument();

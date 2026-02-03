@@ -22,7 +22,7 @@ describe('TransactionItem', () => {
       />,
     );
     expect(screen.getByText(mockData.title)).toBeInTheDocument();
-    expect(screen.getByText(mockData.amount)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(mockData.amount.toString(), 'i'))).toBeInTheDocument();
   });
   it('should render income item', () => {
     const mockData = {
@@ -43,7 +43,7 @@ describe('TransactionItem', () => {
     );
     expect(screen.getByTestId('arrow-up')).toBeInTheDocument();
     expect(screen.getByText('Wpływ')).toBeInTheDocument();
-    expect(screen.getByText('+')).toBeInTheDocument();
+    expect(screen.getByText(/\+/i)).toBeInTheDocument();
   });
   it('should render expense item', () => {
     const mockData = {
@@ -64,7 +64,7 @@ describe('TransactionItem', () => {
     );
     expect(screen.getByTestId('arrow-down')).toBeInTheDocument();
     expect(screen.getByText('Wydatek')).toBeInTheDocument();
-    expect(screen.getByText('-')).toBeInTheDocument();
+    expect(screen.getByText(/\-/i)).toBeInTheDocument();
   });
   it('should buttons clicked', async () => {
     const mockData = {
@@ -86,8 +86,8 @@ describe('TransactionItem', () => {
         selectItem={vitest.fn()}
       />,
     );
-    const editButton = screen.getByRole('button', { name: /edytuj/i });
-    const deleteButton = screen.getByRole('button', { name: /usuń/i });
+    const editButton = screen.getByRole('button', { name: /edit/i });
+    const deleteButton = screen.getByRole('button', { name: /delete/i });
 
     await userEvent.click(editButton); // Dodaj import
     await userEvent.click(deleteButton); // Dodaj import

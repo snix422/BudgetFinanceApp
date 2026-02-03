@@ -7,9 +7,9 @@ test.describe('Budgets Page', () => {
     await page.getByLabel('Adres e-mail').fill('user5@gmail.com');
     await page.getByLabel('Hasło').fill('Test123!');
     await page.getByRole('button', { name: 'Zaloguj się' }).click();
-    expect(page).toHaveURL('http://localhost:3000/dashboard');
+    expect(page).toHaveURL('http://localhost:5173/dashboard');
     await page.getByRole('link', { name: 'Budżety' }).click();
-    expect(page).toHaveURL('http://localhost:3000/budgets');
+    expect(page).toHaveURL('http://localhost:5173/budgets');
   });
   test('should properly render budgets page', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Twoje Budżety' })).toBeVisible();

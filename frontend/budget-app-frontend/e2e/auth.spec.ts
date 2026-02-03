@@ -3,7 +3,7 @@ import test, { expect } from '@playwright/test';
 test.describe('Moduł Logowania', () => {
   // To wykona się automatycznie przed testem 1, przed testem 2 i przed testem 3
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:5173');
     await page.getByRole('button', { name: 'Zaloguj się' }).click();
   });
 

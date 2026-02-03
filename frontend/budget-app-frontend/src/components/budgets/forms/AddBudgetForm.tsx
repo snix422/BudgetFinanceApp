@@ -15,7 +15,6 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<CreateBudgetDto>({
     resolver: zodResolver(CreateBudgetSchema),
@@ -32,8 +31,8 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 py-4'>
       <div className='space-y-2'>
         <Input
-          id='title'
-          label='Title'
+          id='Title'
+          label='Nazwa budżetu'
           error={errors.title?.message}
           placeholder='np. Jedzenie'
           {...register('title')}
@@ -41,7 +40,7 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
         <Input
           type='date'
           id='date'
-          label='Start date'
+          label='Data rozpoczęcia'
           error={errors.startDate?.message}
           placeholder='np.20.01.2026'
           {...register('startDate')}
@@ -49,7 +48,7 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
         <Input
           type='date'
           id='date'
-          label='End Date'
+          label='Data zakończenia'
           error={errors.endDate?.message}
           {...register('endDate')}
         />

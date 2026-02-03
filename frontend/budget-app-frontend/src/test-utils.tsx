@@ -1,11 +1,26 @@
+import { render as rtlRender, screen as rtlScreen } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
-import { render as rtlRender } from '@testing-library/react'; // [1] Importujemy z inną nazwą
 import type { RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
+import { queryClient } from './lib/queryClient';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false, // Wyłączamy powtarzanie, żeby testy nie trwały wieki
+      },
+    },
+  });
 const AllTheProviders = ({ children }: { children: ReactNode }) => {
-  return <BrowserRouter>{children}</BrowserRouter>;
+  const queryClient = createTestQueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </QueryClientProvider>
+  );
 };
 
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
@@ -14,5 +29,4 @@ const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>
 // [2] Eksportujemy wszystko poza oryginalnym renderem
 
 export * from '@testing-library/react';
-// [3] Eksportujemy nasze własne render
-export { customRender as render, userEvent };
+export { customRender as render, userEvent, rtlScreen as screen };

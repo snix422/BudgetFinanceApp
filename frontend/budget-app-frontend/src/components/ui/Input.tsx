@@ -7,17 +7,21 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, error, ...props }, ref) => {
+  ({ id, className, type, label, error, ...props }, ref) => {
     return (
       <div className='w-full space-y-2'>
         {/* Renderujemy Label tylko jeśli został podany */}
         {label && (
-          <label className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-700'>
+          <label
+            htmlFor={id}
+            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-700'
+          >
             {label}
           </label>
         )}
 
         <input
+          id={id}
           type={type}
           className={cn(
             // Podstawowe style inputa (wygląd jak w nowoczesnych UI kits)

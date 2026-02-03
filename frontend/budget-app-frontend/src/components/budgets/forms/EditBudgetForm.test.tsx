@@ -11,9 +11,9 @@ describe('EditBudgetForm', () => {
         values={{ title: 'Test', startDate: '2025-01-01', endDate: '2025-01-31' }}
       />,
     );
-    expect(screen.getByLabelText('Title')).toBeInTheDocument();
-    expect(screen.getByLabelText('Start date')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    expect(screen.getByLabelText('Nazwa budżetu')).toBeInTheDocument();
+    expect(screen.getByLabelText('Data rozpoczęcia')).toBeInTheDocument();
+    expect(screen.getByLabelText('Data zakończenia')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Anuluj/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Zapisz zmiany/i })).toBeInTheDocument();
   });
@@ -51,12 +51,12 @@ describe('EditBudgetForm', () => {
         values={{ title: 'Test', startDate: '2025-01-01', endDate: '2025-01-31' }}
       />,
     );
-    await user.clear(screen.getByLabelText('Title'));
-    await user.type(screen.getByLabelText('Title'), 'Zaktualizowany budżet');
-    await user.clear(screen.getByLabelText('Start date'));
-    await user.type(screen.getByLabelText('Start date'), '2025-02-01');
-    await user.clear(screen.getByLabelText('End Date'));
-    await user.type(screen.getByLabelText('End Date'), '2025-02-28');
+    await user.clear(screen.getByLabelText('Nazwa budżetu'));
+    await user.type(screen.getByLabelText('Nazwa budżetu'), 'Zaktualizowany budżet');
+    await user.clear(screen.getByLabelText('Data rozpoczęcia'));
+    await user.type(screen.getByLabelText('Data rozpoczęcia'), '2025-02-01');
+    await user.clear(screen.getByLabelText('Data zakończenia'));
+    await user.type(screen.getByLabelText('Data zakończenia'), '2025-02-28');
     await user.click(screen.getByRole('button', { name: /Zapisz zmiany/i }));
     expect(screen.queryByText(/jest wymagany/i)).not.toBeInTheDocument();
   });
@@ -68,8 +68,8 @@ describe('EditBudgetForm', () => {
         values={{ title: 'Test', startDate: '2025-01-01', endDate: '2025-01-31' }}
       />,
     );
-    expect(screen.getByLabelText('Title')).toHaveValue('Test');
-    expect(screen.getByLabelText('Start date')).toHaveValue('2025-01-01');
-    expect(screen.getByLabelText('End Date')).toHaveValue('2025-01-31');
+    expect(screen.getByLabelText('Nazwa budżetu')).toHaveValue('Test');
+    expect(screen.getByLabelText('Data rozpoczęcia')).toHaveValue('2025-01-01');
+    expect(screen.getByLabelText('Data zakończenia')).toHaveValue('2025-01-31');
   });
 });

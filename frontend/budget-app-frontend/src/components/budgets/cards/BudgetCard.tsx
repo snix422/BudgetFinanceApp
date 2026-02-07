@@ -22,7 +22,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
     : `/app/budgets/${data.id}`;
 
   return (
-    <div className='bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow duration-200'>
+    <div className='bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow duration-200 budget-card'>
       {/* IKONA GŁÓWNA */}
       <div className='w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4'>
         <svg

@@ -31,15 +31,15 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 py-4'>
       <div className='space-y-2'>
         <Input
-          id='Title'
-          label='Nazwa budżetu'
+          id='Tytuł'
+          label='Tytuł'
           error={errors.title?.message}
           placeholder='np. Jedzenie'
           {...register('title')}
         />
         <Input
           type='date'
-          id='date'
+          id='Data rozpoczęcia'
           label='Data rozpoczęcia'
           error={errors.startDate?.message}
           placeholder='np.20.01.2026'
@@ -47,7 +47,7 @@ const AddBudgetForm: React.FC<AddBudgetFormProps> = ({ onClose }) => {
         />
         <Input
           type='date'
-          id='date'
+          id='Data zakończenia'
           label='Data zakończenia'
           error={errors.endDate?.message}
           {...register('endDate')}

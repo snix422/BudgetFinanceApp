@@ -33,23 +33,23 @@ const AddIncomeForm: React.FC<AddIncomeFormProps> = ({ budgetId, onClose }) => {
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 py-4'>
       <div className='space-y-2'>
         <Input
-          id='title'
-          label='Title'
+          id='Tytuł'
+          label='Tytuł'
           error={errors.title?.message}
           placeholder='np. Jedzenie'
           {...register('title')}
         />
         <Input
           type='number'
-          id='amount'
-          label='Amount'
+          id='Kwota'
+          label='Kwota'
           error={errors.amount?.message}
           placeholder='np.20.01.2026'
           {...register('amount')}
         />
         <Input
           type='date'
-          id='date'
+          id='Data'
           label='Data'
           error={errors.date?.message}
           {...register('date')}

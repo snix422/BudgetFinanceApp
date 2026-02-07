@@ -11,18 +11,15 @@ export const ExpenseSchema = z.object({
 });
 
 export const ExpenseFormSchema = z.object({
-  title: z.string().trim().min(1, 'Tytuł jest wymagany'),
+  title: z.string().trim().min(1, 'Nazwa wydatku jest  wymagana'),
   amount: z.coerce.number({ invalid_type_error: 'Wpisz liczbę' }).positive('Kwota jest wymagana'),
   date: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'Wybierz datę',
   }),
-  categoryId: z
-    .number({
-      required_error: 'Kategoria jest wymagana',
-      invalid_type_error: 'Kategoria jest wymagana', // To zadziała, jeśli user nic nie wybierze
-    })
-    .int()
-    .positive({ message: 'Wybierz poprawną kategorię' }), // ID musi być > 0
+  categoryId: z.preprocess(
+    (val) => (val === '' || val === null || val === undefined ? 0 : Number(val)),
+    z.number().gt(0, { message: 'Kategoria jest wymagana' }),
+  ),
 });
 
 export type Expense = z.infer<typeof ExpenseSchema>;

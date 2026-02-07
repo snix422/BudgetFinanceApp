@@ -8,13 +8,14 @@ export const IncomeSchema = z.object({
 });
 
 export const IncomeFormSchema = z.object({
-  title: z.string().trim().min(1, 'Tytuł jest wymagany'),
-  amount: z.coerce
-    .number({ invalid_type_error: 'Wpisz liczbę' })
-    .positive('Kwota musi być dodatnia'),
-  date: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: 'Data jest wymagana',
-  }),
+  title: z.string().trim().min(1, 'Nazwa przychodu jest wymagana'),
+  amount: z.coerce.number({ invalid_type_error: 'Wpisz liczbę' }).positive('Kwota jest wymagana'),
+  date: z
+    .string()
+    .min(1, 'Wybierz datę')
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: 'Wybierz datę',
+    }),
 });
 
 export type Income = z.infer<typeof IncomeSchema>;

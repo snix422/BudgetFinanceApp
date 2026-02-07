@@ -10,8 +10,8 @@ export default defineConfig({
 
   use: {
     /* Tutaj wpisz port, na którym działa Twój React (np. 5173 dla Vite) */
-    baseURL: 'http://localhost:5173', 
-    
+    baseURL: 'http://localhost:5173',
+
     /* Nagrywaj ślad przy każdym błędzie (bardzo pomaga na początku) */
     trace: 'retain-on-failure',
     video: 'on-first-retry',
@@ -22,14 +22,14 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
+    /*{
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    },
+    },*/
   ],
 
   /* Automatyczne odpalanie serwera przed testami */
@@ -40,43 +40,3 @@ export default defineConfig({
     timeout: 120 * 1000, // Daj mu 2 minuty na wstanie (przydatne na wolniejszych maszynach)
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

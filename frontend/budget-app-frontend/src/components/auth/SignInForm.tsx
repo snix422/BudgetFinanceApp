@@ -23,13 +23,15 @@ const SignInForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
       <Input
-        label='Adres e-mail'
+        id='E-mail'
+        label='E-mail'
         type='email'
         placeholder='jan@kowalski.pl'
         error={errors.email?.message}
         {...register('email')}
       />
       <Input
+        id='password'
         label='Hasło'
         type='password'
         placeholder='Write password...'

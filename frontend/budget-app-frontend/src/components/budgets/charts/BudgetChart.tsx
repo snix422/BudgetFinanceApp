@@ -6,7 +6,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart';
-import { Bar, BarChart, Legend, Pie, PieChart, Tooltip } from 'recharts';
+import { Pie, PieChart } from 'recharts';
 
 const chartConfig = {
   incomes: {

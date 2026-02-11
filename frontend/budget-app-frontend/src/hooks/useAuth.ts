@@ -4,7 +4,7 @@ import { getCurrentUser, logOut, signIn, signUp } from '../api/auth/auth';
 import type { SignInFormValues } from '../schemas/signInSchema';
 import type { SignUpFormValues } from '../schemas/signUpSchema';
 import { toast } from 'sonner';
-import type { Axios, AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 type BackendError = {
   message: string;

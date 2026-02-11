@@ -14,11 +14,7 @@ import { mergeAndSortTransactions } from '@/utils/budgetCalculations';
 
 const AdminBudgetDetails = () => {
   const { id: budgetId, userId } = useParams();
-  const {
-    data: budget,
-    isLoading,
-    error,
-  } = useGetBudgetsByUserIdAndBudgetId(userId, Number(budgetId));
+  const { data: budget } = useGetBudgetsByUserIdAndBudgetId(userId, Number(budgetId));
   const { expenses } = useGetExpenses(Number(budgetId));
   const { incomes } = useGetIncomes(Number(budgetId));
 

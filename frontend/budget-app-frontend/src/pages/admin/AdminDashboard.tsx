@@ -2,7 +2,7 @@ import useGetAllUsers from '@/hooks/useGetAllUsers';
 import UsersTable from '@/components/admin/users/UsersTable';
 
 const AdminDashboard = () => {
-  const { users, isLoading, error } = useGetAllUsers();
+  const { users } = useGetAllUsers();
   if (!users) return <div></div>;
   console.log('admin dashboard');
   console.log(users);

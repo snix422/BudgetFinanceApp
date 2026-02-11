@@ -11,7 +11,6 @@ import type { UpdateExpenseDto } from '@/schemas/expenseSchema';
 import { Select } from '../../ui/Select';
 import { CategoryRule, CategoryRuleLabels } from '@/types/enums';
 import useGetCategories from '@/hooks/useGetCategories';
-import type { Category } from '@/schemas/categorySchema';
 import { useAdminTransactionMutations } from '@/hooks/useAdminTransactionMutations';
 import { groupCategoriesByRule } from '@/utils/budgetCalculations';
 
@@ -33,7 +32,7 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({
   const {
     register,
     handleSubmit,
-    reset,
+
     formState: { errors },
   } = useForm<UpdateExpenseDto>({
     resolver: zodResolver(UpdateIncomeSchema),

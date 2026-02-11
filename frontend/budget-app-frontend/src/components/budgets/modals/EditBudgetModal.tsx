@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog';
-import type { Budget, UpdateBudgetDto } from '@/schemas/budgetSchema';
+import type { Budget } from '@/schemas/budgetSchema';
 import { EditBudgetForm } from '../forms/EditBudgetForm';
 
 type EditBudgetModalProps = {

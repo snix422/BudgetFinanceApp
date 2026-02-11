@@ -1,8 +1,8 @@
-import './App.css'
-import AppProvider from './providers/AppProvider'
+import './App.css';
+import AppProvider from './providers/AppProvider';
 
 function App() {
-  return <AppProvider />
+  return <AppProvider />;
 }
 
-export default App
+export default App;

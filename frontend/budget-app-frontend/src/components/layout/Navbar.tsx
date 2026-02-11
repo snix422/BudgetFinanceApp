@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router';
 
-import { Wallet, LogOut, User as UserIcon, LayoutDashboard, PieChart } from 'lucide-react';
+import { Wallet, LogOut, LayoutDashboard, PieChart } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
 import Button from '../ui/Button';
 

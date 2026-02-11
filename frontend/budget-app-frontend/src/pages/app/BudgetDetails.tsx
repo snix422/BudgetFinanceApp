@@ -22,6 +22,7 @@ import ErrorState from '@/components/layout/ErrorState';
 import BudgetChart from '@/components/budgets/charts/BudgetChart';
 import { ExpensesChart } from '@/components/transactions/charts/ExpensesChart';
 import BudgetsSkeleton from '@/components/BudgetsSkeleton';
+import type { Budget } from '@/schemas/budgetSchema';
 
 const BudgetDetails = () => {
   const { id: budgetId } = useParams();
@@ -37,7 +38,7 @@ const BudgetDetails = () => {
   const editExpenseModal = useModal();
 
   // Wybrany element
-  const { selectedItem, selectItem, clearSelection } = useSelectedItem();
+  const { selectedItem, selectItem } = useSelectedItem();
 
   const { categories } = useGetCategories();
 

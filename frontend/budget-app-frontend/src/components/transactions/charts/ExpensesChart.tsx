@@ -6,9 +6,9 @@ import {
 } from '@/components/ui/chart';
 import React, { useMemo } from 'react';
 
-import { Bar, BarChart, LabelList, Legend, Pie, PieChart, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 
-const info = [
+/*const info = [
   {
     rachunki: 700,
     kredyt: 1500,
@@ -34,7 +34,7 @@ const chartConfig = {
     label: 'Zabawa',
     color: '#ef9999',
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig;*/
 
 type ExpensesChart = {
   data: any[];
@@ -44,14 +44,16 @@ export const ExpensesChart: React.FC<ExpensesChart> = ({ data }) => {
   const sortedData = useMemo(() => {
     return [...data].sort((a, b) => b.value - a.value).slice(0, 15);
   }, [data]);
-  console.log(data);
+
   const chartConfig = {
     amount: {
       label: 'Kwota',
       color: 'hsl(var(--primary))',
     },
   } satisfies ChartConfig;
+
   const chartWidth = data.length > 0 ? Math.max(data.length * 110, 500) : '100%';
+
   return (
     <div className='w-full overflow-x-auto pb-4 flex flex-col items-center'>
       {/* Jeśli chartWidth jest undefined, div zajmie 100%, jeśli ustawiony - rozszerzy się */}

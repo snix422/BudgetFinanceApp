@@ -54,7 +54,7 @@ export const calculateBudgetSplit = (totalEarned: number | undefined | null): Bu
   };
 };
 
-export const calculateRuleSplit = (expenses: any[] | null | undefined) => {
+export const calculateRuleSplit = (expenses: Expense[] | null | undefined) => {
   if (!expenses) return { totalAmountNeeds: 0, totalAmountWants: 0, totalAmountSavings: 0 };
   const matchingNeeds = expenses.filter((e) => e.categoryRule == CategoryRule.Needs);
   const matchingWants = expenses.filter((e) => e.categoryRule == CategoryRule.Wants);

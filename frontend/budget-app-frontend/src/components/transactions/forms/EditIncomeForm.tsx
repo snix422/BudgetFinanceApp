@@ -27,7 +27,6 @@ export const EditIncomeForm: React.FC<EditIncomeFormProps> = ({
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<UpdateIncomeDto>({
     resolver: zodResolver(UpdateIncomeSchema),

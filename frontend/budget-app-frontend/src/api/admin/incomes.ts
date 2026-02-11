@@ -1,5 +1,4 @@
 import { api } from '@/lib/axiosClient';
-import type { UpdateExpenseDto } from '@/schemas/expenseSchema';
 import type { UpdateIncomeDto } from '@/schemas/incomeSchema';
 
 // Zwróć uwagę, że nazwy funkcji mogą być krótkie, bo import wskazuje, że to admin

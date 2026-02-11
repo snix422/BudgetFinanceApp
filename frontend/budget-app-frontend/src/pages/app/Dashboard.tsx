@@ -4,10 +4,8 @@ import BudgetsSkeleton from '../../components/BudgetsSkeleton';
 import ErrorState from '../../components/layout/ErrorState';
 import Button from '../../components/ui/Button';
 import { useState } from 'react';
-
 import BudgetCard from '@/components/budgets/cards/BudgetCard';
 import BudgetModal from '@/components/budgets/modals/AddBudgetModal';
-import TransactionSkeleton from '@/components/TransactionSkeleton';
 
 export const Dashboard = () => {
   const { budgets, isLoading, error } = useGetBudgets();
@@ -24,7 +22,7 @@ export const Dashboard = () => {
       {budgets && budgets.length > 0 ? (
         <div className='flex flex-col items-center gap-4'>
           <h1 className='text-2xl font-bold'>Twoje budżety: </h1>
-          <GenericList data={budgets} renderItem={(item, index) => <BudgetCard data={item} />} />
+          <GenericList data={budgets} renderItem={(item) => <BudgetCard data={item} />} />
         </div>
       ) : (
         <h1 className='text-2xl font-bold'>Brak budżetów</h1>

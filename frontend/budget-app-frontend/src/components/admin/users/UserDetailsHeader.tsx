@@ -1,8 +1,8 @@
 // src/components/admin/users/UserDetailsHeader.tsx
-
+import type { NavigateFunction } from 'react-router-dom';
 type Props = {
   userId: string | undefined;
-  navigate: any;
+  navigate: NavigateFunction;
 };
 
 export const UserDetailsHeader = ({ userId, navigate }: Props) => {

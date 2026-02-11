@@ -1,4 +1,4 @@
-import { ArrowDownCircle, ArrowUpCircle, Pencil, Trash2 } from 'lucide-react';
+import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import Button from '../../ui/Button';
 import type { DeleteType } from '@/components/ui/DeleteModal';
 

@@ -1,10 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  BudgetSchema,
-  type Budget,
-  type CreateBudgetDto,
-  type UpdateBudgetDto,
-} from '@/schemas/budgetSchema';
+import { BudgetSchema, type Budget, type UpdateBudgetDto } from '@/schemas/budgetSchema';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import useGetBudgets from '@/hooks/useGetBudgets';
 import { Loader2 } from 'lucide-react';
@@ -40,21 +35,14 @@ const UpdateBudgetModal: React.FC<UpdateBudgetModalProps> = ({
   const {
     register,
     handleSubmit,
-    reset,
+
     formState: { errors },
   } = useForm<UpdateBudgetDto>({
     resolver: zodResolver(BudgetSchema),
-    defaultValues: { title: data.title, amount: data.amount, date: data.date },
+    defaultValues: { title: data.title, startDate: data.startDate, endDate: data.endDate },
   });
 
-  const {
-    addBudget,
-    addBudgetLoading,
-    addBudgetError,
-    updateBudget,
-    updateBudgetLoading,
-    updateBudgetError,
-  } = useGetBudgets();
+  const { updateBudget, updateBudgetLoading, updateBudgetError } = useGetBudgets();
 
   const onSubmit: SubmitHandler<UpdateBudgetDto> = (dto) => {
     updateBudget({ id: data.id, dto: dto });
@@ -81,19 +69,20 @@ const UpdateBudgetModal: React.FC<UpdateBudgetModalProps> = ({
               {...register('title')}
             />
             <Input
-              id='amount'
-              label='Amount'
-              error={errors.amount?.message}
+              id='startDate'
+              label='startDate'
+              type='date'
+              error={errors.startDate?.message}
               placeholder='np. 1000'
-              {...register('amount')}
+              {...register('startDate')}
             />
             <Input
+              id='endDate'
+              label='endDate'
               type='date'
-              id='date'
-              label='data'
-              error={errors.date?.message}
+              error={errors.endDate?.message}
               placeholder='np.20.01.2026'
-              {...register('date')}
+              {...register('endDate')}
             />
           </div>
 

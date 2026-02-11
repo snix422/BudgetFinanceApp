@@ -16,7 +16,7 @@ const UserDetails = () => {
   console.log(budgets);
   const editModal = useModal(false);
   const deleteModal = useModal(false);
-  const { selectedItem, selectItem } = useSelectedItem();
+  const { selectedItem } = useSelectedItem();
 
   if (isLoading) return <BudgetsSkeleton lines={6} height={100} />;
 

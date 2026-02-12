@@ -18,7 +18,7 @@ const useGetExpenses = (budgetId: number) => {
   const addExpense = useMutation({
     mutationFn: ({ dto, budgetId }: { dto: CreateExpenseDto; budgetId: number }) =>
       createExpense(dto, budgetId),
-    onMutate: async (variables, context) => {
+    onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
       const previousExpenses = queryClient.getQueryData(['expenses-query-key', variables.budgetId]);
       queryClient.setQueryData(
@@ -35,13 +35,13 @@ const useGetExpenses = (budgetId: number) => {
       );
       return { previousExpenses };
     },
-    onSuccess(data, variables, onMutateResult, context) {
+    onSuccess(data, variables) {
       console.log('ID nowego wydatku:', data);
       console.log('Dodano wydatek pomyślnie:', variables.dto.title);
       toast.success('Dodano wydatek pomyślnie!');
     },
 
-    onError(error, variables, onMutateResult, context) {
+    onError(error, variables, onMutateResult) {
       console.log(`Błąd przy dodawaniu "${variables.dto.title}":`, error);
       toast.error('Wystąpił błąd z dodawaniem wydatku!');
       if (onMutateResult?.previousExpenses) {
@@ -49,7 +49,7 @@ const useGetExpenses = (budgetId: number) => {
       }
     },
 
-    onSettled(data, error, variables, onMutateResult, context) {
+    onSettled(data, error, variables) {
       queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
@@ -58,10 +58,7 @@ const useGetExpenses = (budgetId: number) => {
   const editExpense = useMutation({
     mutationFn: ({ id, dto, budgetId }: { id: number; dto: UpdateExpenseDto; budgetId: number }) =>
       updateExpense(id, dto, budgetId),
-    onMutate: async (
-      variables: { id: number; dto: UpdateExpenseDto; budgetId: number },
-      context,
-    ) => {
+    onMutate: async (variables: { id: number; dto: UpdateExpenseDto; budgetId: number }) => {
       await queryClient.cancelQueries({ queryKey: ['expenses-query-key'] });
       const previousExpense = queryClient.getQueryData(['expenses-query-key']);
       queryClient.setQueryData(['expenses-query-key'], (old: Expense[] = []) => {
@@ -83,12 +80,12 @@ const useGetExpenses = (budgetId: number) => {
       return { previousExpense };
     },
 
-    onSuccess(data, variables, onMutateResult, context) {
+    onSuccess(data, variables) {
       console.log('Edytowano wydatek pomyślnie. ID:', variables.id);
       toast.success('Edytowano wydatek pomyślnie!');
     },
 
-    onError(error, variables, onMutateResult, context) {
+    onError(error, variables, onMutateResult) {
       console.log(`Błąd edycji wydatku ID ${variables.id}:`, error);
       toast.error('Wystąpił błąd z edycją wydatku!');
       if (onMutateResult?.previousExpense) {
@@ -96,7 +93,7 @@ const useGetExpenses = (budgetId: number) => {
       }
     },
 
-    onSettled(data, error, variables, onMutateResult, context) {
+    onSettled(data, error, variables) {
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
     },
@@ -104,7 +101,7 @@ const useGetExpenses = (budgetId: number) => {
 
   const removeExpense = useMutation({
     mutationFn: ({ id, budgetId }: { id: number; budgetId: number }) => deleteExpense(id, budgetId),
-    onMutate(variables, context) {
+    onMutate(variables) {
       queryClient.cancelQueries({ queryKey: ['expenses-query-key'] });
       const previousExpenses = queryClient.getQueryData(['expenses-query-key']);
 
@@ -114,18 +111,18 @@ const useGetExpenses = (budgetId: number) => {
 
       return { previousExpenses };
     },
-    onSuccess(data, variables, onMutateResult, context) {
+    onSuccess(data) {
       toast.success('Usunięto wydatek pomyślnie!');
-      console.log('Usunięto budżet o ID:', data);
+      console.log('Usunięto wydatek o ID:', data);
     },
-    onError(error, variables, onMutateResult, context) {
+    onError(error, variables, onMutateResult) {
       console.log(`Wystąpił błąd z usuwaniem wydatku ID ${variables}:`, error);
       toast.error('Wystąpił błąd z usuwaniem wydatku!');
       if (onMutateResult?.previousExpenses) {
         queryClient.setQueryData(['expenses-query-key'], onMutateResult.previousExpenses);
       }
     },
-    onSettled(data, error, variables, onMutateResult, context) {
+    onSettled(data, error, variables) {
       queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },

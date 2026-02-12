@@ -42,7 +42,7 @@ export const useAdminTransactionMutations = (budgetId: number) => {
       updateIncome(Number(payload.budgetId), payload.id, payload.data),
 
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
-    onError: (error) => alert('Nie udało się zaktualizować wpływu.'),
+    onError: () => alert('Nie udało się zaktualizować wpływu.'),
   });
 
   return {

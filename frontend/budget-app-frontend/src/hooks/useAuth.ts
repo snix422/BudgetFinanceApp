@@ -17,11 +17,7 @@ type ResponseLogin = {
 const useAuth = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const {
-    data: user,
-    isLoading: userIsLoading,
-    isError: userIsError,
-  } = useQuery({
+  const { data: user, isLoading: userIsLoading } = useQuery({
     queryKey: ['user'],
     queryFn: getCurrentUser,
     retry: false,
@@ -30,12 +26,12 @@ const useAuth = () => {
 
   const loginMutation = useMutation<ResponseLogin, AxiosError<BackendError>, SignInFormValues>({
     mutationFn: (dto: SignInFormValues) => signIn(dto),
-    onSuccess: async (data, variables, onMutateResult, context) => {
+    onSuccess: async (data) => {
       toast.success('Zalogowano pomyślnie!');
       await queryClient.invalidateQueries({ queryKey: ['user'] });
-      const user = queryClient.getQueryData<any>(['user']);
+      //const user = queryClient.getQueryData<any>(['user']);
 
-      const isAdmin = user?.roleName?.toUpperCase() === 'ADMIN';
+      //const isAdmin = user?.roleName?.toUpperCase() === 'ADMIN';
 
       /*if (isAdmin) {
         navigate('/admin/dashboard'); // Lub /admin/dashboard
@@ -45,7 +41,7 @@ const useAuth = () => {
       navigate('/');
       console.log(data);
     },
-    onError(error, variables, onMutateResult, context) {
+    onError(error) {
       toast.error(error.response?.data.message || 'Błąd logowania');
       console.error('Nie udało się zalogować:', error);
     },
@@ -53,11 +49,11 @@ const useAuth = () => {
 
   const registerMutation = useMutation<ResponseLogin, AxiosError<BackendError>, SignUpFormValues>({
     mutationFn: (dto: SignUpFormValues) => signUp(dto),
-    onSuccess(data, variables, onMutateResult, context) {
+    onSuccess(data) {
       toast.success('Konto utworzone! Zaloguj się');
       console.log(data);
     },
-    onError(error, variables, onMutateResult, context) {
+    onError(error) {
       console.error('Nie udało się zarejestrować:', error);
       toast.error(error.response?.data.message);
     },
@@ -65,12 +61,12 @@ const useAuth = () => {
 
   const logOutMutation = useMutation({
     mutationFn: logOut,
-    onSuccess(data, variables, onMutateResult, context) {
+    onSuccess() {
       toast.success('Wylogowano!');
       queryClient.setQueryData(['user'], null);
       navigate('/');
     },
-    onError(error, variables, onMutateResult, context) {
+    onError(error) {
       toast.error('Nie udało się wylogować');
       console.error('Nie udało się wylogować:', error);
     },

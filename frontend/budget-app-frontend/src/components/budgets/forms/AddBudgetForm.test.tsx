@@ -5,7 +5,7 @@ import { render, screen, userEvent } from '@/test-utils';
 describe('AddBudgetForm', () => {
   it('should render form inputs and buttons', () => {
     render(<AddBudgetForm onClose={vi.fn()} />);
-    expect(screen.getByLabelText('Nazwa budżetu')).toBeInTheDocument();
+    expect(screen.getByLabelText('Tytuł')).toBeInTheDocument();
     expect(screen.getByLabelText('Data rozpoczęcia')).toBeInTheDocument();
     expect(screen.getByLabelText('Data zakończenia')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Anuluj/i })).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('AddBudgetForm', () => {
   it('should submit form with valid data', async () => {
     const user = userEvent.setup();
     render(<AddBudgetForm onClose={vi.fn()} />);
-    await user.type(screen.getByLabelText('Nazwa budżetu'), 'Mój budżet');
+    await user.type(screen.getByLabelText('Tytuł'), 'Mój budżet');
     await user.type(screen.getByLabelText('Data rozpoczęcia'), '2024-01-01');
     await user.type(screen.getByLabelText('Data zakończenia'), '2024-12-31');
     const submitButton = screen.getByRole('button', { name: /Utwórz/i });

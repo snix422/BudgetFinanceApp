@@ -1,13 +1,15 @@
 import EditExpenseModal from '@/components/transactions/modals/EditExpenseModal';
 import EditIncomeModal from '@/components/transactions/modals/EditIncomeModal';
 import DeleteModal from '@/components/ui/DeleteModal';
+import type { SelectedItem } from '@/hooks/useSelectedItem';
+import type { ModalType } from '@/hooks/useModal';
 
 type Props = {
   budgetId: number;
-  selectedItem: any;
-  deleteModal: any; // Twój stan modala
-  editIncomeModal: any;
-  editExpenseModal: any;
+  selectedItem: SelectedItem;
+  deleteModal: ModalType; // Twój stan modala
+  editIncomeModal: ModalType;
+  editExpenseModal: ModalType;
 };
 
 export const BudgetModals = ({
@@ -24,7 +26,7 @@ export const BudgetModals = ({
           isOpenModal={deleteModal.isOpen}
           onClose={deleteModal.close}
           type={selectedItem.type}
-          id={selectedItem.id}
+          id={Number(selectedItem.id)}
           budgetId={budgetId}
         />
       )}
@@ -35,16 +37,19 @@ export const BudgetModals = ({
           onClose={editIncomeModal.close}
           data={selectedItem}
           budgetId={budgetId}
-          id={selectedItem.id}
+          id={Number(selectedItem.id)}
         />
       )}
       {editExpenseModal.isOpen && selectedItem && (
         <EditExpenseModal
           isOpenModal={editExpenseModal.isOpen}
           onClose={editExpenseModal.close}
-          id={selectedItem.id}
+          id={Number(selectedItem.id)}
           budgetId={budgetId}
-          data={selectedItem}
+          data={{
+            ...selectedItem,
+            categoryId: selectedItem.categoryId ?? 0, // Jeśli undefined, daj 0 lub id kategorii "Inne"
+          }}
         />
       )}
     </>

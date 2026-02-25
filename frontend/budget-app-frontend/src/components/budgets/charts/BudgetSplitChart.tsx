@@ -17,9 +17,9 @@ type BudgetSplitChartProps = {
 
 const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({ ruleAmount, total, label, name }) => {
   const categoryColors: Record<string, string> = {
-    needs: '#ef4444', // Czerwony
-    wants: '#eab308', // Żółty (yellow-500)
-    savings: '#3b82f6', // Niebieski (blue-500)
+    needs: '#ef4444',
+    wants: '#eab308',
+    savings: '#3b82f6',
   };
   const activeColor = categoryColors[name] || '#22c55e';
   const chartConfig = {

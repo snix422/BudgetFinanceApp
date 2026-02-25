@@ -4,13 +4,14 @@ import useGetBudgetsByUserIdAndBudgetId from '@/hooks/useGetBudgetsByUserIdAndBu
 import useGetExpenses from '@/hooks/useGetExpenses';
 import useGetIncomes from '@/hooks/useGetIncomes';
 import { useModal } from '@/hooks/useModal';
-import { useSelectedItem } from '@/hooks/useSelectedItem';
+import { useSelectedItem, type SelectedItem } from '@/hooks/useSelectedItem';
 import type { Expense } from '@/schemas/expenseSchema';
 import type { Income } from '@/schemas/incomeSchema';
 import { useParams } from 'react-router';
 import { BudgetSummaryCards } from '@/components/budgets/BudgetSummaryCards';
 import { BudgetModals } from '@/components/admin/modals/BudgetModals';
 import { mergeAndSortTransactions } from '@/utils/budgetCalculations';
+import type { Transaction } from '@/types/transaction';
 
 const AdminBudgetDetails = () => {
   const { id: budgetId, userId } = useParams();
@@ -22,7 +23,6 @@ const AdminBudgetDetails = () => {
   const editIncomeModal = useModal();
   const editExpenseModal = useModal();
 
-  // Wybrany element
   const { selectedItem, selectItem } = useSelectedItem();
 
   const allTransactions = mergeAndSortTransactions(incomes as Income[], expenses as Expense[]);
@@ -43,39 +43,53 @@ const AdminBudgetDetails = () => {
         <h2>Brak wpływów i wydatków</h2>
       ) : (
         <div className='flex justify-center items-center mt-10'>
-          <GenericList
+          <GenericList<Transaction>
             data={allTransactions}
-            className='flex flex-col items-center'
-            renderItem={(item: any) => (
-              <TransactionItem
-                key={`${item.type}-${item.id}`}
-                data={item}
-                onOpenDeleteModal={() => {
-                  selectItem(item);
-                  deleteModal.open();
-                }}
-                onOpenEditModal={() => {
-                  selectItem(item);
-                  if (item.type === 'income') {
-                    editIncomeModal.open();
-                  } else {
-                    editExpenseModal.open();
-                  }
-                }}
-                selectItem={selectItem}
-              />
-            )}
+            className='w-full flex flex-col items-center pt-8 pb-8'
+            renderItem={(item: Transaction) => {
+              const handleSelect = () => {
+                const select: SelectedItem = {
+                  id: item.id,
+                  type: item.type,
+                  title: item.title,
+                  amount: item.amount,
+                  date: item.date,
+                };
+                selectItem(select);
+              };
+              return (
+                <TransactionItem
+                  key={`${item.type}-${item.id}`}
+                  data={item}
+                  onOpenDeleteModal={() => {
+                    handleSelect();
+                    deleteModal.open();
+                  }}
+                  onOpenEditModal={() => {
+                    handleSelect();
+                    if (item.type === 'income') {
+                      editIncomeModal.open();
+                    } else {
+                      editExpenseModal.open();
+                    }
+                  }}
+                  selectItem={selectItem}
+                />
+              );
+            }}
           />
         </div>
       )}
 
-      <BudgetModals
-        budgetId={Number(budgetId)}
-        deleteModal={deleteModal}
-        editIncomeModal={editIncomeModal}
-        editExpenseModal={editExpenseModal}
-        selectedItem={selectedItem}
-      />
+      {selectedItem && (
+        <BudgetModals
+          budgetId={Number(budgetId)}
+          deleteModal={deleteModal}
+          editIncomeModal={editIncomeModal}
+          editExpenseModal={editExpenseModal}
+          selectedItem={selectedItem}
+        />
+      )}
     </main>
   );
 };

@@ -9,7 +9,6 @@ export const useAdminTransactionMutations = (budgetId: number) => {
   const queryClient = useQueryClient();
   const queryKey = ['admin', 'budget'];
 
-  // --- DELETE (To już mieliśmy) ---
   const deleteExpenseMutation = useMutation({
     mutationFn: (id: number) => deleteExpense(Number(budgetId), id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
@@ -20,15 +19,12 @@ export const useAdminTransactionMutations = (budgetId: number) => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
 
-  // --- UPDATE EXPENSE (Nowość!) ---
   const updateExpenseMutation = useMutation({
-    // Payload to obiekt zawierający ID i dane do zmiany
     mutationFn: (payload: { id: number; data: UpdateExpenseDto; budgetId: number }) =>
       updateExpense(Number(budgetId), payload.id, payload.data),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
-      // Tu opcjonalnie: toast.success("Zaktualizowano wydatek");
     },
     onError: (error) => {
       console.error('Błąd edycji wydatku:', error);
@@ -36,7 +32,6 @@ export const useAdminTransactionMutations = (budgetId: number) => {
     },
   });
 
-  // --- UPDATE INCOME (Nowość!) ---
   const updateIncomeMutation = useMutation({
     mutationFn: (payload: { id: number; data: UpdateIncomeDto; budgetId: number }) =>
       updateIncome(Number(payload.budgetId), payload.id, payload.data),
@@ -48,12 +43,11 @@ export const useAdminTransactionMutations = (budgetId: number) => {
   return {
     deleteExpense: deleteExpenseMutation.mutate,
     deleteIncome: deleteIncomeMutation.mutate,
-    updateExpense: updateExpenseMutation.mutate, // Eksportujemy funkcję
+    updateExpense: updateExpenseMutation.mutate,
     updateExpenseLoading: updateExpenseMutation.isPending,
-    updateIncome: updateIncomeMutation.mutate, // Eksportujemy funkcję
+    updateIncome: updateIncomeMutation.mutate,
     updateIncomeLoading: updateIncomeMutation.isPending,
 
-    // Stany ładowania (przydatne do zablokowania formularza)
     isUpdating: updateExpenseMutation.isPending || updateIncomeMutation.isPending,
   };
 };

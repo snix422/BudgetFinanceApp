@@ -8,9 +8,10 @@ import { useAdminTransactionMutations } from '@/hooks/useAdminTransactionMutatio
 import Input from '@/components/ui/Input';
 import { DialogFooter } from '@/components/ui/dialog';
 import Button from '@/components/ui/Button';
+import type { SelectedItem } from '@/hooks/useSelectedItem';
 
 type EditIncomeFormProps = {
-  values: UpdateIncomeDto;
+  values: SelectedItem;
   id: number;
   onClose: () => void;
   budgetId: number;
@@ -38,9 +39,12 @@ export const EditIncomeForm: React.FC<EditIncomeFormProps> = ({
   });
 
   const { updateIncome, updateIncomeLoading, updateIncomeError } = useGetIncomes(budgetId);
-  const { updateIncome: updateIncomeAdmin, updateIncomeLoading: updateIncomeAdminLoading } = isAdmin
-    ? useAdminTransactionMutations(budgetId)
-    : { updateIncome: null, updateIncomeLoading: false };
+
+  const { updateIncome: adminUpdate, updateIncomeLoading: adminLoading } =
+    useAdminTransactionMutations(budgetId);
+
+  const updateIncomeAdmin = isAdmin ? adminUpdate : null;
+  const updateIncomeAdminLoading = isAdmin ? adminLoading : false;
 
   const onSubmit: SubmitHandler<UpdateIncomeDto> = (data) => {
     if (isAdmin && updateIncomeAdmin) {

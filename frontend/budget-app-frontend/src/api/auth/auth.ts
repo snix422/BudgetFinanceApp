@@ -2,10 +2,7 @@ import { api } from '../../lib/axiosClient';
 import type { SignInFormValues } from '../../schemas/signInSchema';
 import type { SignUpFormValues } from '../../schemas/signUpSchema';
 import type { User } from '../../schemas/userSchema';
-
-type ResponseLogin = {
-  message: string;
-};
+import type { ResponseLogin } from '../../types/auth';
 
 export const getCurrentUser = async (): Promise<User> => {
   return await api.get('/auth/me');

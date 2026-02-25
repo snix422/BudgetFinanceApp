@@ -1,6 +1,13 @@
 import { useState } from 'react';
 
-export type SelectedItem = Record<string, any>;
+export type SelectedItem = {
+  id: number | string;
+  type: 'income' | 'expense';
+  title: string;
+  amount: number;
+  date: string;
+  categoryId?: number;
+};
 
 export const useSelectedItem = () => {
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);

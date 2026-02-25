@@ -13,6 +13,7 @@ import { CategoryRule, CategoryRuleLabels } from '@/types/enums';
 import useGetCategories from '@/hooks/useGetCategories';
 import { useAdminTransactionMutations } from '@/hooks/useAdminTransactionMutations';
 import { groupCategoriesByRule } from '@/utils/budgetCalculations';
+import type { Category } from '@/schemas/categorySchema';
 
 type EditExpenseFormProps = {
   values: UpdateIncomeDto;
@@ -45,10 +46,13 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({
   console.log(errors);
 
   const { updateExpense, updateExpenseLoading, updateExpenseError } = useGetExpenses(budgetId);
-  const { updateExpense: updateExpenseAdmin, updateExpenseLoading: updateExpenseAdminLoading } =
-    isAdmin
-      ? useAdminTransactionMutations(budgetId)
-      : { updateExpense: null, updateExpenseLoading: false };
+
+  const { updateExpense: adminUpdate, updateExpenseLoading: adminLoading } =
+    useAdminTransactionMutations(budgetId);
+
+  const updateExpenseAdmin = isAdmin ? adminUpdate : null;
+  const updateExpenseAdminLoading = isAdmin ? adminLoading : false;
+
   const { categories } = useGetCategories();
   const groupedCategories = groupCategoriesByRule(categories);
 
@@ -92,7 +96,7 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({
           </option>
           <optgroup label={CategoryRuleLabels[CategoryRule.Needs]}>
             {groupedCategories.needs &&
-              groupedCategories.needs.map((cat: any) => (
+              groupedCategories.needs.map((cat: Category) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
@@ -100,15 +104,15 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({
           </optgroup>
           <optgroup label={CategoryRuleLabels[CategoryRule.Wants]}>
             {groupedCategories.wants &&
-              groupedCategories.wants.map((cat: any) => (
+              groupedCategories.wants.map((cat: Category) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
               ))}
           </optgroup>
-          <optgroup label={CategoryRuleLabels[CategoryRule.Wants]}>
+          <optgroup label={CategoryRuleLabels[CategoryRule.Savings]}>
             {groupedCategories.savings &&
-              groupedCategories.savings.map((cat: any) => (
+              groupedCategories.savings.map((cat: Category) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>

@@ -7,15 +7,12 @@ import Button from '../ui/Button';
 const Navbar = () => {
   const { user, isAuthenticated, logOut, logOutIsLoading } = useAuth();
 
-  // Opcjonalne: do aktywnego linku
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
-  console.log(user, 'user');
+
   return (
-    // Sticky header z efektem rozmycia (backdrop-blur)
     <header className='sticky h-[10vh] top-0 z-50 max-w-full border-b border-gray-200 bg-yellow-50 backdrop-blur-md'>
       <div className='mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8'>
-        {/* --- LEWA STRONA: LOGO --- */}
         <div className='flex items-center gap-8'>
           <Link to='/' className='flex items-center gap-2'>
             <div className='rounded-lg bg-blue-600 p-2 text-white'>
@@ -24,7 +21,6 @@ const Navbar = () => {
             <span className='text-xl font-bold tracking-tight text-gray-900'>BudgetApp</span>
           </Link>
 
-          {/* --- ŚRODEK: LINKI NAWIGACYJNE (Widoczne tylko po zalogowaniu) --- */}
           {isAuthenticated && (
             <nav className='hidden md:flex items-center gap-6'>
               <Link
@@ -49,12 +45,9 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* --- PRAWA STRONA: AKCJE UŻYTKOWNIKA --- */}
         <div className='flex items-center gap-4'>
           {isAuthenticated ? (
-            // WARIANT A: ZALOGOWANY
             <>
-              {/* Informacja o użytkowniku (na mobile ukrywamy maila, pokazujemy ikonkę) */}
               <div className='hidden sm:flex flex-col items-end mr-2'>
                 <span className='text-sm font-medium text-gray-900'>
                   {user?.firstName ? `Witaj, ${user.firstName}` : 'Moje Konto'}
@@ -74,7 +67,6 @@ const Navbar = () => {
               </Button>
             </>
           ) : (
-            // WARIANT B: NIEZALOGOWANY (Gość)
             <>
               <Link to='/login'>
                 <Button size='sm'>Zaloguj się</Button>

@@ -33,11 +33,13 @@ const UserDetails = () => {
         onEditClick={editModal.open}
       />
 
-      <UserActionModals
-        editModal={editModal}
-        deleteModal={deleteModal}
-        selectedItem={selectedItem}
-      />
+      {selectedItem && (
+        <UserActionModals
+          editModal={editModal}
+          deleteModal={deleteModal}
+          selectedItem={selectedItem}
+        />
+      )}
     </main>
   );
 };

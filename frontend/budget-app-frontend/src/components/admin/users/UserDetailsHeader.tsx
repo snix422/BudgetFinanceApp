@@ -1,4 +1,3 @@
-// src/components/admin/users/UserDetailsHeader.tsx
 import type { NavigateFunction } from 'react-router-dom';
 type Props = {
   userId: string | undefined;

@@ -7,7 +7,7 @@ import useGetIncomes from '@/hooks/useGetIncomes';
 import Button from '@/components/ui/Button';
 import useGetCategories from '@/hooks/useGetCategories';
 import { useModal } from '@/hooks/useModal';
-import { useSelectedItem } from '@/hooks/useSelectedItem';
+import { useSelectedItem, type SelectedItem } from '@/hooks/useSelectedItem';
 import { BudgetModals } from '@/components/budgets/modals/BudgetModals';
 import { BudgetRuleSection } from '@/components/budgets/BudgetRuleSection';
 import { BudgetSummaryCards } from '@/components/budgets/BudgetSummaryCards';
@@ -22,7 +22,7 @@ import ErrorState from '@/components/layout/ErrorState';
 import BudgetChart from '@/components/budgets/charts/BudgetChart';
 import { ExpensesChart } from '@/components/transactions/charts/ExpensesChart';
 import BudgetsSkeleton from '@/components/BudgetsSkeleton';
-import type { Budget } from '@/schemas/budgetSchema';
+import type { Transaction } from '@/types/transaction';
 
 const BudgetDetails = () => {
   const { id: budgetId } = useParams();
@@ -30,14 +30,12 @@ const BudgetDetails = () => {
   const { expenses } = useGetExpenses(Number(budgetId));
   const { incomes } = useGetIncomes(Number(budgetId));
 
-  // Modale
   const deleteModal = useModal();
   const addIncomeModal = useModal();
   const addExpenseModal = useModal();
   const editIncomeModal = useModal();
   const editExpenseModal = useModal();
 
-  // Wybrany element
   const { selectedItem, selectItem } = useSelectedItem();
 
   const { categories } = useGetCategories();
@@ -98,28 +96,41 @@ const BudgetDetails = () => {
         <h2>Brak wpływów i wydatków</h2>
       ) : (
         <div className='w-4/5 flex items-center'>
-          <GenericList
+          <GenericList<Transaction>
             data={allTransactions}
             className='w-full flex flex-col items-center pt-8 pb-8'
-            renderItem={(item: any) => (
-              <TransactionItem
-                key={`${item.type}-${item.id}`}
-                data={item}
-                onOpenDeleteModal={() => {
-                  selectItem(item);
-                  deleteModal.open();
-                }}
-                onOpenEditModal={() => {
-                  selectItem(item);
-                  if (item.type === 'income') {
-                    editIncomeModal.open();
-                  } else {
-                    editExpenseModal.open();
-                  }
-                }}
-                selectItem={selectItem}
-              />
-            )}
+            renderItem={(item: Transaction) => {
+              const handleSelect = () => {
+                const select: SelectedItem = {
+                  id: item.id,
+                  type: item.type,
+                  title: item.title,
+                  amount: item.amount,
+                  date: item.date,
+                };
+                selectItem(select);
+              };
+
+              return (
+                <TransactionItem
+                  key={`${item.type}-${item.id}`}
+                  data={item}
+                  onOpenDeleteModal={() => {
+                    handleSelect();
+                    deleteModal.open();
+                  }}
+                  onOpenEditModal={() => {
+                    handleSelect();
+                    if (item.type === 'income') {
+                      editIncomeModal.open();
+                    } else {
+                      editExpenseModal.open();
+                    }
+                  }}
+                  selectItem={selectItem}
+                />
+              );
+            }}
           />
         </div>
       )}

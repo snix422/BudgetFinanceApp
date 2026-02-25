@@ -4,11 +4,8 @@ import { Link } from 'react-router';
 const Register = () => {
   return (
     <div className='flex min-h-screen w-full'>
-      {/* --- LEWA STRONA: Formularz --- */}
-      {/* Na mobile: 100% szerokości (w-full). Na desktopie: 50% (lg:w-1/2) */}
       <div className='flex w-full flex-col justify-center items-center bg-white px-8 lg:w-1/2 lg:px-16 xl:px-24'>
         <div className='w-full max-w-md space-y-8'>
-          {/* Nagłówek sekcji logowania */}
           <div>
             <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Witaj w BudgetApp</h1>
             <p className='mt-2 text-sm text-gray-600'>
@@ -22,10 +19,8 @@ const Register = () => {
             </p>
           </div>
 
-          {/* Twój komponent formularza */}
           <SignUpForm />
 
-          {/* Stopka (opcjonalnie, np. linki prawne) */}
           <p className='text-center text-xs text-gray-500 mt-6'>
             Logując się akceptujesz{' '}
             <a href='#' className='underline hover:text-gray-800'>
@@ -40,20 +35,15 @@ const Register = () => {
         </div>
       </div>
 
-      {/* --- PRAWA STRONA: Zdjęcie --- */}
-      {/* Hidden na mobile (hidden), widoczne na dużym ekranie (lg:block). Szerokość 50% */}
       <div className='hidden lg:block lg:w-1/2 relative bg-gray-900'>
-        {/* Zdjęcie tła (z Unsplash - finanse/biuro) */}
         <img
           className='absolute inset-0 h-full w-full object-cover opacity-90'
           src='https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=2071&auto=format&fit=crop'
           alt='Finanse i budżet'
         />
 
-        {/* Ciemny overlay (żeby tekst był czytelny) */}
         <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent' />
 
-        {/* Tekst na zdjęciu (Cytat lub USP) */}
         <div className='absolute bottom-0 left-0 p-12 text-white'>
           <blockquote className='space-y-2'>
             <p className='text-lg font-medium leading-relaxed'>

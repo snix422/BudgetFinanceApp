@@ -13,7 +13,6 @@ const GenericList = <T,>({
   emptyState = 'Brak danych',
   className,
 }: GenericListProps<T>) => {
-  //if (!data?.length || !data) return <h2 className='text-white text-2xl'>{emptyMessage}</h2>;
   if (!data || data.length === 0) {
     return <>{emptyState || <p className='text-center text-gray-500'>Brak danych.</p>}</>;
   }

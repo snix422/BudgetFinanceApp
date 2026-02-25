@@ -5,7 +5,6 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   error?: string;
 }
 
-// Używamy forwardRef, żeby react-hook-form mógł "podpiąć się" pod ten element
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, error, className, id, children, ...props }, ref) => {
     return (

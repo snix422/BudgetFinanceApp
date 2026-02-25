@@ -1,13 +1,13 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog';
-import type { UpdateIncomeDto } from '@/schemas/incomeSchema';
 import { EditIncomeForm } from '../forms/EditIncomeForm';
+import type { SelectedItem } from '@/hooks/useSelectedItem';
 
 type EditIncomeModalProps = {
   isOpenModal?: boolean;
   onClose: () => void;
   id: number;
   budgetId: number;
-  data: UpdateIncomeDto;
+  data: SelectedItem;
   isAdmin?: boolean;
 };
 

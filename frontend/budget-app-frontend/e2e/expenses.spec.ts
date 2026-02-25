@@ -34,7 +34,8 @@ test.describe('Expenses E2E Tests', () => {
     await page.getByLabel('Tytuł').fill('Wydatek testowy');
     await page.getByLabel('Kwota').fill('500');
     await page.getByLabel('Data').fill('2025-03-20');
-    await page.getByLabel('Kategoria').selectOption('1');
+    //await page.getByLabel('Kategoria').selectOption('1');
+    await page.getByLabel('Kategoria').selectOption({ label: 'Jedzenie' });
     //await page.getByRole('button', { name: 'Dodaj wydatek' }).click();
     //await expect(page.getByText('Wydatek testowy')).toBeVisible();
     //await expect(page.getByText('500')).toBeVisible();

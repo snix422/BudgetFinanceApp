@@ -4,6 +4,7 @@ import Input from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import useGetCategories from '@/hooks/useGetCategories';
 import useGetExpenses from '@/hooks/useGetExpenses';
+import type { Category } from '@/schemas/categorySchema';
 import { CreateExpenseSchema, type CreateExpenseDto } from '@/schemas/expenseSchema';
 import { CategoryRule, CategoryRuleLabels } from '@/types/enums';
 import { groupCategoriesByRule } from '@/utils/budgetCalculations';
@@ -64,7 +65,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ budgetId, onClose }) =>
           </option>
           <optgroup label={CategoryRuleLabels[CategoryRule.Needs]}>
             {groupedCategories.needs &&
-              groupedCategories.needs.map((cat: any) => (
+              groupedCategories.needs.map((cat: Category) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
@@ -72,15 +73,15 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ budgetId, onClose }) =>
           </optgroup>
           <optgroup label={CategoryRuleLabels[CategoryRule.Wants]}>
             {groupedCategories.wants &&
-              groupedCategories.wants.map((cat: any) => (
+              groupedCategories.wants.map((cat: Category) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
               ))}
           </optgroup>
-          <optgroup label={CategoryRuleLabels[CategoryRule.Wants]}>
+          <optgroup label={CategoryRuleLabels[CategoryRule.Savings]}>
             {groupedCategories.savings &&
-              groupedCategories.savings.map((cat: any) => (
+              groupedCategories.savings.map((cat: Category) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>

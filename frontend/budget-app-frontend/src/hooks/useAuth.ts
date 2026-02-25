@@ -5,14 +5,8 @@ import type { SignInFormValues } from '../schemas/signInSchema';
 import type { SignUpFormValues } from '../schemas/signUpSchema';
 import { toast } from 'sonner';
 import type { AxiosError } from 'axios';
-
-type BackendError = {
-  message: string;
-};
-
-type ResponseLogin = {
-  message: string;
-};
+import type { BackendError } from '../types/api';
+import type { ResponseLogin } from '../types/auth';
 
 const useAuth = () => {
   const navigate = useNavigate();
@@ -29,15 +23,7 @@ const useAuth = () => {
     onSuccess: async (data) => {
       toast.success('Zalogowano pomyślnie!');
       await queryClient.invalidateQueries({ queryKey: ['user'] });
-      //const user = queryClient.getQueryData<any>(['user']);
 
-      //const isAdmin = user?.roleName?.toUpperCase() === 'ADMIN';
-
-      /*if (isAdmin) {
-        navigate('/admin/dashboard'); // Lub /admin/dashboard
-      } else {
-        navigate('/app/dashboard');
-      }*/
       navigate('/');
       console.log(data);
     },

@@ -3,3 +3,9 @@ export type BudgetSplit = {
   wants: number;
   savings: number;
 };
+
+export type BudgetRuleResults = {
+  totalAmountNeeds: number;
+  totalAmountWants: number;
+  totalAmountSavings: number;
+};

@@ -7,6 +7,7 @@ import {
 import React, { useMemo } from 'react';
 
 import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
+import type { ChartDataItem } from '@/types/charts';
 
 /*const info = [
   {
@@ -36,11 +37,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;*/
 
-type ExpensesChart = {
-  data: any[];
+type ExpensesChartProps = {
+  data: ChartDataItem[];
 };
 
-export const ExpensesChart: React.FC<ExpensesChart> = ({ data }) => {
+export const ExpensesChart: React.FC<ExpensesChartProps> = ({ data }) => {
   const sortedData = useMemo(() => {
     return [...data].sort((a, b) => b.value - a.value).slice(0, 15);
   }, [data]);
@@ -56,7 +57,6 @@ export const ExpensesChart: React.FC<ExpensesChart> = ({ data }) => {
 
   return (
     <div className='w-full overflow-x-auto pb-4 flex flex-col items-center'>
-      {/* Jeśli chartWidth jest undefined, div zajmie 100%, jeśli ustawiony - rozszerzy się */}
       <div className='text-center space-y-1'>
         <h2 className='text-2xl font-bold tracking-tight text-gray-900'>Bilans Twoich wydatków</h2>
         <p className='text-base text-gray-500'>Podsumowanie wszystkich wydatków wg kategorii</p>
@@ -66,7 +66,7 @@ export const ExpensesChart: React.FC<ExpensesChart> = ({ data }) => {
           <BarChart
             accessibilityLayer
             data={sortedData}
-            margin={{ top: 30, left: 0, right: 0, bottom: 0 }} // Marginesy
+            margin={{ top: 30, left: 0, right: 0, bottom: 0 }}
           >
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
 
@@ -74,24 +74,18 @@ export const ExpensesChart: React.FC<ExpensesChart> = ({ data }) => {
               dataKey='name'
               tickLine={false}
               axisLine={false}
-              interval={0} // Wymusza pokazanie wszystkich etykiet (nie pomija co drugiej)
-              tickMargin={10} // Odstęp od słupka
-              height={60} // 2. ZWIĘKSZONA WYSOKOŚĆ na napisy
-              angle={-20} // 2. OBRÓT napisów
-              textAnchor='end' // Zakotwiczenie tekstu (żeby środek nie był pod słupkiem)
-              className='text-xs' // Mniejsza czcionka
-              // Opcjonalnie: skracanie bardzo długich nazw
+              interval={0}
+              tickMargin={10}
+              height={60}
+              angle={-20}
+              textAnchor='end'
+              className='text-xs'
               tickFormatter={(value) => (value.length > 10 ? `${value.slice(0, 10)}...` : value)}
             />
 
             <YAxis hide padding={{ top: 20 }} />
 
-            <Bar
-              dataKey='value'
-              fill='var(--color-amount)'
-              radius={[4, 4, 0, 0]}
-              maxBarSize={40} // 3. LIMIT GRUBOŚCI (Naprawia problem 1 kolumny)
-            >
+            <Bar dataKey='value' fill='var(--color-amount)' radius={[4, 4, 0, 0]} maxBarSize={40}>
               <LabelList
                 dataKey='value'
                 position='top'

@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { render as rtlRender, screen as rtlScreen } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 import type { RenderOptions } from '@testing-library/react';
@@ -9,7 +11,7 @@ const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
       queries: {
-        retry: false, // Wyłączamy powtarzanie, żeby testy nie trwały wieki
+        retry: false,
       },
     },
   });
@@ -24,8 +26,6 @@ const AllTheProviders = ({ children }: { children: ReactNode }) => {
 
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
   rtlRender(ui, { wrapper: AllTheProviders, ...options });
-
-// [2] Eksportujemy wszystko poza oryginalnym renderem
 
 export * from '@testing-library/react';
 export { customRender as render, userEvent, rtlScreen as screen };

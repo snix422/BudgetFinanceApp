@@ -14,7 +14,6 @@ const SignInForm = () => {
 
   const { login, loginIsLoading, loginError } = useAuth();
   const onSubmit: SubmitHandler<SignInFormValues> = async (data) => {
-    console.log(data);
     login(data);
   };
 

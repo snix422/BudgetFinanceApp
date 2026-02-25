@@ -2,12 +2,14 @@
 
 import EditBudgetModal from '@/components/budgets/modals/EditBudgetModal';
 import DeleteModal from '@/components/ui/DeleteModal';
+import type { SelectedItem } from '@/hooks/useSelectedItem';
 import type { Budget } from '@/schemas/budgetSchema';
+import type { ModalType } from '@/hooks/useModal';
 
 type Props = {
-  editModal: any;
-  deleteModal: any;
-  selectedItem: any;
+  editModal: ModalType;
+  deleteModal: ModalType;
+  selectedItem: SelectedItem;
 };
 
 export const UserActionModals = ({ editModal, deleteModal, selectedItem }: Props) => {
@@ -17,8 +19,8 @@ export const UserActionModals = ({ editModal, deleteModal, selectedItem }: Props
         <EditBudgetModal
           isOpenModal={editModal.isOpen}
           onClose={editModal.close}
-          id={selectedItem.id}
-          data={selectedItem as Budget}
+          id={Number(selectedItem.id)}
+          data={selectedItem as unknown as Budget}
         />
       )}
 
@@ -27,7 +29,7 @@ export const UserActionModals = ({ editModal, deleteModal, selectedItem }: Props
           isOpenModal={deleteModal.isOpen}
           onClose={deleteModal.close}
           type={selectedItem.type}
-          id={selectedItem.id}
+          id={Number(selectedItem.id)}
         />
       )}
     </>

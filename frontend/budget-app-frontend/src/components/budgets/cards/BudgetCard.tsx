@@ -3,10 +3,10 @@ import type { Budget } from '../../../schemas/budgetSchema';
 
 type BudgetCardProps = {
   data: Budget;
-  isAdmin?: boolean; // 👈 Nowa flaga: czy to widok admina?
-  onDelete?: () => void; // 👈 Funkcja usuwania
-  onEdit?: (budget: Budget) => void; // 👈 Funkcja edycji
-  userId?: any;
+  isAdmin?: boolean;
+  onDelete?: () => void;
+  onEdit?: (budget: Budget) => void;
+  userId?: number | string;
 };
 
 const BudgetCard: React.FC<BudgetCardProps> = ({
@@ -16,14 +16,15 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   onEdit,
   userId,
 }) => {
-  // Dynamiczna ścieżka w zależności od roli
   const detailsPath = isAdmin
     ? `/admin/users/${userId}/budgets/${data.id}`
     : `/app/budgets/${data.id}`;
 
   return (
-    <div className='bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow duration-200 budget-card'>
-      {/* IKONA GŁÓWNA */}
+    <div
+      className='bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow duration-200'
+      data-testid='budget-card'
+    >
       <div className='w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -46,10 +47,8 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
         </svg>
       </div>
 
-      {/* TYTUŁ */}
       <h3 className='text-xl font-bold text-gray-800 mb-4'>{data.title}</h3>
 
-      {/* PRZYCISK SZCZEGÓŁÓW (Wspólny) */}
       <Link
         to={detailsPath}
         className='px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors w-full mb-3'
@@ -57,10 +56,8 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
         Zobacz szczegóły
       </Link>
 
-      {/* 🔴 SEKCJA ADMINA (Wyświetlana tylko gdy isAdmin=true) */}
       {isAdmin && (
         <div className='flex gap-2 w-full pt-3 border-t border-gray-100 mt-1'>
-          {/* Przycisk EDYCJI */}
           <button
             onClick={() => onEdit && onEdit(data)}
             className='flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors'
@@ -82,7 +79,6 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             Edytuj
           </button>
 
-          {/* Przycisk USUWANIA */}
           <button
             onClick={() => onDelete && onDelete()}
             className='flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors'

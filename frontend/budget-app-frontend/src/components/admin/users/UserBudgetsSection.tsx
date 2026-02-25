@@ -1,13 +1,11 @@
-// src/components/admin/users/UserBudgetsSection.tsx
-
-import BudgetCard from '@/components/budgets/cards/BudgetCard'; // Twoja ścieżka
+import BudgetCard from '@/components/budgets/cards/BudgetCard';
 import GenericList from '@/components/ui/GenericList';
 import type { Budget } from '@/schemas/budgetSchema';
 
 type Props = {
   budgets: Budget[] | undefined;
   userId: string | undefined;
-  onEditClick: () => void; // Przekazujemy funkcję "co zrobić po kliknięciu"
+  onEditClick: () => void;
   onDeleteClick: () => void;
 };
 
@@ -28,7 +26,7 @@ export const UserBudgetsSection = ({ budgets, userId, onEditClick, onDeleteClick
             key={budget.id}
             data={budget}
             isAdmin={true}
-            userId={userId} // Ważne dla routingu admina
+            userId={userId}
             onEdit={() => onEditClick()}
             onDelete={() => onDeleteClick()}
           />

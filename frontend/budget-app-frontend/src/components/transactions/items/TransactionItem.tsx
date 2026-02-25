@@ -1,9 +1,11 @@
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import Button from '../../ui/Button';
 import type { DeleteType } from '@/components/ui/DeleteModal';
+import type { Transaction } from '@/types/transaction';
+import type { SelectedItem } from '@/hooks/useSelectedItem';
 
 type TransactionItem = {
-  id: number;
+  id: number | string;
   title: string;
   amount: number;
   date: string;
@@ -12,10 +14,10 @@ type TransactionItem = {
 };
 
 interface TransactionItemProps {
-  data: TransactionItem;
-  onOpenEditModal: () => void;
+  data: Transaction;
   onOpenDeleteModal: () => void;
-  selectItem: (item: TransactionItem) => void;
+  onOpenEditModal: () => void;
+  selectItem: (item: SelectedItem) => void;
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({
@@ -24,7 +26,6 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
   onOpenEditModal,
   selectItem,
 }) => {
-  // Formatowanie daty na polski format (np. 12.05.2024)
   const formattedDate = new Date(data.date).toLocaleDateString('pl-PL', {
     day: '2-digit',
     month: '2-digit',
@@ -45,9 +46,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
 
   return (
     <div className='w-4/5 group flex flex-col sm:flex-row sm:items-center justify-between p-4 mb-3 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200'>
-      {/* --- LEWA STRONA: IKONA I OPIS --- */}
       <div className='flex items-center gap-4 mb-3 sm:mb-0'>
-        {/* Ikona: Czerwona dla wydatku, Zielona dla wpływu */}
         <div
           className={`p-3 rounded-full ${isExpense ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'}`}
         >
@@ -64,8 +63,6 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
         </div>
       </div>
 
-      {/* --- ŚRODEK: KATEGORIA (TYLKO DLA WYDATKÓW) --- */}
-      {/* Ukrywamy na bardzo małych ekranach, pokazujemy od md w górę */}
       <div className='hidden md:flex flex-1 justify-center'>
         {isExpense && data.categoryName && (
           <div className='flex gap-4'>
@@ -84,7 +81,6 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
         )}
       </div>
 
-      {/* --- PRAWA STRONA: KWOTA I PRZYCISKI --- */}
       <div className='flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto'>
         <span className={`text-lg font-bold ${isExpense ? 'text-red-600' : 'text-green-600'}`}>
           {isExpense ? '-' : '+'}

@@ -1,6 +1,6 @@
 import { describe, expect, it, vitest } from 'vitest';
 import TransactionItem from './TransactionItem';
-import { render, screen, userEvent } from '@/test-utils'; // Dodaj userEvent tutaj!
+import { render, screen, userEvent } from '@/test-utils';
 import { vi } from 'vitest';
 
 describe('TransactionItem', () => {
@@ -64,7 +64,7 @@ describe('TransactionItem', () => {
     );
     expect(screen.getByTestId('arrow-down')).toBeInTheDocument();
     expect(screen.getByText('Wydatek')).toBeInTheDocument();
-    expect(screen.getByText(/\-/i)).toBeInTheDocument();
+    expect(screen.getByText(/-/i)).toBeInTheDocument();
   });
   it('should buttons clicked', async () => {
     const mockData = {

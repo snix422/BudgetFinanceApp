@@ -1,0 +1,17 @@
+import useGetAllUsers from '@/hooks/useGetAllUsers';
+import UsersTable from '@/components/admin/users/UsersTable';
+
+const AdminDashboard = () => {
+  const { users } = useGetAllUsers();
+  if (!users) return <div></div>;
+  console.log('admin dashboard');
+  console.log(users);
+  return (
+    <main className='w-full flex flex-col items-center p-10 gap-6'>
+      <h1>Panel Admina</h1>
+      <UsersTable users={users} />
+    </main>
+  );
+};
+
+export default AdminDashboard;

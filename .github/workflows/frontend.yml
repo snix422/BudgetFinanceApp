@@ -1,0 +1,39 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "frontend/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Pobierz kod
+        uses: actions/checkout@v4
+
+      - name: Ustaw Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Instalacja zależności
+        run: npm install
+
+      - name: Sprawdzenie kodu (Lint)
+        run: npm run lint --if-present
+
+      - name: Uruchomienie testów
+        run: npm run test --if-present
+
+      - name: Budowanie aplikacji (Build)
+        run: npm run build
+
+      - name: Sprawdź czy Dockerfile buduje się poprawnie
+        run: docker build . -t moj-frontend:latest

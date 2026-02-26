@@ -1,0 +1,35 @@
+name: Backend CI
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "backend/**" # Uruchom tylko gdy zmieni się coś w backendzie
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend # Wszystkie komendy wykonuj w folderze backend
+
+    steps:
+      - name: Pobierz kod (Checkout)
+        uses: actions/checkout@v4
+
+      - name: Ustaw .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Przywróć zależności (Restore)
+        run: dotnet restore
+
+      - name: Zbuduj (Build)
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Uruchomienie testów
+        run: dotnet test --no-build --configuration Release
+
+      - name: Sprawdź czy Dockerfile buduje się poprawnie
+        run: docker build . -t moje-api:latest

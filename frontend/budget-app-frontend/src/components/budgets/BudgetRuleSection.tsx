@@ -1,0 +1,79 @@
+import BudgetSplitChart from './charts/BudgetSplitChart';
+import type { BudgetRuleResults } from '@/types/budget';
+
+type Props = {
+  needs: number;
+  wants: number;
+  savings: number;
+  resultRules: BudgetRuleResults;
+  hasExpenses: boolean;
+};
+
+export const BudgetRuleSection = ({ needs, wants, savings, resultRules, hasExpenses }: Props) => {
+  return (
+    <div className='w-4/5 flex flex-col items-center gap-10 min-h-auto p-4 mt-20'>
+      <div className='flex flex-col items-center gap-4 space-y-2'>
+        <h2 className='text-3xl font-bold tracking-tight'>Zasada 50/30/20</h2>
+        <p className='text-muted-foreground max-w-2xl text-center mx-auto'>
+          Twój budżet został podzielony na trzy kluczowe obszary...
+        </p>
+      </div>
+
+      <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-6'>
+        <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-red-100 bg-red-50/50'>
+          <span className='text-sm font-medium text-red-600 uppercase tracking-wider mb-1'>
+            Limit na Rachunki (50%)
+          </span>
+          <h3 className='text-3xl font-bold text-gray-900'>{needs} zł</h3>
+          <p className='text-xs text-red-400 mt-2 text-center'>Opłaty stałe, czynsz, jedzenie</p>
+        </div>
+
+        <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-yellow-100 bg-yellow-50/50'>
+          <span className='text-sm font-medium text-yellow-600 uppercase tracking-wider mb-1'>
+            Limit na Przyjemności (30%)
+          </span>
+          <h3 className='text-3xl font-bold text-gray-900'>{wants} zł</h3>
+          <p className='text-xs text-yellow-500 mt-2 text-center'>Rozrywka, wyjścia, hobby</p>
+        </div>
+
+        <div className='flex flex-col justify-center items-center rounded-xl p-6 border border-blue-100 bg-blue-50/50'>
+          <span className='text-sm font-medium text-blue-600 uppercase tracking-wider mb-1'>
+            Cel Oszczędności (20%)
+          </span>
+          <h3 className='text-3xl font-bold text-gray-900'>{savings} zł</h3>
+          <p className='text-xs text-blue-400 mt-2 text-center'>Poduszka finansowa, inwestycje</p>
+        </div>
+      </div>
+
+      <div className='w-full flex flex-col items-center gap-4'>
+        <h3 className='text-xl font-semibold'>Bieżące wykorzystanie budżetu</h3>
+        {hasExpenses ? (
+          <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-8'>
+            <BudgetSplitChart
+              ruleAmount={resultRules.totalAmountNeeds}
+              total={needs}
+              label='Rachunki'
+              name='needs'
+            />
+            <BudgetSplitChart
+              ruleAmount={resultRules.totalAmountWants}
+              total={wants}
+              label='Przyjemności'
+              name='wants'
+            />
+            <BudgetSplitChart
+              ruleAmount={resultRules.totalAmountSavings}
+              total={savings}
+              label='Oszczędności'
+              name='savings'
+            />
+          </div>
+        ) : (
+          <div className='p-10 text-center bg-gray-50 rounded-lg w-full'>
+            <h2 className='text-gray-500'>Brak wydatków w tym miesiącu...</h2>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

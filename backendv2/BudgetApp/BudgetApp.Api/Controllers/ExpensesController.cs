@@ -18,12 +18,11 @@ namespace BudgetApp.Api.Controllers
     [Route("api")]
     public class ExpensesController : Controller
     {
-        private readonly IExpenseService _expenseService;
+       
         private readonly IMediator _mediator;
 
-        public ExpensesController(IExpenseService expenseService, Mediator mediator)
+        public ExpensesController(IMediator mediator)
         {
-            _expenseService = expenseService;
             _mediator = mediator;
         }
 
@@ -42,15 +41,16 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpPost("budgets/{budgetId}/expenses")]
-        public async Task<IActionResult> CreateExpense(int budgetId,[FromBody] CreateExpenseCommand request)
+        public async Task<IActionResult> CreateExpense(int budgetId,[FromBody] CreateExpenseDTO request)
         {
             var newExpenseId = await _mediator.Send(new CreateExpenseCommand(request.Title, request.Amount, request.Date, request.CategoryId, budgetId));
             return CreatedAtAction(nameof(GetExpenseById), new { budgetId = budgetId, id = newExpenseId }, request);
         }
 
         [HttpPut("budgets/{budgetId}/expenses/{id}")]
-        public async Task<IActionResult> UpdateExpense(int id, int budgetId, [FromBody] UpdateExpenseCommand request)
+        public async Task<IActionResult> UpdateExpense(int id, int budgetId, [FromBody] UpdateExpenseDTO request)
         {
+            Console.WriteLine(id);
             await _mediator.Send(new UpdateExpenseCommand(id, request.Title,request.Amount,request.Date, request.CategoryId,budgetId));
             return NoContent();
         }

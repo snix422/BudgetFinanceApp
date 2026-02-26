@@ -16,11 +16,11 @@ namespace BudgetApp.Application.Features.Expenses.Queries.GetExpenseById
 {
     public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, ExpenseDTO>
     {
-        private readonly IExpenseInterface _repository;
+        private readonly IExpenseRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetExpenseByIdQueryHandler(IExpenseInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public GetExpenseByIdQueryHandler(IExpenseRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Application.Services
 {
-    public class ExpenseService : IExpenseService
+    /*public class ExpenseService : IExpenseService
     {
         private readonly IMainInterface<Expense> _expenseRepository;
 
@@ -80,5 +80,5 @@ namespace BudgetApp.Application.Services
             await _expenseRepository.Update(existingExpense);
 
         }
-    }
+    }*/
 }

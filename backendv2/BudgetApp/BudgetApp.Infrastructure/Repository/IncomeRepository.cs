@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Infrastructure.Repository
 {
-    public class IncomeRepository : IIncomeInterface
+    public class IncomeRepository : IIncomeRepository
     {
         private readonly Context _context;
 
@@ -35,7 +35,6 @@ namespace BudgetApp.Infrastructure.Repository
         {
             var query = _context
                 .Incomes
-                .Include(e => e.Category)
                 .Include(e => e.Budget)
                 .AsNoTracking();
 
@@ -55,13 +54,16 @@ namespace BudgetApp.Infrastructure.Repository
 
         public async Task<Income?> GetByIdAsync(int id, string userId, int budgetId, CancellationToken cancellationToken)
         {
-            var query = _context
+            IQueryable<Income> query = _context
                 .Incomes
-                .Include(e => e.Category)
-                .Include(e => e.Budget)
-                .AsNoTracking();
+                .Include(e => e.Budget);
+                
+            Console.WriteLine(id);
+            var test = await _context.Incomes.Include(e => e.Budget).FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+            Console.WriteLine(test);
 
-
+            Console.WriteLine(userId);
+            
 
             query = query.Where(b => b.Id == id);
 
@@ -72,9 +74,9 @@ namespace BudgetApp.Infrastructure.Repository
             {
                 query = query.Where(b => b.Budget.UserId == userId);
             }
-
+            Console.WriteLine(query);
             return await query.FirstOrDefaultAsync(cancellationToken);
-
+            
         }
 
         public async Task Update(Income item, CancellationToken cancellationToken = default)

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Interfaces;
+using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
 using BudgetWebApi.Domain.Interfaces.MainInterface;
 using BudgetWebApi.Domain.Models;
@@ -15,11 +16,11 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetBudgetById
 {
     public class GetBudgetByIdQueryHandler : IRequestHandler<GetBudgetByIdQuery, BudgetDTO>
     {
-        private readonly IBudgetInterface _repository;
+        private readonly IBudgetRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetBudgetByIdQueryHandler(IBudgetInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public GetBudgetByIdQueryHandler(IBudgetRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;
@@ -37,7 +38,7 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetBudgetById
             
             if (budget == null)
             {
-                throw new KeyNotFoundException($"Budget with id {request.Id} not found");
+                throw new NotFoundException($"Budget with id {request.Id} not found");
             }
             return _mapper.Map<BudgetDTO>(budget);
         }

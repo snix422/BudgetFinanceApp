@@ -15,12 +15,12 @@ namespace BudgetApp.Application.Features.Expenses.Commands.CreateExpense
 {
     public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseCommand, int>
     {
-        private readonly IExpenseInterface _repository;
-        private readonly IBudgetInterface _budgetRepository;
+        private readonly IExpenseRepository _repository;
+        private readonly IBudgetRepository _budgetRepository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public CreateExpenseCommandHandler(IExpenseInterface repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetInterface budgetRepository)
+        public CreateExpenseCommandHandler(IExpenseRepository repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetRepository budgetRepository)
         {
             _repository = repository;
             _mapper = mapper;

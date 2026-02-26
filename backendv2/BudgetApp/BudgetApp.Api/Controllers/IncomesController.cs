@@ -14,11 +14,10 @@ namespace BudgetApp.Api.Controllers
     [Route("api")]
     public class IncomesController : Controller
     {
-        private readonly IIncomeService _incomeService;
+        
         private readonly IMediator _mediator;
-        public IncomesController(IIncomeService incomeService, IMediator mediator)
+        public IncomesController(IMediator mediator)
         {
-            _incomeService = incomeService;
             _mediator = mediator;
         }
 
@@ -31,7 +30,7 @@ namespace BudgetApp.Api.Controllers
             return Ok(incomes);
         }
 
-        [HttpGet("budgets/{budgetId}/incomes{id}")]
+        [HttpGet("budgets/{budgetId}/incomes/{id}")]
         public async Task<IActionResult> GetIncomeById([FromRoute] int budgetId, [FromRoute]int id)
         {
             var income = await _mediator.Send(new GetIncomeByIdQuery(budgetId, id));
@@ -40,21 +39,21 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpPost("budgets/{budgetId}/incomes")]
-        public async Task<IActionResult> CreateIncome(int budgetId, [FromBody] CreateIncomeCommand request)
+        public async Task<IActionResult> CreateIncome(int budgetId, [FromBody] CreateIncomeDTO request)
         {
 
-           var newIncomeId = await _mediator.Send(new CreateIncomeCommand(request.Title,request.Amount,request.Date,request.CategoryId,budgetId));
+           var newIncomeId = await _mediator.Send(new CreateIncomeCommand(request.Title,request.Amount,request.Date,budgetId));
 
-           return CreatedAtAction(nameof(GetIncomeById), new { id = newIncomeId }, request);
+           return CreatedAtAction(nameof(GetIncomeById), new { id = newIncomeId, budgetId = budgetId }, newIncomeId);
         }
 
 
         [HttpPut("budgets/{budgetId}/incomes/{id}")]
-        public async Task<IActionResult> UpdateIncome(int budgetId, int id, [FromBody] UpdateIncomeCommand request)
+        public async Task<IActionResult> UpdateIncome(int budgetId, int id, [FromBody] UpdateIncomeDTO request)
         {
            
-
-            await _mediator.Send(new UpdateIncomeCommand(id, request.Title,request.Amount,request.Date, request.CategoryId, budgetId));
+            Console.WriteLine(id);
+            await _mediator.Send(new UpdateIncomeCommand(id, request.Title,request.Amount,request.Date, budgetId));
 
             return NoContent();
         }

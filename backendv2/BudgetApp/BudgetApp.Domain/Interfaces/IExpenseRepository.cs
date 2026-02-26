@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Domain.Interfaces
 {
-    public interface IExpenseInterface : ITransactionInterface<Expense>
+    public interface IExpenseRepository : ITransactionInterface<Expense>
     {
         
     }

@@ -10,73 +10,29 @@ using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddFluentValidationAutoValidation(config =>
-{
-    config.ImplicitlyValidateChildProperties = true;
-});
-
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<Context>()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                // Szukamy ciasteczka o nazwie "AuthToken" (takiej samej jak w kontrolerze)
-                var accessToken = context.Request.Cookies["AuthToken"];
-
-                // Jeœli znaleŸliœmy ciasteczko, przepisujemy je do Tokena, którego u¿ywa Identity
-                if (!string.IsNullOrEmpty(accessToken))
-                {
-                    context.Token = accessToken;
-                }
-
-                return Task.CompletedTask;
-            }
-        };
-    });
-
+// Add services to the container.
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Adres Twojego frontendu
+            policy.WithOrigins("http://localhost:5173") // <-- Tutaj wpisz adres Frontendu (bez / na koñcu)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials(); // <--- TO JEST KLUCZOWE! Bez tego ciasteczko nie przejdzie.
+                  .AllowCredentials(); // Wa¿ne, jeœli u¿ywasz ciasteczek (HttpOnly cookies)
         });
 });
+
+// ... inne serwisy ...
+builder.Services.AddRouting(options => {
+    options.LowercaseUrls = true; // <--- To magiczna linijka
+});
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
@@ -91,14 +47,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors("AllowFrontend");
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseCors("AllowFrontend");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

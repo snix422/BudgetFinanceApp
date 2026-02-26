@@ -1,4 +1,5 @@
-﻿using BudgetApp.Domain.Interfaces;
+﻿using BudgetApp.Application.Features.Budgets.Queries.GetSharedBudget;
+using BudgetApp.Domain.Interfaces;
 using BudgetWebApi.Domain.Interfaces.MainInterface;
 using BudgetWebApi.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Infrastructure.Repository
 {
-    public class BudgetRepository : IBudgetInterface
+    public class BudgetRepository : IBudgetRepository
     {
         private readonly Context _context;
 
@@ -39,7 +40,6 @@ namespace BudgetApp.Infrastructure.Repository
                 .Include(b => b.Expenses)
                     .ThenInclude(e => e.Category)
                 .Include(b => b.Incomes)
-                    .ThenInclude(i => i.Category)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .ToListAsync(cancellationToken);
@@ -55,7 +55,6 @@ namespace BudgetApp.Infrastructure.Repository
                 .Include(b => b.Expenses)
                     .ThenInclude(e => e.Category)
                 .Include(b => b.Incomes)
-                    .ThenInclude(i => i.Category)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .ToListAsync(cancellationToken);
@@ -66,10 +65,9 @@ namespace BudgetApp.Infrastructure.Repository
         public async Task<Budget?> GetByIdAsync(int id, string? userId = null, CancellationToken cancellationToken = default)
         {
             var query = _context.Budgets
-                .Include(b => b.Incomes)
-                    .ThenInclude(i => i.Category)
                 .Include(b => b.Expenses)
                     .ThenInclude(e => e.Category)
+                .Include(b => b.Incomes)
                 .AsNoTracking()
                 .AsSplitQuery();
 
@@ -85,6 +83,18 @@ namespace BudgetApp.Infrastructure.Repository
 
             return await query.FirstOrDefaultAsync(cancellationToken);
 
+        }
+
+        public async Task<Budget?> GetByShareTokenAsync(Guid token, CancellationToken cancellationToken = default)
+        {
+            var budget = await _context.Budgets
+                .Include(b => b.Expenses)
+                    .ThenInclude(e => e.Category)
+                .Include(b => b.Incomes)
+                .AsNoTracking()
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(b => b.ShareToken == token ,cancellationToken);
+            return budget;
         }
 
         public Task Update(Budget item, CancellationToken cancellationToken = default)

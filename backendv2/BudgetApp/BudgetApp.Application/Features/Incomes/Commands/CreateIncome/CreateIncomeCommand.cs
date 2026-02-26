@@ -12,15 +12,13 @@ namespace BudgetApp.Application.Features.Incomes.Commands.CreateIncome
         public string Title { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
-        public int CategoryId { get; set; }
         public int BudgetId { get; set; }
 
-        public CreateIncomeCommand(string title, decimal amount, DateTime date, int categoryId, int budget)
+        public CreateIncomeCommand(string title, decimal amount, DateTime date, int budget)
         {
             Title = title;
             Amount = amount;
             Date = date;
-            CategoryId = categoryId;
             BudgetId = budget;
         }
     }

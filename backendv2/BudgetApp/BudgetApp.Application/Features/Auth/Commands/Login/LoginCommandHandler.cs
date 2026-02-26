@@ -1,4 +1,7 @@
-﻿using BudgetApp.Application.Interfaces;
+﻿using AutoMapper;
+using BudgetApp.Application.Common;
+using BudgetApp.Application.DTOs;
+using BudgetApp.Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,25 +11,29 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Application.Features.Auth.Commands.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<string>>
     {
         private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
 
-        public LoginCommandHandler(IAuthService authService)
+        public LoginCommandHandler(IAuthService authService, IMapper mapper)
         {
             _authService = authService;
+            _mapper = mapper;
         }
 
-        public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var result = await _authService.LoginAsync(request.Email, request.Password);
+            var loginUserDTO = _mapper.Map<LoginUserDTO>(request);
 
-            if (!result.IsSuccess)
+            var result = await _authService.LoginAsync(loginUserDTO);
+
+            /*if (!result.IsSuccess)
             {
                 throw new UnauthorizedAccessException(result.Error);
-            }
+            }*/
 
-            return result.Token;
+            return result;
         }
     }
 }

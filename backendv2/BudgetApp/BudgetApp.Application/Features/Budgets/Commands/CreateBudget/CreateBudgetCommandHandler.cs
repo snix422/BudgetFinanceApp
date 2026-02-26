@@ -15,11 +15,11 @@ namespace BudgetApp.Application.Features.Budgets.Commands.CreateBudget
 {
     public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, int>
     {
-        private readonly IBudgetInterface _repository;
+        private readonly IBudgetRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public CreateBudgetCommandHandler(IBudgetInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public CreateBudgetCommandHandler(IBudgetRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;

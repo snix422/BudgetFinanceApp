@@ -15,11 +15,11 @@ namespace BudgetApp.Application.Features.Incomes.Queries.GetAllIncomes
 {
     public class GetAllIncomesQueryHandler : IRequestHandler<GetAllIncomesQuery, IEnumerable<IncomeDTO>>
     {
-        private readonly IIncomeInterface _repository;
+        private readonly IIncomeRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetAllIncomesQueryHandler(IIncomeInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public GetAllIncomesQueryHandler(IIncomeRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;

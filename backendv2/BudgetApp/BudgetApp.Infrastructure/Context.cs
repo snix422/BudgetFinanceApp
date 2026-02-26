@@ -1,5 +1,6 @@
 ﻿using BudgetApp.Infrastructure.Identity;
 using BudgetWebApi.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,9 +18,28 @@ public class Context : IdentityDbContext<ApplicationUser>
 	{
 		base.OnModelCreating(modelBuilder);
         // Configure relationships and constraints here if needed
-		modelBuilder.Entity<Budget>()
-			.Property(b => b.TotalAmount)
-			.HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<IdentityRole>().HasData(
+        new IdentityRole
+        {
+            Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
+            Name = "Admin",
+            NormalizedName = "ADMIN"
+        },
+        new IdentityRole
+        {
+            Id = "2c5e174e-3b0e-446f-86af-483d56fd7211",
+            Name = "User",
+            NormalizedName = "USER"
+        },
+        new IdentityRole
+        {
+            Id = "2c5e174e-3b0e-446f-86af-483d56fd7212",
+            Name = "Moderator",
+            NormalizedName = "MODERATOR"
+        }
+    );
+
 
 		modelBuilder.Entity<Income>()
 			.Property(i => i.Amount)
@@ -53,18 +73,11 @@ public class Context : IdentityDbContext<ApplicationUser>
 
 		modelBuilder.Entity<Expense>()
 			.HasOne(e => e.Category)
-			.WithMany()
+			.WithMany(c => c.Expenses)
 			.HasForeignKey(e => e.CategoryId)
 			.OnDelete(DeleteBehavior.Restrict);
 
-		modelBuilder.Entity<Income>()
-			.HasOne(i => i.Category)
-			.WithMany()
-			.HasForeignKey(i => i.CategoryId)
-			.OnDelete(DeleteBehavior.Restrict);
-
-
-
+		
 
     }
 

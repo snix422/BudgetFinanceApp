@@ -1,4 +1,7 @@
-﻿using BudgetApp.Application.Interfaces;
+﻿using Azure.Core;
+using BudgetApp.Application.Common;
+using BudgetApp.Application.DTOs;
+using BudgetApp.Application.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,66 +18,92 @@ namespace BudgetApp.Infrastructure.Identity
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _roleManager = roleManager;
         }
 
-        public async Task<(bool IsSuccess, string UserId, string Error)> RegisterAsync(string email, string password, string firstName, string lastName, string confirmPassword)
+        public async Task<Result<string>> RegisterAsync(RegisterUserDTO dto)
         {
-            var existingUser = await _userManager.FindByEmailAsync(email);
+            var existingUser = await _userManager.FindByEmailAsync(dto.Email);
             if (existingUser != null)
             {
-                return (false, null, "Użytkownik o takim adresie email już istnieje.");
+                return Result<string>.Failure("Email jest zajęty");
             }
             var user = new ApplicationUser
             {
-                UserName = email,
-                Email = email,
-                FirstName = firstName, 
-                LastName = lastName   
+                UserName = dto.Email,
+                Email = dto.Email,
+                FirstName = dto.FirstName, 
+                LastName = dto.LastName,
+                PhoneNumber = dto.Phone,
             };
 
-            var result = await _userManager.CreateAsync(user, password);
+            var result = await _userManager.CreateAsync(user, dto.Password);
 
             if (!result.Succeeded)
             {
-                var error = string.Join(", ", result.Errors.Select(e => e.Description));
-                return (false, null, error);
+                var error = string.Join("\n", result.Errors.Select(e => e.Description));
+                return Result<string>.Failure($"Rejestracja nie powiodła się: {error}");
             }
 
-            var roleResult = await _userManager.AddToRoleAsync(user, "User");
+            string roleToAssign = "User";
+
+            if (dto.Email.Equals("admin@budgetapp.com", StringComparison.OrdinalIgnoreCase))
+            {
+                roleToAssign = "Admin";
+            }
+            else if (dto.Email.EndsWith("@budgetapp.com"))
+            {
+                roleToAssign = "Moderator";
+            }
+
+            if (!await _roleManager.RoleExistsAsync(roleToAssign))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(roleToAssign));
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, roleToAssign);
 
             if (!roleResult.Succeeded)
             {
-                // Opcjonalnie: Logowanie błędu, że user powstał, ale bez roli
-                // Lub rollback (jeśli używasz transakcji, choć UserManager nie wspiera transakcji wprost w jednej metodzie)
+                await _userManager.DeleteAsync(user);
+
+                return Result<string>.Failure("Dodawanie roli nie powiodło się");
             }
 
-            return (true, user.Id, null);
+            return Result<string>.Success(user.Id);
         }
 
-        public async Task<(bool IsSuccess, string Token, string Error)> LoginAsync(string email, string password)
+        public async Task<Result<string>> LoginAsync(LoginUserDTO dto)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null) return (false, null, "Invalid credentials");
-            var isValidPassword = await _userManager.CheckPasswordAsync(user, password);
-            if (!isValidPassword) return (false, null, "Invalid credentials");
-
-            var token = GenerateJwtToken(user);
-            return (true, token, null);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null) return Result<string>.Failure("Invalid credentials");
+            var isValidPassword = await _userManager.CheckPasswordAsync(user, dto.Password);
+            if (!isValidPassword) return Result<string>.Failure("Invalid credentials");
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var token = GenerateJwtToken(user, userRoles);
+            return Result<string>.Success(token);
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
+        private string GenerateJwtToken(ApplicationUser user, IList<string> roles)
         {
             var claims = new List<Claim> 
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id)
             };
+
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

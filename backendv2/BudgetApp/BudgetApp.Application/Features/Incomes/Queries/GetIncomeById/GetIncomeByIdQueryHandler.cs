@@ -16,11 +16,11 @@ namespace BudgetApp.Application.Features.Incomes.Queries.GetIncomeById
 {
     public class GetIncomeByIdQueryHandler : IRequestHandler<GetIncomeByIdQuery, IncomeDTO>
     {
-        private readonly IIncomeInterface _repository;
+        private readonly IIncomeRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetIncomeByIdQueryHandler(IIncomeInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public GetIncomeByIdQueryHandler(IIncomeRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;

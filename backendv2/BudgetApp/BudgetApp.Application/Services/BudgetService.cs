@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Application.Services
 {
-    public class BudgetService : IBudgetService
+    /*public class BudgetService : IBudgetService
     {
         private readonly IMainInterface<Budget> _budgetRepository;
         private readonly ICurrentUserService _currentUserService;
@@ -87,5 +87,6 @@ namespace BudgetApp.Application.Services
 
            await _budgetRepository.Update(existingBudget.Result);
         }
-    }
+    }*/
 }
+    

@@ -10,9 +10,9 @@ namespace BudgetWebApi.Domain.Models
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public Category Category { get; set; } = null!;
         public int BudgetId { get; set; }
-        public Budget Budget { get; set; }
-       
+        public Budget Budget { get; set; } = null!;
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BudgetApp.Application.Interfaces;
+using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
 using BudgetWebApi.Domain.Interfaces.MainInterface;
 using BudgetWebApi.Domain.Models;
@@ -14,12 +15,12 @@ namespace BudgetApp.Application.Features.Budgets.Commands.UpdateBudget
 {
     public class UpdateBudgetCommandHandler : IRequestHandler<UpdateBudgetCommand>
     {
-        private readonly IBudgetInterface _repository;
+        private readonly IBudgetRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
 
-        public UpdateBudgetCommandHandler(IBudgetInterface repository, IMapper mapper,ICurrentUserService currentUserService)
+        public UpdateBudgetCommandHandler(IBudgetRepository repository, IMapper mapper,ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;
@@ -36,7 +37,7 @@ namespace BudgetApp.Application.Features.Budgets.Commands.UpdateBudget
 
             if (existingBudget == null)
             {
-                throw new Exception("Budget not found");
+                throw new NotFoundException("Budget not found");
             }
 
             var originalBudgetId = existingBudget.Id;

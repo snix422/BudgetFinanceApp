@@ -19,8 +19,7 @@ namespace BudgetApp.Application.Validators
                 .GreaterThan(0).WithMessage("Amount must be greater than zero.");
             RuleFor(x => x.Date)
                 .LessThanOrEqualTo(DateTime.Now).WithMessage("Date cannot be in the future.");
-            RuleFor(x => x.CategoryId)
-                .GreaterThan(0).WithMessage("CategoryId must be a positive integer.");
+           
         }
     }
 }

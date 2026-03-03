@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Infrastructure.Repository
 {
-    public class ExpenseRepository : IExpenseInterface
+    public class ExpenseRepository : IExpenseRepository
     {
         private readonly Context _context;
 

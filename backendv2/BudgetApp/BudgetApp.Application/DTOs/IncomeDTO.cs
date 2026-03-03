@@ -14,9 +14,6 @@ namespace BudgetApp.Application.DTOs
         public DateTime Date { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
-        public string BudgetTitle { get; set; } = string.Empty;
-        public decimal TotalAmount { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        
     }
 }

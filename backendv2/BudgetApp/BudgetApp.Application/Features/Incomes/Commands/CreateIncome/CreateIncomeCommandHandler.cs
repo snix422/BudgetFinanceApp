@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Application.Features.Incomes.Commands.CreateIncome
 {
-    public class CreateIncomeCommandHandler
+    public class CreateIncomeCommandHandler : IRequestHandler<CreateIncomeCommand, int>
     {
-        private readonly IIncomeInterface _repository;
+        private readonly IIncomeRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IBudgetInterface _budgetRepository;
+        private readonly IBudgetRepository _budgetRepository;
 
-        public CreateIncomeCommandHandler(IIncomeInterface repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetInterface budgetInterface)
+        public CreateIncomeCommandHandler(IIncomeRepository repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetRepository budgetInterface)
         {
             _repository = repository;
             _mapper = mapper;

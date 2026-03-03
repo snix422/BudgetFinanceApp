@@ -5,7 +5,7 @@ using BudgetWebApi.Domain.Interfaces.MainInterface;
 using BudgetWebApi.Domain.Models;
 using System;
 
-public class IncomeService : IIncomeService
+/*public class IncomeService : IIncomeService
 {
     private readonly IMainInterface<Income> _incomeRepository;
     private readonly IMapper _mapper;
@@ -65,4 +65,4 @@ public class IncomeService : IIncomeService
 
         await _incomeRepository.Update(existingIncome);
     }
-}
+}*/

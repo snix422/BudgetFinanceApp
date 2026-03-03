@@ -14,12 +14,12 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetBudgetsByUser
 {
     public class GetBudgetsByUserQueryHandler : IRequestHandler<GetBudgetsByUserQuery, IEnumerable<BudgetDTO>>
     {
-        private readonly IBudgetInterface _repository;
+        private readonly IBudgetRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
 
-        public GetBudgetsByUserQueryHandler(IBudgetInterface repository, ICurrentUserService currentUserService, IMapper mapper)
+        public GetBudgetsByUserQueryHandler(IBudgetRepository repository, ICurrentUserService currentUserService, IMapper mapper)
         {
             _repository = repository;
             _currentUserService = currentUserService;

@@ -1,5 +1,7 @@
 ﻿using BudgetApp.Application.Interfaces;
+using BudgetApp.Domain.Interfaces;
 using BudgetApp.Infrastructure.Identity;
+using BudgetApp.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +24,10 @@ namespace BudgetApp.Infrastructure
             services.AddDbContext<Context>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"),
-                builder => builder.MigrationsAssembly(typeof(Context).Assembly.FullName)
-            ));
+                b => b.MigrationsAssembly("BudgetApp.Infrastructure")));
 
-            // 1. Konfiguracja Bazy Danych (pewnie już tu masz)
-            services.AddDbContext<Context>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+
 
             // 2. Konfiguracja Identity (PRZENIESIONE Z PROGRAM.CS)
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -70,6 +70,11 @@ namespace BudgetApp.Infrastructure
             // Register infrastructure services here
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IBudgetRepository, BudgetRepository>();
+            services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            services.AddScoped<IIncomeRepository, IncomeRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             return services;
         }
     }

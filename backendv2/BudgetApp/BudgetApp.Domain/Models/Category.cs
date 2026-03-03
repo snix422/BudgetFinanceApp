@@ -1,4 +1,5 @@
 ﻿using System;
+using BudgetApp.Domain.Enums;
 using BudgetWebApi.Domain.Models;
 
 namespace BudgetWebApi.Domain.Models
@@ -7,6 +8,10 @@ namespace BudgetWebApi.Domain.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool IsExpense { get; set; }
+        public CategoryRule Rule { get; set; }
+
+        public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
+
     }
+
 }

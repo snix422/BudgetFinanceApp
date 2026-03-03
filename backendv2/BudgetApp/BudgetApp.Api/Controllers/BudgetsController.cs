@@ -1,14 +1,17 @@
 ﻿using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
 using BudgetApp.Application.Features.Budgets.Commands.DeleteBudget;
+using BudgetApp.Application.Features.Budgets.Commands.GenerateBudgetShareToken;
+using BudgetApp.Application.Features.Budgets.Commands.RevokeShareToken;
 using BudgetApp.Application.Features.Budgets.Commands.UpdateBudget;
+using BudgetApp.Application.Features.Budgets.Queries.ExportBudget;
 using BudgetApp.Application.Features.Budgets.Queries.GetAllBudgets;
 using BudgetApp.Application.Features.Budgets.Queries.GetBudgetById;
 using BudgetApp.Application.Features.Budgets.Queries.GetBudgetsByUser;
-using BudgetApp.Application.Interfaces;
 using BudgetWebApi.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BudgetApp.Api.Controllers
 {
@@ -16,12 +19,12 @@ namespace BudgetApp.Api.Controllers
     [Route("api/[controller]")]
     public class BudgetsController : Controller
     {
-        private readonly IBudgetService _budgetService;
+
         private readonly IMediator _mediator;
 
-        public BudgetsController(IBudgetService budgetService, IMediator mediator)
+        public BudgetsController(IMediator mediator)
         {
-            _budgetService = budgetService;
+
             _mediator = mediator;
         }
 
@@ -32,12 +35,14 @@ namespace BudgetApp.Api.Controllers
             return Ok(budgets);
         }
 
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Budget>> GetBudgetById(int id)
         {
             var budget = await _mediator.Send(new GetBudgetByIdQuery(id));
             return Ok(budget);
-             
+
         }
 
         [HttpGet]
@@ -48,7 +53,7 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBudget([FromBody] CreateBudgetCommand request)
+        public async Task<IActionResult> CreateBudget([FromBody] CreateBudgetDTO request)
         {
             var newBudgetId = await _mediator.Send(request);
             return CreatedAtAction(nameof(GetBudgetById), new { id = newBudgetId }, request);
@@ -68,5 +73,34 @@ namespace BudgetApp.Api.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}/export/pdf")]
+        public async Task<IActionResult> ExportToPdf(string id)
+        {
+            var result = await _mediator.Send(new ExportBudgetToPdfQuery(id));
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return File(result.Content, result.ContentType, result.FileName);
+
+        }
+
+        [HttpPost("{id}/share")]
+        public async Task<IActionResult> GenerateShareToken(string id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var shareToken = await _mediator.Send(new GenerateBudgetShareTokenCommand(id, userId));
+            return Ok(new { Token = shareToken, Url = $"http://localhost:3000/shared/{shareToken}" });
+        }
+
+        [HttpDelete("{id}/share")]
+        public async Task<IActionResult> RevokeShareToken(string id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _mediator.Send(new RevokeBudgetShareTokenCommand(id, userId));
+            return NoContent();
+        }
     }
 }

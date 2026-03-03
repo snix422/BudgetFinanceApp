@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Tests/">
+    <Project Path="BudgetApp.IntegrationTests/BudgetApp.IntegrationTests.csproj" Id="a06f7675-95a8-45ba-ab1a-4d7916bbd9d9" />
+    <Project Path="BudgetApp.UnitTests/BudgetApp.UnitTests.csproj" Id="2d671a94-7a24-4fd7-b77a-57ad9dc4098b" />
+  </Folder>
   <Project Path="BudgetApp.Api/BudgetApp.Api.csproj" Id="15d015ad-92e3-493d-9da9-1b136011f1a2" />
   <Project Path="BudgetApp.Application/BudgetApp.Application.csproj" Id="2816a6cd-c52b-4a09-8bd4-c074fab2ffe8" />
   <Project Path="BudgetApp.Domain/BudgetApp.Domain.csproj" Id="b2bed733-afb0-4f2e-81bb-fdd325d1fb82" />

@@ -15,11 +15,11 @@ namespace BudgetApp.Application.Features.Expenses.Commands.DeleteExpense
 {
     public class DeleteExpenseCommandHandler : IRequestHandler<DeleteExpenseCommand>
     {
-        private readonly IExpenseInterface _repository;
+        private readonly IExpenseRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public DeleteExpenseCommandHandler(IExpenseInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public DeleteExpenseCommandHandler(IExpenseRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;

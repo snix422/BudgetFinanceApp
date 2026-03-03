@@ -1,5 +1,6 @@
 ﻿using BudgetApp.Application.Interfaces;
 using BudgetApp.Application.Services;
+using BudgetApp.Domain.Interfaces;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 
 namespace BudgetApp.Application
 {
@@ -16,12 +18,13 @@ namespace BudgetApp.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             // Register application services here
-            services.AddScoped<IBudgetService, BudgetService>();
-            services.AddScoped<IExpenseService, ExpenseService>();
-            services.AddScoped<IIncomeService, IncomeService>();
+            //services.AddScoped<IBudgetService, BudgetService>();
+            //services.AddScoped<IExpenseService, ExpenseService>();
+            //services.AddScoped<IIncomeService, IncomeService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddFluentValidationAutoValidation();
             return services;
         }
     }

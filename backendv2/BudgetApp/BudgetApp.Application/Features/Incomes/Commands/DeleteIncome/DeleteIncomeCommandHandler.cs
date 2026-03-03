@@ -14,10 +14,10 @@ namespace BudgetApp.Application.Features.Incomes.Commands.DeleteIncome
 {
     public class DeleteIncomeCommandHandler : IRequestHandler<DeleteIncomeCommand>
     {
-        private readonly IIncomeInterface _repository;
+        private readonly IIncomeRepository _repository;
         private readonly ICurrentUserService _currentUserService;
 
-        public DeleteIncomeCommandHandler(IIncomeInterface repository, ICurrentUserService currentUserService)
+        public DeleteIncomeCommandHandler(IIncomeRepository repository, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _currentUserService = currentUserService;

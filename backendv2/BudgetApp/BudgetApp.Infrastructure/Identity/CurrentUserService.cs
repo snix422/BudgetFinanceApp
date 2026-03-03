@@ -20,18 +20,20 @@ namespace BudgetApp.Infrastructure.Identity
 
         public string? UserId
         {
-               get
+            get
             {
-                return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+                var idClaim = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrEmpty(idClaim))
+                {
+                    return null;
+                }
+
+                return idClaim;
             }
         }
 
-        public string? UserRole
-        {
-            get
-            {
-                return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
-            }
-        }
+        public string UserRole => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
+
     }
 }

@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Application.Features.Expenses.Commands.UpdateExpense
 {
-    public class UpdateExpenseCommandHandler
+    public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand>
     {
-        private readonly IExpenseInterface _repository;
+        private readonly IExpenseRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IBudgetInterface _budgetRepository;
+        private readonly IBudgetRepository _budgetRepository;
 
-        public UpdateExpenseCommandHandler(IExpenseInterface repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetInterface budgetRepository)
+        public UpdateExpenseCommandHandler(IExpenseRepository repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetRepository budgetRepository)
         {
             _repository = repository;
             _mapper = mapper;

@@ -15,11 +15,11 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetAllBudgets
 {
     public class GetAllBudgetsQueryHandler : IRequestHandler<GetAllBudgetsQuery, IEnumerable<BudgetDTO>>
     {
-        private readonly IBudgetInterface _repository;
+        private readonly IBudgetRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetAllBudgetsQueryHandler(IBudgetInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public GetAllBudgetsQueryHandler(IBudgetRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;

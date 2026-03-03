@@ -13,16 +13,20 @@ namespace BudgetApp.Application.Validators
         public RegisterCommandValidator()
         {
             RuleFor(v => v.Email)
-             .NotEmpty().EmailAddress();
+             .NotEmpty().WithMessage("Email jest wymagany.")
+             .EmailAddress().WithMessage("Niepoprawny adres e-mail");
 
-            RuleFor(v => v.FirstName).NotEmpty();
-            RuleFor(v => v.LastName).NotEmpty();
+            RuleFor(v => v.FirstName).NotEmpty().WithMessage("Imię jest wymagane");
+            RuleFor(v => v.LastName).NotEmpty().WithMessage("Nazwisko jest wymagane");
 
             RuleFor(v => v.Password)
-                .MinimumLength(8)
-                .NotEmpty();
+                .NotEmpty().WithMessage("Hasło jest wymagane")
+                .MinimumLength(8).WithMessage("Hasło musi mieć co najmniej 8 znaków")
+                .Matches("[A-Z]").WithMessage("Hasło musi zawierać wielką literę")
+                .Matches("[a-z]").WithMessage("Hasło musi zawierać małą literę")
+                .Matches("[0-9]").WithMessage("Hasło musi zawierać cyfrę");
 
-           
+
             RuleFor(v => v.ConfirmPassword)
                 .Equal(v => v.Password).WithMessage("Hasła muszą być identyczne.");
         }

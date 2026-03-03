@@ -15,11 +15,11 @@ namespace BudgetApp.Application.Features.Budgets.Commands.DeleteBudget
 {
     public class DeleteBudgetCommandHandler : IRequestHandler<DeleteBudgetCommand>
     {
-        private readonly IBudgetInterface _repository;
+        private readonly IBudgetRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public DeleteBudgetCommandHandler(IBudgetInterface repository, IMapper mapper, ICurrentUserService currentUserService)
+        public DeleteBudgetCommandHandler(IBudgetRepository repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;

@@ -15,6 +15,7 @@ import AdminLayout from '@/layouts/AdminLayout';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import UserDetails from '@/pages/admin/UserDetails';
 import AdminBudgetDetails from '@/pages/admin/AdminBudgetDetails';
+import SharedBudgetDetails from '@/pages/app/SharedBudgetDetails';
 //import AppLayout from '../layouts/AppLayout';
 
 // Guards (Strażnicy)
@@ -75,6 +76,7 @@ export const router = createBrowserRouter([
       },
       { path: 'budgets', element: <div>Budżety</div> },
       { path: 'budgets/:id', element: <BudgetDetails /> },
+      { path: 'shared/budgets/:id', element: <SharedBudgetDetails /> },
     ],
   },
 

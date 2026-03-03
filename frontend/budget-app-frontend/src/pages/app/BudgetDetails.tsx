@@ -17,19 +17,24 @@ import {
   mergeAndSortTransactions,
   prepareChartData,
 } from '@/utils/budgetCalculations';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import ErrorState from '@/components/layout/ErrorState';
 import BudgetChart from '@/components/budgets/charts/BudgetChart';
 import { ExpensesChart } from '@/components/transactions/charts/ExpensesChart';
 import BudgetsSkeleton from '@/components/BudgetsSkeleton';
 import type { Transaction } from '@/types/transaction';
+import { toast } from 'sonner';
+import { Copy, Check } from 'lucide-react';
+import { useGenerateShareLink } from '@/hooks/useGenerateShareLink';
 
 const BudgetDetails = () => {
   const { id: budgetId } = useParams();
   const { budget, isLoading, error } = useGetBudgetById(Number(budgetId));
   const { expenses } = useGetExpenses(Number(budgetId));
   const { incomes } = useGetIncomes(Number(budgetId));
-
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const { mutateAsync: generateShareLink, isPending: isGeneratingLink } = useGenerateShareLink();
   const deleteModal = useModal();
   const addIncomeModal = useModal();
   const addExpenseModal = useModal();
@@ -53,6 +58,53 @@ const BudgetDetails = () => {
 
   const hasExpenses = !!expenses?.length;
 
+  const handleCopyLink = async () => {
+    if (!shareUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setIsCopied(true); // Zmieniamy ikonkę na "ptaszka"
+      toast.success('Skopiowano link do schowka!');
+
+      // Po 2 sekundach wracamy do zwykłej ikony kopiowania
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.log(err.message); // Tutaj TS już wie na 100%, że to Error
+      }
+      toast.error('Nie udało się skopiować linku.');
+    }
+  };
+
+  const handleGenerateLink = async () => {
+    try {
+      // 1. Uderzamy do Twojego kodu w C#
+      const data = await generateShareLink(Number(budgetId));
+
+      // 2. Sklejamy URL dynamicznie na frontendzie (bezpieczniejsze niż branie z backendu)
+      // data.token to właściwość z Twojego `Ok(new { Token = shareToken... })`
+      const shareableUrl = `${window.location.origin}/shared/${data.token}`;
+
+      // 3. Zapisujemy do stanu, żeby wyświetlił się nasz ładny szary pasek z linkiem
+      setShareUrl(shareableUrl);
+
+      // (Opcjonalnie) Możemy od razu wrzucić to użytkownikowi do schowka
+      await navigator.clipboard.writeText(shareableUrl);
+      setIsCopied(true);
+      toast.success('Link wygenerowany i skopiowany do schowka!');
+
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err: unknown) {
+      // Błędy są już obsługiwane w naszym hooku przez toast.error
+      if (err instanceof Error) {
+        console.log(err.message); // Tutaj TS już wie na 100%, że to Error
+      }
+      toast.error('Wystąpił błąd podczas generowania linku do udostępnienia!');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className='w-full flex justify-center items-center mt-10 gap-10 flex-wrap'>
@@ -70,6 +122,34 @@ const BudgetDetails = () => {
       <h1 className='text-3xl font-extrabold tracking-tight text-gray-900'>
         Budżet: <span className='text-primary'>{budget?.title}</span>
       </h1>
+      <Button variant='secondary' size='md'>
+        Eksportuj Pdf
+      </Button>
+      <Button
+        variant='secondary'
+        size='md'
+        onClick={handleGenerateLink}
+        disabled={isGeneratingLink} // <--- Blokada
+      >
+        {isGeneratingLink ? 'Generowanie...' : 'Udostępnij link'}
+      </Button>
+      {shareUrl && (
+        <div className='w-4/5 mt-4 flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg p-3 shadow-sm'>
+          <span className='text-gray-600 text-sm truncate pr-4 select-all'>{shareUrl}</span>
+
+          <button
+            onClick={handleCopyLink}
+            className='p-2 hover:bg-gray-200 rounded-md transition-colors duration-200'
+            title='Skopiuj link'
+          >
+            {isCopied ? (
+              <Check size={20} className='text-green-600' />
+            ) : (
+              <Copy size={20} className='text-gray-500' />
+            )}
+          </button>
+        </div>
+      )}
       <div className='w-4/5 flex flex-col items-center gap-5 min-h-auto p-4'>
         <BudgetSummaryCards
           earned={budget?.totalEarned ?? 0}

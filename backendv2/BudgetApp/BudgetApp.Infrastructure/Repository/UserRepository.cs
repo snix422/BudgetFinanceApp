@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BudgetApp.Domain.Interfaces;
 using BudgetApp.Infrastructure.Identity;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

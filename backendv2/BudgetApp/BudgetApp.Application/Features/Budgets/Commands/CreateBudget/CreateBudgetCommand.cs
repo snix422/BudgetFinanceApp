@@ -1,18 +1,12 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MediatR;
 
-namespace BudgetApp.Application.Features.Budgets.Commands.CreateBudget
+namespace BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
+
+public record CreateBudgetCommand : IRequest<int>
 {
-    public class CreateBudgetCommand : IRequest<int>
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public decimal TotalAmount { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
+    public int Id { get; init; }
+    public string Title { get; init; } = string.Empty;
+    public decimal TotalAmount { get; init; }
+    public DateTime StartDate { get; init; }
+    public DateTime EndDate { get; init; }
 }

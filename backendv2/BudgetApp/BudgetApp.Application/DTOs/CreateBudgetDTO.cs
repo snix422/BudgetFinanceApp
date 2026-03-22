@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace BudgetApp.Application.DTOs;
 
-namespace BudgetApp.Application.DTOs
+public record CreateBudgetDTO
 {
-    public class CreateBudgetDTO
-    {
-        public string Title { get; set; } = string.Empty;
-        public decimal TotalAmount { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
+    public string Title { get; init; } = string.Empty;
+    public decimal TotalAmount { get; init; }
+    public DateTime StartDate { get; init; }
+    public DateTime EndDate { get; init; }
 }

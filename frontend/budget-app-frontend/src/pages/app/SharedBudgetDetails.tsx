@@ -13,12 +13,14 @@ import { ExpensesChart } from '@/components/transactions/charts/ExpensesChart';
 import BudgetsSkeleton from '@/components/BudgetsSkeleton';
 import type { Transaction } from '@/types/transaction';
 import useGetSharedBudget from '@/hooks/useGetSharedBudget';
+import useGetIncomes from '@/hooks/useGetIncomes';
+import useGetExpenses from '@/hooks/useGetExpenses';
 
 const SharedBudgetDetails = () => {
   const { token } = useParams();
   const { sharedData, isLoading, error } = useGetSharedBudget(token || '');
-  const expenses = sharedData?.expenses || [];
-  const incomes = sharedData?.incomes || [];
+  const { incomes } = useGetIncomes(Number(sharedData?.id));
+  const { expenses } = useGetExpenses(Number(sharedData?.id));
   const deleteModal = useModal();
 
   const editIncomeModal = useModal();
@@ -31,6 +33,8 @@ const SharedBudgetDetails = () => {
   const allTransactions = mergeAndSortTransactions(incomes, expenses);
 
   const groupedData = prepareChartData(categories, expenses);
+
+  console.log(sharedData, 'shared budget data');
 
   if (isLoading) {
     return (

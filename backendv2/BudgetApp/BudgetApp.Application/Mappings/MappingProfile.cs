@@ -7,7 +7,7 @@ using BudgetApp.Application.Features.Expenses.Commands.CreateExpense;
 using BudgetApp.Application.Features.Expenses.Commands.UpdateExpense;
 using BudgetApp.Application.Features.Incomes.Commands.CreateIncome;
 using BudgetApp.Application.Features.Incomes.Commands.UpdateIncome;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

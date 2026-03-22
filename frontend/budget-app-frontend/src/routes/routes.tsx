@@ -54,6 +54,7 @@ export const router = createBrowserRouter([
         ),
       },
       { path: 'register', element: <Register /> },
+      { path: 'shared/:token', element: <SharedBudgetDetails /> },
     ],
   },
   // 2. Aplikacja Użytkownika (wymaga logowania)
@@ -76,7 +77,6 @@ export const router = createBrowserRouter([
       },
       { path: 'budgets', element: <div>Budżety</div> },
       { path: 'budgets/:id', element: <BudgetDetails /> },
-      { path: 'shared/budgets/:id', element: <SharedBudgetDetails /> },
     ],
   },
 

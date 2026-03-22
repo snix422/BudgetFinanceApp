@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BudgetApp.Application.DTOs;
 using BudgetApp.Domain.Expectations;
-using BudgetWebApi.Domain.Interfaces.MainInterface;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Interfaces;
+using BudgetApp.Domain.Models;
 using System;
 
 /*public class IncomeService : IIncomeService

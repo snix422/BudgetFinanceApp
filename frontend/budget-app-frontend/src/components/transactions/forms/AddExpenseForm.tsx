@@ -11,6 +11,8 @@ import { groupCategoriesByRule } from '@/utils/budgetCalculations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import { isAxiosError } from 'axios';
+import type { BackendValidationError } from '@/types/error';
 
 type AddExpenseFormProps = {
   budgetId: number;
@@ -21,6 +23,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ budgetId, onClose }) =>
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateExpenseDto>({
     resolver: zodResolver(CreateExpenseSchema),
@@ -32,9 +35,23 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ budgetId, onClose }) =>
   const groupedCategories = groupCategoriesByRule(categories);
 
   const onSubmit: SubmitHandler<CreateExpenseDto> = (dto) => {
-    addExpense({ dto, budgetId });
-    onClose();
+    addExpense(
+      { dto, budgetId },
+      {
+        // To jest LOKALNY onSuccess. Wykona się zaraz po tym globalnym z Twojego hooka,
+        // ale TYLKO wtedy, gdy żądanie zakończy się sukcesem.
+        onSuccess: () => {
+          reset();
+          onClose();
+        },
+        // Lokalnego onError tutaj w ogóle nie piszemy!
+        // Twój globalny hook rzuci toast z błędem i cofnie cache,
+        // a dzięki brakowi lokalnego onSuccess - modal bezpiecznie zostanie na ekranie.
+      },
+    );
   };
+
+  console.log(addExpenseError, 'add expense error');
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 py-4'>
       <div className='space-y-2'>
@@ -104,7 +121,16 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ budgetId, onClose }) =>
           {addExpenseLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           Dodaj wydatek
         </Button>
-        {addExpenseError && <p className='text-base text-red-500'>{addExpenseError.message}</p>}
+        {isAxiosError<BackendValidationError>(addExpenseError) &&
+          addExpenseError.response?.data?.errors && (
+            <div className='text-base text-red-500'>
+              {Object.values(addExpenseError.response.data.errors)
+                .flat()
+                .map((errorMsg, index) => (
+                  <p key={index}>{errorMsg as string}</p>
+                ))}
+            </div>
+          )}
       </DialogFooter>
     </form>
   );

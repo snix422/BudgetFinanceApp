@@ -36,17 +36,19 @@ export const deleteBudget = async (id: number): Promise<void> => {
 };
 
 export const exportBudgetToPdf = async (budgetId: number): Promise<Blob> => {
-  return await api.get(`budgets/${budgetId}/export-pdf`, {
+  return await api.get(`budgets/${budgetId}/export/pdf`, {
     responseType: 'blob',
   });
 };
 
 export const generateBudgetShareLink = async (budgetId: number) => {
-  const res = await api.post(`budgets/${budgetId}/generate-share-link`);
-  return res.data;
+  const res = await api.post(`budgets/${budgetId}/share`);
+  console.log(res, 'share link response');
+  return res;
 };
 
-export const getSharedBudget = async (token: string) => {
-  const response = await api.get(`shared/budgets/${token}`);
-  return response.data;
+export const getSharedBudget = async (token: string): Promise<Budget> => {
+  const response = await api.get<unknown, Budget>(`budgets/shared/${token}`);
+  console.log(response, 'shared budget response');
+  return response;
 };

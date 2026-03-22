@@ -10,7 +10,10 @@ export const signUpSchema = z
     password: z
       .string()
       .min(1, 'Hasło jest wymagane')
-      .min(6, 'Hasło musi mieć co najmniej 6 znaków'),
+      .min(6, 'Hasło musi mieć co najmniej 6 znaków')
+      .regex(/[A-Z]/, 'Hasło musi zawierać co najmniej jedną wielką literę'),
+    //.regex(/[0-9]/, 'Hasło musi zawierać co najmniej jedną cyfrę')
+    //.regex(/[^a-zA-Z0-9]/, 'Hasło musi zawierać co najmniej jeden znak specjalny'),
     confirmPassword: z
       .string()
       .min(1, 'Pole potwierdź hasło jest wymagane')

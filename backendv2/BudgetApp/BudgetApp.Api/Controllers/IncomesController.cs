@@ -1,4 +1,4 @@
-﻿using BudgetApp.Application.DTOs;
+using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Features.Expenses.Commands.UpdateExpense;
 using BudgetApp.Application.Features.Incomes.Commands.CreateIncome;
 using BudgetApp.Application.Features.Incomes.Commands.DeleteIncome;
@@ -33,7 +33,7 @@ namespace BudgetApp.Api.Controllers
         [HttpGet("budgets/{budgetId}/incomes/{id}")]
         public async Task<IActionResult> GetIncomeById([FromRoute] int budgetId, [FromRoute]int id)
         {
-            var income = await _mediator.Send(new GetIncomeByIdQuery(budgetId, id));
+            var income = await _mediator.Send(new GetIncomeByIdQuery(id, budgetId));
 
             return Ok(income);
         }

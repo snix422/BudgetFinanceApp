@@ -1,6 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
 using BudgetApp.Application.DTOs;
-using BudgetApp.Application.Features.Auth.Queries.CurrentUser;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;

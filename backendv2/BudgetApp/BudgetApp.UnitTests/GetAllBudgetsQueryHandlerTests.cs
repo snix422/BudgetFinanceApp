@@ -3,7 +3,7 @@ using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Features.Budgets.Queries.GetAllBudgets;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using FluentAssertions;
 using Moq;
 using System;

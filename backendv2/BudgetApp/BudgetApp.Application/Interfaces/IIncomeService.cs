@@ -1,5 +1,5 @@
 ﻿using BudgetApp.Application.DTOs;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using System;
 
 public interface IIncomeService

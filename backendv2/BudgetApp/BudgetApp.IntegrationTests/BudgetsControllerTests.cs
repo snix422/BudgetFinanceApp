@@ -1,4 +1,5 @@
-﻿using BudgetApp.Application.DTOs;
+using BudgetApp.Application.DTOs;
+using BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
 using BudgetApp.Application.Features.Budgets.Commands.DeleteBudget;
 using BudgetApp.Application.Features.Budgets.Queries.GetBudgetById;
 using BudgetApp.Domain.Expectations;
@@ -45,7 +46,7 @@ namespace BudgetApp.IntegrationTests
         {
             // Arrange: Mockujemy, że Mediator pomyślnie stworzył budżet i zwrócił ID 1
             _mediatorMock
-                .Setup(m => m.Send(It.IsAny<CreateBudgetDTO>(), default))
+                .Setup(m => m.Send(It.IsAny<CreateBudgetCommand>(), default))
                 .ReturnsAsync(1);
 
             var command = new CreateBudgetDTO { Title = "Wycieczka", TotalAmount = 2000, StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(2) };

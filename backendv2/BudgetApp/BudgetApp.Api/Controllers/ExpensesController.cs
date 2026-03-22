@@ -1,4 +1,4 @@
-﻿using BudgetApp.Application.DTOs;
+using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
 using BudgetApp.Application.Features.Budgets.Commands.DeleteBudget;
 using BudgetApp.Application.Features.Budgets.Commands.UpdateBudget;
@@ -8,7 +8,6 @@ using BudgetApp.Application.Features.Expenses.Commands.UpdateExpense;
 using BudgetApp.Application.Features.Expenses.Queries.GetAllExpenses;
 using BudgetApp.Application.Features.Expenses.Queries.GetExpenseById;
 using BudgetApp.Application.Interfaces;
-using BudgetWebApi.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +35,7 @@ namespace BudgetApp.Api.Controllers
         [HttpGet("budgets/{budgetId}/expenses/{id}")]
         public async Task<ActionResult<ExpenseDTO>> GetExpenseById([FromRoute] int budgetId, [FromRoute] int id)
         {
-            var expense = await _mediator.Send(new GetExpenseByIdQuery(budgetId, id));
+            var expense = await _mediator.Send(new GetExpenseByIdQuery(id, budgetId));
             return Ok(expense);
         }
 

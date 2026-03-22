@@ -3,7 +3,7 @@ using BudgetApp.Application.Features.Budgets.Commands.DeleteBudget;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using FluentAssertions;
 using Moq;
 using System;

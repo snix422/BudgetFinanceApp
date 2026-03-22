@@ -26,6 +26,7 @@ import type { Transaction } from '@/types/transaction';
 import { toast } from 'sonner';
 import { Copy, Check } from 'lucide-react';
 import { useGenerateShareLink } from '@/hooks/useGenerateShareLink';
+import useExportToPdf from '@/hooks/useExportToPdf';
 
 const BudgetDetails = () => {
   const { id: budgetId } = useParams();
@@ -35,6 +36,7 @@ const BudgetDetails = () => {
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const { mutateAsync: generateShareLink, isPending: isGeneratingLink } = useGenerateShareLink();
+  const { exportToPdf, isPending } = useExportToPdf();
   const deleteModal = useModal();
   const addIncomeModal = useModal();
   const addExpenseModal = useModal();
@@ -122,9 +124,17 @@ const BudgetDetails = () => {
       <h1 className='text-3xl font-extrabold tracking-tight text-gray-900'>
         Budżet: <span className='text-primary'>{budget?.title}</span>
       </h1>
-      <Button variant='secondary' size='md'>
-        Eksportuj Pdf
-      </Button>
+      {budgetId && (
+        <Button
+          variant='secondary'
+          size='md'
+          onClick={() => exportToPdf(Number(budgetId))}
+          disabled={isPending}
+        >
+          Eksportuj Pdf
+        </Button>
+      )}
+
       <Button
         variant='secondary'
         size='md'

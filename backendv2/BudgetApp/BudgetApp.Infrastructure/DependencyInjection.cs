@@ -1,6 +1,7 @@
-﻿using BudgetApp.Application.Interfaces;
+using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Interfaces;
 using BudgetApp.Infrastructure.Identity;
+using BudgetApp.Infrastructure.Reporting;
 using BudgetApp.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -75,6 +76,7 @@ namespace BudgetApp.Infrastructure
             services.AddScoped<IIncomeRepository, IncomeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IBudgetPdfReportGenerator, BudgetPdfReportGenerator>();
             return services;
         }
     }

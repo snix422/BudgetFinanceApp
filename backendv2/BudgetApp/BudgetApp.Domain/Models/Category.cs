@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using BudgetApp.Domain.Enums;
-using BudgetWebApi.Domain.Models;
 
-namespace BudgetWebApi.Domain.Models
+namespace BudgetApp.Domain.Models
 {
     public class Category
     {

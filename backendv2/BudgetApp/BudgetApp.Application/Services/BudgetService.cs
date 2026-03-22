@@ -1,8 +1,8 @@
 ﻿using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Expectations;
-using BudgetWebApi.Domain.Interfaces.MainInterface;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Interfaces;
+using BudgetApp.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

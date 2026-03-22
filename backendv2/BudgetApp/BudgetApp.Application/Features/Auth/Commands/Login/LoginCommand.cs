@@ -1,22 +1,6 @@
-﻿using BudgetApp.Application.Common;
+using BudgetApp.Application.Common;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BudgetApp.Application.Features.Auth.Commands.Login
-{
-    public class LoginCommand : IRequest<Result<string>>
-    {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+namespace BudgetApp.Application.Features.Auth.Commands.Login;
 
-        public LoginCommand(string email, string password)
-        {
-            Email = email;
-            Password = password;
-        }
-    }
-}
+public record LoginCommand(string Email, string Password) : IRequest<Result<string>>;

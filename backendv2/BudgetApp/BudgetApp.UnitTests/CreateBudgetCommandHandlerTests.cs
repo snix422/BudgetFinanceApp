@@ -2,7 +2,7 @@
 using BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using FluentAssertions;
 using Moq;
 using System;

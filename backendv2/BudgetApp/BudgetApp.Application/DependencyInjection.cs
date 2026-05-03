@@ -1,4 +1,4 @@
-﻿using BudgetApp.Application.Behaviors;
+
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Application.Services;
 using BudgetApp.Domain.Interfaces;
@@ -12,16 +12,19 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using BudgetApp.Application.Behaviors;
+
+
 namespace BudgetApp.Application
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            // Register application services here
-            //services.AddScoped<IBudgetService, BudgetService>();
-            //services.AddScoped<IExpenseService, ExpenseService>();
-            //services.AddScoped<IIncomeService, IncomeService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             // Rejestracja MediatR wraz z naszym nowym Behavior
             services.AddMediatR(cfg => {

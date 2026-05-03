@@ -2,6 +2,7 @@
 using BudgetApp.Domain.Interfaces;
 using BudgetApp.Infrastructure.Identity;
 using BudgetApp.Infrastructure.Repository;
+using BudgetApp.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,7 @@ namespace BudgetApp.Infrastructure
             services.AddScoped<IIncomeRepository, IncomeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IEmailSender, EmailSender>();
             return services;
         }
     }

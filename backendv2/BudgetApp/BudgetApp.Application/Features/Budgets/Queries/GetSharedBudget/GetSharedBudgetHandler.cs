@@ -1,4 +1,5 @@
-﻿using BudgetApp.Application.DTOs;
+﻿using AutoMapper;
+using BudgetApp.Application.DTOs;
 using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
 using MediatR;
@@ -10,22 +11,26 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Application.Features.Budgets.Queries.GetSharedBudget
 {
-    public class GetSharedBudgetHandler : IRequestHandler<GetSharedBudgetQuery, SharedBudgetDTO>
+    public class GetSharedBudgetHandler : IRequestHandler<GetSharedBudgetQuery, BudgetDTO>
     {
         private readonly IBudgetRepository _budgetRepository;
+        private readonly IMapper _mapper;
 
-        public GetSharedBudgetHandler(IBudgetRepository budgetRepository)
+        public GetSharedBudgetHandler(IBudgetRepository budgetRepository, IMapper mapper)
         {
             _budgetRepository = budgetRepository;
+            _mapper = mapper;
         }
 
-        public async Task<SharedBudgetDTO> Handle(GetSharedBudgetQuery request, CancellationToken cancellationToken)
+        public async Task<BudgetDTO> Handle(GetSharedBudgetQuery request, CancellationToken cancellationToken)
         {
             var budget = await _budgetRepository.GetByShareTokenAsync(request.Token, cancellationToken);
             if (budget == null)
             {
                 throw new NotFoundException("Budget not found");
             }
+
+            var budgetDTO = _mapper.Map<BudgetDTO>(budget);
 
             var transactions = new List<SharedTransactionDTO>();
 
@@ -36,12 +41,7 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetSharedBudget
                 new SharedTransactionDTO(e.Date, e.Title, e.Amount, e.Category.Name, false)));
 
 
-            return new SharedBudgetDTO(
-             Name: budget.Title,
-             TotalIncomes: budget.Incomes.Sum(i => i.Amount),
-             TotalExpenses: budget.Expenses.Sum(e => e.Amount),
-             Transactions: transactions.OrderByDescending(t => t.Date).ToList()
-         );
+            return budgetDTO;
         }
     }
 }

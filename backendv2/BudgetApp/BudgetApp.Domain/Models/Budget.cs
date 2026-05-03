@@ -16,5 +16,10 @@ namespace BudgetWebApi.Domain.Models
         public Guid? ShareToken { get; set; }
         public bool IsShared => ShareToken.HasValue;
 
+        public bool Is80PercentAlertSend { get; set; } = false;
+
+        public bool IsSummaryEmailSent { get; set; } = false;
+
     }
 }
+ 

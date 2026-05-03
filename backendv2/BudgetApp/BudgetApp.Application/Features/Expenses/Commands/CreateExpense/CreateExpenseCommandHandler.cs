@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BudgetApp.Application.DTOs;
+using BudgetApp.Application.Features.Budgets.Notifications;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
@@ -19,13 +21,15 @@ namespace BudgetApp.Application.Features.Expenses.Commands.CreateExpense
         private readonly IBudgetRepository _budgetRepository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IPublisher _publisher;
 
-        public CreateExpenseCommandHandler(IExpenseRepository repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetRepository budgetRepository)
+        public CreateExpenseCommandHandler(IExpenseRepository repository, IMapper mapper, ICurrentUserService currentUserService, IBudgetRepository budgetRepository, IPublisher publisher)
         {
             _repository = repository;
             _mapper = mapper;
             _currentUserService = currentUserService;
             _budgetRepository = budgetRepository;
+            _publisher = publisher;
         }
 
         public async Task<int> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
@@ -42,8 +46,25 @@ namespace BudgetApp.Application.Features.Expenses.Commands.CreateExpense
 
             var expense = _mapper.Map<Expense>(request);
             expense.BudgetId = request.BudgetId;
+            var budgetDTO = _mapper.Map<BudgetDTO>(budget);
 
             await _repository.AddAsync(expense, cancellationToken);
+
+            var newTotalExpenses = budgetDTO.TotalSpent + expense.Amount;
+
+            if(budgetDTO.TotalEarned > 0)
+            {
+                var currentPercentage = (newTotalExpenses / budgetDTO.TotalEarned)   * 100m;
+                if(currentPercentage >= 80m)
+                {
+                    var userEmail = _currentUserService.UserEmail ?? "brak-maila@test.pl";
+
+                    var notification = new BudgetAlertExceededNotification(budget.Id, currentPercentage, userEmail);
+
+                    await _publisher.Publish(notification, cancellationToken);
+                }
+            }
+
             return expense.Id;
         }
     }

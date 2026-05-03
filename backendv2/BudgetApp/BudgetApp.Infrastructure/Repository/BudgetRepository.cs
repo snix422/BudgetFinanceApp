@@ -97,6 +97,18 @@ namespace BudgetApp.Infrastructure.Repository
             return budget;
         }
 
+        public async Task<IEnumerable<Budget>> GetBudgetsAwaitingSummaryAsync(CancellationToken cancellationToken)
+        {
+            var today = DateTime.UtcNow.Date.AddDays(-1);
+
+            return await _context.Budgets
+                .Include(b => b.Expenses)
+                    .ThenInclude(e => e.Category)
+                .Include(b => b.Incomes)
+                .Where(b => b.EndDate.Date <= today && !b.IsSummaryEmailSent)
+                .ToListAsync(cancellationToken);
+        }
+
         public Task Update(Budget item, CancellationToken cancellationToken = default)
         {
             _context.Budgets.Update(item);

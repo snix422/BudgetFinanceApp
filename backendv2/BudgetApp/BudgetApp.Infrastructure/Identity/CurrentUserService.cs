@@ -35,5 +35,7 @@ namespace BudgetApp.Infrastructure.Identity
 
         public string UserRole => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
 
+        public string UserEmail => _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+
     }
 }

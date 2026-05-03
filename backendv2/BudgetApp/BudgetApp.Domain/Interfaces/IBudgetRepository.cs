@@ -15,5 +15,7 @@ namespace BudgetApp.Domain.Interfaces
         Task<Budget?> GetByIdAsync(int id, string userId, CancellationToken cancellationToken = default);
 
         Task<Budget?> GetByShareTokenAsync(Guid shareToken, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Budget>> GetBudgetsAwaitingSummaryAsync(CancellationToken cancellationToken);
     }
 }

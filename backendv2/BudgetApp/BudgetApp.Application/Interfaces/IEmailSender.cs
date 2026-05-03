@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace BudgetApp.Application.Interfaces
 {
-    public interface ICurrentUserService
+    public interface IEmailSender
     {
-        string? UserId { get; }
-        string? UserRole { get; }
-
-        string UserEmail { get; }
+        Task SendEmailAsync(string toEmail, string subject, string htmlBody, CancellationToken cancellationToken);
     }
 }

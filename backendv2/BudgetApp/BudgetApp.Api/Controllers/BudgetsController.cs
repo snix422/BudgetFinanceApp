@@ -55,7 +55,14 @@ namespace BudgetApp.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBudget([FromBody] CreateBudgetDTO request)
         {
-            var newBudgetId = await _mediator.Send(request);
+            var newBudget = new CreateBudgetCommand
+            {
+                Title = request.Title,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate
+            };
+
+            var newBudgetId = await _mediator.Send(newBudget);
             return CreatedAtAction(nameof(GetBudgetById), new { id = newBudgetId }, request);
         }
 

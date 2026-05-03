@@ -9,9 +9,7 @@ namespace BudgetApp.Application.Features.Budgets.Commands.CreateBudget
 {
     public class CreateBudgetCommand : IRequest<int>
     {
-        public int Id { get; set; }
         public string Title { get; set; }
-        public decimal TotalAmount { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }

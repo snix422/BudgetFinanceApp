@@ -4,18 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetApp.Api.Controllers
 {
-    public class SharedBudgetsController : Controller
+    [ApiController]
+    [Route("api/budgets/shared")]
+    public class SharedBudgetsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
         public SharedBudgetsController(IMediator mediator)
         {
             _mediator = mediator;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [HttpGet("{token}")]

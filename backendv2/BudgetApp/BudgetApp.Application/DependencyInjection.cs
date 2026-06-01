@@ -1,4 +1,5 @@
 
+
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Application.Services;
 using BudgetApp.Domain.Interfaces;
@@ -18,6 +19,11 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using BudgetApp.Application.Behaviors;
 
+
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace BudgetApp.Application
 {

@@ -20,7 +20,8 @@
     <ProjectReference Include="..\BudgetApp.Domain\BudgetApp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+
+	<ItemGroup>
     <Folder Include="Nowy folder\" />
   </ItemGroup>
 

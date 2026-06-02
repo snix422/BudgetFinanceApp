@@ -1,15 +1,6 @@
-﻿using BudgetApp.Application.DTOs;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Application.DTOs;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BudgetApp.Application.Features.Categories.Queries.GetAllCategories
-{
-    public class GetAllCategoriesQuery : IRequest<IEnumerable<CategoryDTO>>
-    {
-    }
-}
+namespace BudgetApp.Application.Features.Categories.Queries.GetAllCategories;
+
+public record GetAllCategoriesQuery : IRequest<IEnumerable<CategoryDTO>>;

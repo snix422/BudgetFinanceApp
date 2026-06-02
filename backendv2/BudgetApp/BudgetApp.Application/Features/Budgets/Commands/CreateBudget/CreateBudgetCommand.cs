@@ -1,11 +1,8 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MediatR;
 
-namespace BudgetApp.Application.Features.Budgets.Commands.CreateBudget
+namespace BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
+
+public record CreateBudgetCommand : IRequest<int>
 {
     public class CreateBudgetCommand : IRequest<int>
     {

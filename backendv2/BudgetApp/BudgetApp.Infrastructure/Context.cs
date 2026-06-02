@@ -1,9 +1,10 @@
-﻿using BudgetApp.Infrastructure.Identity;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Infrastructure.Identity;
+using BudgetApp.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
+
+namespace BudgetApp.Infrastructure;
 
 public class Context : IdentityDbContext<ApplicationUser>
 {
@@ -82,3 +83,4 @@ public class Context : IdentityDbContext<ApplicationUser>
     }
 
 }
+

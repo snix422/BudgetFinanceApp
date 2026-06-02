@@ -1,10 +1,9 @@
-﻿using AutoMapper;
+using AutoMapper;
 using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Interfaces.MainInterface;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -34,12 +33,12 @@ namespace BudgetApp.Application.Features.Incomes.Queries.GetIncomeById
             var userId = _currentUserService.UserId;
             string? userIdFilter = userRole == "Admin" ? null : userId;
 
-            income = await _repository.GetByIdAsync(request.Id, userIdFilter, request.BugetId, cancellationToken);
+            income = await _repository.GetByIdAsync(request.Id, userIdFilter, request.BudgetId, cancellationToken);
 
             if (income == null)
             {
 
-                throw new NotFoundException($"Income with ID {request.Id} not found in Budget {request.BugetId}.");
+                throw new NotFoundException($"Income with ID {request.Id} not found in Budget {request.BudgetId}.");
             }
 
             return _mapper.Map<IncomeDTO>(income);

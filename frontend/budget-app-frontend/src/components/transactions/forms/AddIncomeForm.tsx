@@ -25,9 +25,21 @@ const AddIncomeForm: React.FC<AddIncomeFormProps> = ({ budgetId, onClose }) => {
   console.log(errors);
   const { addIncome, addIncomeLoading, addIncomeError } = useGetIncomes(budgetId);
   const onSubmit: SubmitHandler<CreateIncomeDto> = (dto) => {
-    addIncome({ dto, budgetId });
-    onClose();
-    reset();
+    addIncome(
+      { dto, budgetId },
+      {
+        // To jest LOKALNY onSuccess. Wykona się zaraz po tym globalnym z Twojego hooka,
+        // ale TYLKO wtedy, gdy żądanie zakończy się sukcesem.
+        onSuccess: () => {
+          reset();
+          onClose();
+        },
+
+        // Lokalnego onError tutaj w ogóle nie piszemy!
+        // Twój globalny hook rzuci toast z błędem i cofnie cache,
+        // a dzięki brakowi lokalnego onSuccess - modal bezpiecznie zostanie na ekranie.
+      },
+    );
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 py-4'>

@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace BudgetApp.Application.DTOs;
 
-namespace BudgetApp.Application.DTOs
+public record LoginUserDTO
 {
-    public class LoginUserDTO
-    {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
+    public string Email { get; init; } = string.Empty;
+    public string Password { get; init; } = string.Empty;
 }

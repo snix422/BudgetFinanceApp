@@ -13,3 +13,11 @@ export interface Transaction {
 
 // Jeśli SelectedItem ma być tym samym co Transaction, to użyj:
 // type SelectedItem = Transaction;
+
+export type SharedTransaction = {
+  title: string;
+  amount: number;
+  date: string;
+  isExpense: boolean;
+  categoryName?: string;
+};

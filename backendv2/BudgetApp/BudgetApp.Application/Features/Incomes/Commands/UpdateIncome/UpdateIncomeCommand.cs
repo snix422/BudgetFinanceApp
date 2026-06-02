@@ -1,28 +1,5 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+using MediatR;
 
-namespace BudgetApp.Application.Features.Incomes.Commands.UpdateIncome
-{
-    public class UpdateIncomeCommand : IRequest
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
-        public int BudgetId { get; set; }
+namespace BudgetApp.Application.Features.Incomes.Commands.UpdateIncome;
 
-        public UpdateIncomeCommand(int id, string title, decimal amount, DateTime date, int budgetId)
-        {
-            Id = id;
-            Title = title;
-            Amount = amount;
-            Date = date;
-            BudgetId = budgetId;
-        }
-    }
-}
+public record UpdateIncomeCommand(int Id, string Title, decimal Amount, DateTime Date, int BudgetId) : IRequest;

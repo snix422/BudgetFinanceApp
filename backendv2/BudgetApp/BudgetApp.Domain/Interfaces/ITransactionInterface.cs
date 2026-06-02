@@ -1,5 +1,3 @@
-﻿using BudgetWebApi.Domain.Interfaces.MainInterface;
-using BudgetWebApi.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

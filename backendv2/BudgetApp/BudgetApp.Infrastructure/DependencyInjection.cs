@@ -1,6 +1,7 @@
-﻿using BudgetApp.Application.Interfaces;
+using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Interfaces;
 using BudgetApp.Infrastructure.Identity;
+using BudgetApp.Infrastructure.Reporting;
 using BudgetApp.Infrastructure.Repository;
 using BudgetApp.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

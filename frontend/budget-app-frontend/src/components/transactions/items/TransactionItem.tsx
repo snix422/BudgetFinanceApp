@@ -18,6 +18,7 @@ interface TransactionItemProps {
   onOpenDeleteModal: () => void;
   onOpenEditModal: () => void;
   selectItem: (item: SelectedItem) => void;
+  isReadOnly?: boolean;
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({
@@ -25,6 +26,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
   onOpenDeleteModal,
   onOpenEditModal,
   selectItem,
+  isReadOnly = false,
 }) => {
   const formattedDate = new Date(data.date).toLocaleDateString('pl-PL', {
     day: '2-digit',
@@ -87,15 +89,22 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
           {data.amount.toFixed(2)} zł
         </span>
 
-        <div className='flex items-center gap-1'>
-          <Button variant='edit' size='md' onClick={handleClickUpdate} className='h-8 w-8  px-10'>
-            Edit
-          </Button>
+        {isReadOnly ? null : (
+          <div className='flex items-center gap-1'>
+            <Button variant='edit' size='md' onClick={handleClickUpdate} className='h-8 w-8  px-10'>
+              Edit
+            </Button>
 
-          <Button variant='delete' size='md' onClick={handleClickDelete} className='h-8 w-8 px-10'>
-            Delete
-          </Button>
-        </div>
+            <Button
+              variant='delete'
+              size='md'
+              onClick={handleClickDelete}
+              className='h-8 w-8 px-10'
+            >
+              Delete
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,20 +1,6 @@
-﻿using BudgetApp.Application.DTOs;
+using BudgetApp.Application.DTOs;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BudgetApp.Application.Features.Expenses.Queries.GetAllExpenses
-{
-    public class GetAllExpensesQuery : IRequest<IEnumerable<ExpenseDTO>>
-    {
-        public int BudgetId { get; set; }
+namespace BudgetApp.Application.Features.Expenses.Queries.GetAllExpenses;
 
-        public GetAllExpensesQuery(int budgetId)
-        {
-            BudgetId = budgetId;
-        }
-    }
-}
+public record GetAllExpensesQuery(int BudgetId) : IRequest<IEnumerable<ExpenseDTO>>;

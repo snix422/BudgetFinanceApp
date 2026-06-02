@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -21,10 +21,13 @@
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="QuestPDF" Version="2026.2.1" />
+    <PackageReference Include="ScottPlot" Version="5.1.57" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BudgetApp.Application\BudgetApp.Application.csproj" />
+    <ProjectReference Include="..\BudgetApp.Domain\BudgetApp.Domain.csproj" />
   </ItemGroup>
 
 </Project>

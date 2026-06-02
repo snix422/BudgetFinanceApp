@@ -1,4 +1,4 @@
-﻿using BudgetApp.Application.DTOs;
+using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
 using BudgetApp.Application.Features.Budgets.Commands.DeleteBudget;
 using BudgetApp.Application.Features.Budgets.Commands.GenerateBudgetShareToken;
@@ -8,7 +8,6 @@ using BudgetApp.Application.Features.Budgets.Queries.ExportBudget;
 using BudgetApp.Application.Features.Budgets.Queries.GetAllBudgets;
 using BudgetApp.Application.Features.Budgets.Queries.GetBudgetById;
 using BudgetApp.Application.Features.Budgets.Queries.GetBudgetsByUser;
-using BudgetWebApi.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -29,7 +28,7 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpGet("admin/all")]
-        public async Task<ActionResult<IEnumerable<Budget>>> GetAllBudgets()
+        public async Task<ActionResult<IEnumerable<BudgetDTO>>> GetAllBudgets()
         {
             var budgets = await _mediator.Send(new GetAllBudgetsQuery());
             return Ok(budgets);
@@ -38,7 +37,7 @@ namespace BudgetApp.Api.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Budget>> GetBudgetById(int id)
+        public async Task<ActionResult<BudgetDTO>> GetBudgetById(int id)
         {
             var budget = await _mediator.Send(new GetBudgetByIdQuery(id));
             return Ok(budget);
@@ -46,7 +45,7 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Budget>>> GetBudgetsByUser()
+        public async Task<ActionResult<IEnumerable<BudgetDTO>>> GetBudgetsByUser()
         {
             var budgets = await _mediator.Send(new GetBudgetsByUserQuery());
             return Ok(budgets);
@@ -69,7 +68,7 @@ namespace BudgetApp.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBudget(int id, [FromBody] UpdateBudgetCommand request)
         {
-            await _mediator.Send(request);
+            await _mediator.Send(request with { Id = id });
             return NoContent();
         }
 

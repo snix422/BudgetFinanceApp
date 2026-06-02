@@ -1,20 +1,14 @@
-﻿using BudgetApp.Application.Common;
+using BudgetApp.Application.Common;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BudgetApp.Application.Features.Auth.Commands.Register
+namespace BudgetApp.Application.Features.Auth.Commands.Register;
+
+public record RegisterCommand : IRequest<Result<string>>
 {
-    public class RegisterCommand : IRequest<Result<string>>
-    {
-        public string Email { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public string ConfirmPassword { get; set; } = string.Empty;
-    }
+    public string Email { get; init; } = string.Empty;
+    public string FirstName { get; init; } = string.Empty;
+    public string LastName { get; init; } = string.Empty;
+    public string Password { get; init; } = string.Empty;
+    public string Phone { get; init; } = string.Empty;
+    public string ConfirmPassword { get; init; } = string.Empty;
 }

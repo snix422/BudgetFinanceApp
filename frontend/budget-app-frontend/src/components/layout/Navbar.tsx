@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router';
 
-import { Wallet, LogOut, LayoutDashboard, PieChart } from 'lucide-react';
+import { Wallet, LogOut, LayoutDashboard } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
 import Button from '../ui/Button';
 
@@ -30,15 +30,6 @@ const Navbar = () => {
                 <div className='flex items-center gap-2'>
                   <LayoutDashboard size={16} />
                   Dashboard
-                </div>
-              </Link>
-              <Link
-                to='/budgets'
-                className={`text-sm font-medium transition-colors hover:text-blue-600 ${isActive('/budgets') ? 'text-blue-600' : 'text-gray-600'}`}
-              >
-                <div className='flex items-center gap-2'>
-                  <PieChart size={16} />
-                  Budżety
                 </div>
               </Link>
             </nav>

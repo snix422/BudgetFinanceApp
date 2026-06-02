@@ -1,7 +1,5 @@
-﻿using BudgetApp.Application.Features.Budgets.Queries.GetSharedBudget;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Interfaces.MainInterface;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

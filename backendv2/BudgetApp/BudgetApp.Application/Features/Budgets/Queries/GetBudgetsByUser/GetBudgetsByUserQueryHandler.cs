@@ -2,7 +2,6 @@
 using BudgetApp.Application.DTOs;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Interfaces.MainInterface;
 using MediatR;
 using System;
 using System.Collections.Generic;

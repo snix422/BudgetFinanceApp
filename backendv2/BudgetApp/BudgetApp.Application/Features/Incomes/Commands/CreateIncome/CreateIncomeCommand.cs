@@ -1,25 +1,5 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MediatR;
 
-namespace BudgetApp.Application.Features.Incomes.Commands.CreateIncome
-{
-    public class CreateIncomeCommand : IRequest<int>
-    {
-        public string Title { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
-        public int BudgetId { get; set; }
+namespace BudgetApp.Application.Features.Incomes.Commands.CreateIncome;
 
-        public CreateIncomeCommand(string title, decimal amount, DateTime date, int budget)
-        {
-            Title = title;
-            Amount = amount;
-            Date = date;
-            BudgetId = budget;
-        }
-    }
-}
+public record CreateIncomeCommand(string Title, decimal Amount, DateTime Date, int BudgetId) : IRequest<int>;

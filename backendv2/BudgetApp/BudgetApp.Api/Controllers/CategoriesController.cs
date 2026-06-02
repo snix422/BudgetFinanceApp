@@ -1,8 +1,6 @@
-﻿using AutoMapper;
 using BudgetApp.Application.Features.Categories.Queries.GetAllCategories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BudgetApp.Api.Controllers
 {

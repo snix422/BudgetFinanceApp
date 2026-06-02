@@ -5,7 +5,7 @@ using BudgetApp.Application.Features.Budgets.Queries.GetBudgetById;
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using FluentAssertions;
 using Moq;
 using Xunit;

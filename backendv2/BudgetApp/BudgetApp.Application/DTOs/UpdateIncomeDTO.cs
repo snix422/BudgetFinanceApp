@@ -1,9 +1,9 @@
-﻿using System;
+namespace BudgetApp.Application.DTOs;
 
-public class UpdateIncomeDTO
+public record UpdateIncomeDTO
 {
-    public string Title { get; set; } = string.Empty;
-    public decimal Amount { get; set; }
-    public DateTime Date { get; set; }
-    public int CategoryId { get; set; }
+    public string Title { get; init; } = string.Empty;
+    public decimal Amount { get; init; }
+    public DateTime Date { get; init; }
+    public int CategoryId { get; init; }
 }

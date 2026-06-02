@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace BudgetApp.Application.DTOs;
 
-namespace BudgetApp.Application.DTOs
+public record IncomeDTO
 {
-    public class IncomeDTO
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; } = string.Empty;
-        
-    }
+    public int Id { get; init; }
+    public string Title { get; init; } = string.Empty;
+    public decimal Amount { get; init; }
+    public DateTime Date { get; init; }
+    public int CategoryId { get; init; }
+    public string CategoryName { get; init; } = string.Empty;
 }

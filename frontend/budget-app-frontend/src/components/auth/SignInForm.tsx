@@ -40,9 +40,12 @@ const SignInForm = () => {
       <Button type='submit' className='w-full mt-2' isLoading={loginIsLoading}>
         {loginIsLoading ? 'Logowanie...' : 'Zaloguj się'}
       </Button>
-      {loginError?.response?.data.message && (
-        <p className='text-red-500'>{loginError.response.data.message}</p>
-      )}
+      {loginError?.response?.data.message &&
+        (loginError.response.data.message == 'Invalid credentials' ? (
+          <p className='text-red-500'>Niepoprawne dane logowania</p>
+        ) : (
+          <p className='text-red-500'>{loginError.response.data.message}</p>
+        ))}
     </form>
   );
 };

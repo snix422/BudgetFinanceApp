@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace BudgetApp.Application.DTOs;
 
-namespace BudgetApp.Application.DTOs
+public record UserDTO
 {
-    public class UserDTO
-    {
-        public string Id { get; set; }
-        public string Email { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string RoleName { get; set; } = string.Empty;
-    }
+    public string Id { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string FirstName { get; init; } = string.Empty;
+    public string RoleName { get; init; } = string.Empty;
 }

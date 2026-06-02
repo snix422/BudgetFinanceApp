@@ -1,7 +1,6 @@
-﻿using System;
-using BudgetWebApi.Domain.Models;
+using System;
 
-namespace BudgetWebApi.Domain.Models
+namespace BudgetApp.Domain.Models
 {
 
     public class User

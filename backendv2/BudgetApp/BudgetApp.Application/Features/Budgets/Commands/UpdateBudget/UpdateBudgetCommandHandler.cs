@@ -2,8 +2,7 @@
 using BudgetApp.Application.Interfaces;
 using BudgetApp.Domain.Expectations;
 using BudgetApp.Domain.Interfaces;
-using BudgetWebApi.Domain.Interfaces.MainInterface;
-using BudgetWebApi.Domain.Models;
+using BudgetApp.Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;

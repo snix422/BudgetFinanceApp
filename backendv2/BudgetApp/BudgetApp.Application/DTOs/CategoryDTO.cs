@@ -1,16 +1,10 @@
-﻿using BudgetApp.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BudgetApp.Domain.Enums;
 
-namespace BudgetApp.Application.DTOs
+namespace BudgetApp.Application.DTOs;
+
+public record CategoryDTO
 {
-    public class CategoryDTO
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public CategoryRule Rule { get; set; }
-    }
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public CategoryRule Rule { get; init; }
 }

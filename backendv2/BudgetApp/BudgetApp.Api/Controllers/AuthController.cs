@@ -1,6 +1,6 @@
-﻿using BudgetApp.Application.Features.Auth.Commands.Login;
+using BudgetApp.Application.Features.Auth.Commands.Login;
 using BudgetApp.Application.Features.Auth.Commands.Register;
-using BudgetApp.Application.Features.Auth.Queries.CurrentUser;
+using BudgetApp.Application.Features.Auth.Queries.GetCurrentUser;
 using BudgetApp.Application.Features.Auth.Queries.GetAllUsers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -53,7 +53,7 @@ namespace BudgetApp.Api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginCommand request)
         {
             // Implement login logic here
-            var result = await _mediator.Send(new LoginCommand(request.Email,request.Password));
+            var result = await _mediator.Send(request);
 
             if (!result.IsSuccess)
             {

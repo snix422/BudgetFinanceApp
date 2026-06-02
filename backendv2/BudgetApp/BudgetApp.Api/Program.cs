@@ -71,7 +71,6 @@ app.UseAuthorization();
 
 app.UseHangfireDashboard();
 
-RecurringJob.AddOrUpdate<BudgetSummaryJob>("send-daily-budget-summaries", job => job.ExecuteAsync(), Cron.Daily(8));
 
 app.MapControllers();
 

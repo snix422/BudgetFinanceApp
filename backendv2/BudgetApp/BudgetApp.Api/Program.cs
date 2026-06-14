@@ -7,6 +7,7 @@ using FluentValidation.AspNetCore;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
 using Serilog;
@@ -17,7 +18,7 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 // Add services to the container.
 QuestPDF.Settings.License = LicenseType.Community;
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
@@ -74,6 +75,24 @@ app.UseHangfireDashboard();
 
 app.MapControllers();
 
-app.Run();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<Context>();
+    for (int attempts = 0; attempts < 5; attempts++)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch when (attempts < 5) 
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(5)); 
+            throw;
+        }
+    }
+}
+
+    app.Run();
 
 public partial class Program { }

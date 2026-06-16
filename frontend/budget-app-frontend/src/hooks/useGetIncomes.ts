@@ -18,7 +18,7 @@ const useGetIncomes = (budgetId: number) => {
   const addIncome = useMutation({
     mutationFn: ({ dto, budgetId }: { dto: CreateIncomeDto; budgetId: number }) =>
       createIncome(dto, budgetId),
-    onMutate: async (variables) => {
+    onMutate: async (variables: any) => {
       await queryClient.cancelQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
       const previousIncomes = queryClient.getQueryData(['incomes-query-key']);
       queryClient.setQueryData(['incomes-query-key', variables.budgetId], (old: Income[] = []) => {
@@ -44,7 +44,7 @@ const useGetIncomes = (budgetId: number) => {
         queryClient.setQueryData(['incomes-query-key'], onMutateResult.previousIncomes);
       }
     },
-    onSettled(data, error, variables) {
+    onSettled(_data, _error, variables) {
       queryClient.invalidateQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
@@ -66,7 +66,7 @@ const useGetIncomes = (budgetId: number) => {
       });
       return { previousIncomes };
     },
-    onSuccess(data, variables) {
+    onSuccess(_data, variables) {
       console.log('Edytowano wpływ pomyślnie. ID:', variables.id);
       toast.success('Edytowano wpływ pomyślnie!');
     },
@@ -77,7 +77,7 @@ const useGetIncomes = (budgetId: number) => {
         queryClient.setQueryData(['incomes-query-key'], onMutateResult.previousIncomes);
       }
     },
-    onSettled(data, error, variables) {
+    onSettled(_data, _error, variables) {
       queryClient.invalidateQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
@@ -93,7 +93,7 @@ const useGetIncomes = (budgetId: number) => {
       });
       return { previousIncomes };
     },
-    onSuccess(data, variables) {
+    onSuccess(_data, variables) {
       console.log('Usunięto wpływ o ID:', variables);
       toast.success('Usunięto wpływ pomyślnie!');
     },
@@ -104,7 +104,7 @@ const useGetIncomes = (budgetId: number) => {
         queryClient.setQueryData(['incomes-query-key'], onMutateResult.previousIncomes);
       }
     },
-    onSettled(data, error, variables) {
+    onSettled(_data, _error, variables) {
       queryClient.invalidateQueries({ queryKey: ['incomes-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },

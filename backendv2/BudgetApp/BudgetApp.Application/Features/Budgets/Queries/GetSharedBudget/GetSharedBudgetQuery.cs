@@ -3,7 +3,5 @@ using MediatR;
 
 namespace BudgetApp.Application.Features.Budgets.Queries.GetSharedBudget;
 
-namespace BudgetApp.Application.Features.Budgets.Queries.GetSharedBudget
-{
-   public record GetSharedBudgetQuery(Guid Token) : IRequest<BudgetDTO>;
-}
+public record GetSharedBudgetQuery(Guid Token) : IRequest<BudgetDTO>;
+

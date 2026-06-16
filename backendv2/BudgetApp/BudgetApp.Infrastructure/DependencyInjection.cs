@@ -78,6 +78,7 @@ namespace BudgetApp.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IBudgetPdfReportGenerator, BudgetPdfReportGenerator>();
             return services;
         }
     }

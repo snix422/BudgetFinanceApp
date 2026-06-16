@@ -1,13 +1,8 @@
 using MediatR;
+using System;
 
 namespace BudgetApp.Application.Features.Budgets.Commands.CreateBudget;
 
-public record CreateBudgetCommand : IRequest<int>
-{
-    public class CreateBudgetCommand : IRequest<int>
-    {
-        public string Title { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
-}
+public record CreateBudgetCommand(string Title, decimal TotalAmount, DateTime StartDate, DateTime EndDate) : IRequest<int>;
+
+

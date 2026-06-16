@@ -87,7 +87,7 @@ const BudgetDetails = () => {
 
       // 2. Sklejamy URL dynamicznie na frontendzie (bezpieczniejsze niż branie z backendu)
       // data.token to właściwość z Twojego `Ok(new { Token = shareToken... })`
-      const shareableUrl = `${window.location.origin}/shared/${data.token}`;
+      const shareableUrl = `${window.location.origin}/shared/${data.data.token}`;
 
       // 3. Zapisujemy do stanu, żeby wyświetlił się nasz ładny szary pasek z linkiem
       setShareUrl(shareableUrl);

@@ -1,6 +1,7 @@
 namespace BudgetApp.Application.DTOs;
 
 public record CreateBudgetDTO
+
 (
     string Title,
     decimal TotalAmount,

@@ -24,7 +24,7 @@ namespace BudgetApp.Application.Behaviors
             {
                 var context = new ValidationContext<TRequest>(request);
 
-                // Odpalamy asynchronicznie wszystkie walidatory przypisane do tego Commandu
+               
                 var validationResults = await Task.WhenAll(
                     _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
 
@@ -33,12 +33,11 @@ namespace BudgetApp.Application.Behaviors
                     .Where(f => f != null)
                     .ToList();
 
-                // Jeśli są błędy, przerywamy działanie i rzucamy wyjątek
                 if (failures.Count != 0)
                     throw new ValidationException(failures);
             }
 
-            // Jeśli walidacja przeszła, lecimy dalej do Handlera
+          
             return await next();
         }
     }

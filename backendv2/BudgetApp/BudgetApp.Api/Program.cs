@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
-// Add services to the container.
+
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
@@ -26,29 +26,30 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:3000") // <-- Tutaj wpisz adres Frontendu (bez / na ko�cu)
+            policy.WithOrigins("http://localhost:5173", "http://localhost:3000") 
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials(); // Wa�ne, je�li u�ywasz ciasteczek (HttpOnly cookies)
+                  .AllowCredentials(); 
         });
 });
 
-// ... inne serwisy ...
+
 builder.Services.AddRouting(options => {
-    options.LowercaseUrls = true; // <--- To magiczna linijka
+    options.LowercaseUrls = true; 
 });
 
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    // Tutaj podaj connection string do swojej bazy danych
+   
     .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Dodaj serwer, kt�ry faktycznie b�dzie te zadania wykonywa�
+
 EnsureDatabaseExists(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddHangfireServer();
 builder.Services.AddControllers();
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -56,7 +57,8 @@ builder.Services.AddAuthorization(options =>
         .RequireAuthenticatedUser()
         .Build();
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
@@ -66,7 +68,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -109,7 +111,7 @@ static void EnsureDatabaseExists(string connectionString){
     var database = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
     var masterConnectionString = new SqlConnectionStringBuilder(connectionString)
     {
-        InitialCatalog = "master" // Połącz się z bazą master, aby móc tworzyć inne bazy
+        InitialCatalog = "master" 
     }.ConnectionString;
 
     for(int attempt=1; ; attempt++){

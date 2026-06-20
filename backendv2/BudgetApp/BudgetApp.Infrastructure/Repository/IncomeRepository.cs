@@ -59,11 +59,7 @@ namespace BudgetApp.Infrastructure.Repository
                 
             Console.WriteLine(id);
             var test = await _context.Incomes.Include(e => e.Budget).FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
-            Console.WriteLine(test);
-
-            Console.WriteLine(userId);
-            
-
+       
             query = query.Where(b => b.Id == id);
 
             query = query.Where(b => b.BudgetId == budgetId);
@@ -73,7 +69,7 @@ namespace BudgetApp.Infrastructure.Repository
             {
                 query = query.Where(b => b.Budget.UserId == userId);
             }
-            Console.WriteLine(query);
+           
             return await query.FirstOrDefaultAsync(cancellationToken);
             
         }

@@ -18,7 +18,7 @@ public class Context : IdentityDbContext<ApplicationUser>
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
-        // Configure relationships and constraints here if needed
+       
 
         modelBuilder.Entity<IdentityRole>().HasData(
         new IdentityRole

@@ -27,7 +27,7 @@ namespace BudgetApp.Application.Features.Budgets.Commands.RevokeShareToken
 
             budget.ShareToken = null;
             await _budgetRepository.Update(budget, cancellationToken);
-            //return Unit.Value;
+           
         }
     }
 }

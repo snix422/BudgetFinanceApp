@@ -27,8 +27,6 @@ namespace BudgetApp.Application.Mappings
             CreateMap<UpdateExpenseDTO, Expense>();
             CreateMap<CreateBudgetDTO, Budget>();
             CreateMap<UpdateBudgetDTO, Budget>();
-
-            // Komendy (CQRS)
             CreateMap<RegisterCommand, RegisterUserDTO>();
             CreateMap<LoginCommand, LoginUserDTO>();
             CreateMap<CreateBudgetCommand, Budget>();
@@ -39,38 +37,17 @@ namespace BudgetApp.Application.Mappings
             CreateMap<Category, CategoryDTO>();
             CreateMap<UpdateIncomeCommand, Income>();
             CreateMap<UpdateExpenseCommand, Expense>();
-
             CreateMap<User, UserDTO>();
-
-            // --- INCOME DTO (Do wyświetlania) ---
-            //CreateMap<Income, IncomeDTO>()
-            /*.ForMember(dest => dest.BudgetTitle,
-                opt => opt.MapFrom(src => src.Budget != null ? src.Budget.Title : string.Empty));*/
-            // Usunąłem dziwne mapowania (StartDate, CategoryName z Budget.EndDate), 
-            // bo Income zazwyczaj wyświetla tylko swoje dane + nazwę budżetu.
-
-            // --- EXPENSE DTO (Do wyświetlania) ---
             CreateMap<Expense, ExpenseDTO>()
                 .ForMember(dest => dest.CategoryName,
-                    opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : "Brak Kategorii"))// Poprawione!);
+                    opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : "Brak Kategorii"))
                 .ForMember(dest => dest.CategoryRule,
                     opt => opt.MapFrom(src => src.Category != null ? src.Category.Rule : Domain.Enums.CategoryRule.Needs));
-            /*.ForMember(dest => dest.BudgetTitle,
-                opt => opt.MapFrom(src => src.Budget != null ? src.Budget.Title : string.Empty));*/
-
-
-            // --- BUDGET DTO (Tu dzieje się magia obliczeń) ---
             CreateMap<Budget, BudgetDTO>()
-                // 1. Ile wydaliśmy? (Suma wydatków)
                 .ForMember(dest => dest.TotalSpent,
                     opt => opt.MapFrom(src => src.Expenses != null ? src.Expenses.Sum(e => e.Amount) : 0m))
-
-                // 2. Ile zarobiliśmy? (Suma wpływów)
                 .ForMember(dest => dest.TotalEarned,
                     opt => opt.MapFrom(src => src.Incomes != null ? src.Incomes.Sum(i => i.Amount) : 0m))
-
-                // 3. Ile zostało? (Wpływy - Wydatki)
-                // Uwaga: Tutaj musimy policzyć obie sumy jeszcze raz, bo AutoMapper nie widzi pól "TotalSpent" z DTO w trakcie mapowania źródła.
                 .ForMember(dest => dest.RemainingAmount,
                     opt => opt.MapFrom(src =>
                         (src.Incomes != null ? src.Incomes.Sum(i => i.Amount) : 0m) -

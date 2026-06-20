@@ -25,10 +25,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:3000") // <-- Tutaj wpisz adres Frontendu (bez / na ko�cu)
+            policy.WithOrigins("http://localhost:5173", "http://localhost:3000") 
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials(); // Wa�ne, je�li u�ywasz ciasteczek (HttpOnly cookies)
+                  .AllowCredentials(); 
         });
 });
 
@@ -44,7 +44,7 @@ builder.Services.AddHangfire(configuration => configuration
    
     .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Dodaj serwer, kt�ry faktycznie b�dzie te zadania wykonywa�
+
 EnsureDatabaseExists(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddHangfireServer();
 builder.Services.AddControllers();
@@ -100,7 +100,7 @@ static void EnsureDatabaseExists(string connectionString){
     var database = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
     var masterConnectionString = new SqlConnectionStringBuilder(connectionString)
     {
-        InitialCatalog = "master" // Połącz się z bazą master, aby móc tworzyć inne bazy
+        InitialCatalog = "master" 
     }.ConnectionString;
 
     for(int attempt=1; ; attempt++){

@@ -23,7 +23,6 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
            
@@ -32,6 +31,7 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpGet("users")]
+        [Authorize(Roles = "Admin")] // <-- Tylko użytkownicy z rolą "Admin" mogą uzyskać dostęp
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _mediator.Send(new GetAllUsersQuery());
@@ -39,6 +39,7 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterCommand request)
         {
             var userId = await _mediator.Send(request);
@@ -50,6 +51,7 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginCommand request)
         {
             var result = await _mediator.Send(request);

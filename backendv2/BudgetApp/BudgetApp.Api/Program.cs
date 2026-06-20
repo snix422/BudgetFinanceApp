@@ -13,6 +13,7 @@ using QuestPDF.Infrastructure;
 using Serilog;
 using System.Text;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
@@ -48,6 +49,16 @@ builder.Services.AddHangfire(configuration => configuration
 EnsureDatabaseExists(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddHangfireServer();
 builder.Services.AddControllers();
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();

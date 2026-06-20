@@ -54,15 +54,6 @@ namespace BudgetApp.Infrastructure.Identity
 
             string roleToAssign = "User";
 
-            if (dto.Email.Equals("admin@budgetapp.com", StringComparison.OrdinalIgnoreCase))
-            {
-                roleToAssign = "Admin";
-            }
-            else if (dto.Email.EndsWith("@budgetapp.com"))
-            {
-                roleToAssign = "Moderator";
-            }
-
             if (!await _roleManager.RoleExistsAsync(roleToAssign))
             {
                 await _roleManager.CreateAsync(new IdentityRole(roleToAssign));
@@ -112,7 +103,7 @@ namespace BudgetApp.Infrastructure.Identity
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),
+                expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds
                 );
 

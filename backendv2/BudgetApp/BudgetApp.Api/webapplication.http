@@ -1,0 +1,83 @@
+@BudgetAppApi_HostAddress = http://localhost:8080
+
+### Register John Doe
+POST {{BudgetAppApi_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test2@example.com",
+  "password": "Password123!",
+  "firstName": "John",
+  "lastName": "Doe",
+  "confirmPassword": "Password123!"
+}
+
+
+### Register Jan Kowalski
+POST {{BudgetAppApi_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "Password123!",
+  "firstName": "Jan",
+  "lastName": "Kowalski",
+  "confirmPassword": "Password123!"
+}
+
+
+### Login John Doe
+# @name login
+POST {{BudgetAppApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test2@example.com",
+  "password": "Password123!"
+}
+
+
+### Login Jan Kowalski
+# @name loginJan
+POST {{BudgetAppApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "Password123!"
+}
+
+
+### Create a new budget for John Doe
+POST {{BudgetAppApi_HostAddress}}/api/budgets
+Content-Type: application/json
+Cookie: {{login.response.headers.Set-Cookie}}
+
+{
+  "title": "John's Budget",
+  "totalAmount": 1000.00,
+  "startDate": "2024-01-01",
+  "endDate": "2024-12-31"
+}
+
+
+### Create a new budget for Jan Kowalski
+POST {{BudgetAppApi_HostAddress}}/api/budgets
+Content-Type: application/json
+Cookie: {{loginJan.response.headers.Set-Cookie}}
+
+{
+  "title": "Jan's Budget",
+  "totalAmount": 2000.00,
+  "startDate": "2024-01-01",
+  "endDate": "2024-12-31"
+}
+
+
+### Create a new budget for Jan Kowalski
+GET {{BudgetAppApi_HostAddress}}/api/budgets/admin/all
+
+
+
+
+

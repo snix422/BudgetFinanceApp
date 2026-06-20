@@ -27,7 +27,6 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetAllBudgets
 
         public async Task<IEnumerable<BudgetDTO>> Handle(GetAllBudgetsQuery request, CancellationToken cancellationToken)
         {
-            var userId = _currentUserService.UserId;
             var budgets = await _repository.GetAllAsync(cancellationToken);
             return _mapper.Map<IEnumerable<BudgetDTO>>(budgets);
         }

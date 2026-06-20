@@ -28,12 +28,13 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetBudgetById
 
         public async Task<BudgetDTO> Handle(GetBudgetByIdQuery request, CancellationToken cancellationToken)
         {
-            Budget? budget;
-            var userRole = _currentUserService.UserRole;
-            var userId = _currentUserService.UserId;
-            var userIdFilter = userRole == "Admin" ? null : userId;
+            
+            var userId = _currentUserService.UserId ?? throw new UnauthorizedException("User is not authenticated.");
+            var isAdmin = _currentUserService.userRole == "Admin";
 
-            budget = await _repository.GetByIdAsync(request.Id, userIdFilter, cancellationToken);
+            var budget = isAdmin 
+                ? await _repository.GetByIdAsync(request.Id, null,  cancellationToken) 
+                : await _repository.GetByIdAndUserIdAsync(request.Id, userId, cancellationToken);  
             
             if (budget == null)
             {

@@ -54,9 +54,10 @@ namespace BudgetApp.Api.Middlewares
                     result = JsonSerializer.Serialize(new { error = badRequestException.Message });
                     break;
 
-                case UnauthorizedAccessException unauthorizedAccessException:
+                case UnauthorizedAccessException :
+                case UnauthorizedException unauthorizedException:
                     code = (int)HttpStatusCode.Unauthorized; // 401
-                    result = JsonSerializer.Serialize(new { error = unauthorizedAccessException.Message });
+                    result = JsonSerializer.Serialize(new { error = unauthorizedException.Message });
                     break;
 
                 case ForbiddenException forbiddenException:

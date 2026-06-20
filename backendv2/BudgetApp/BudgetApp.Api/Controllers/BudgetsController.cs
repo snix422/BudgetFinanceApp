@@ -11,6 +11,7 @@ using BudgetApp.Application.Features.Budgets.Queries.GetBudgetsByUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BudgetApp.Api.Controllers
 {
@@ -28,6 +29,7 @@ namespace BudgetApp.Api.Controllers
         }
 
         [HttpGet("admin/all")]
+        [Authorize(Roles = "Admin")] // <-- Tylko użytkownicy z rolą "Admin" mogą uzyskać dostęp
         public async Task<ActionResult<IEnumerable<BudgetDTO>>> GetAllBudgets()
         {
             var budgets = await _mediator.Send(new GetAllBudgetsQuery());

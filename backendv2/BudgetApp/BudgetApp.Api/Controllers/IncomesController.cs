@@ -52,7 +52,7 @@ namespace BudgetApp.Api.Controllers
         public async Task<IActionResult> UpdateIncome(int budgetId, int id, [FromBody] UpdateIncomeDTO request)
         {
            
-            Console.WriteLine(id);
+         
             await _mediator.Send(new UpdateIncomeCommand(id, request.Title,request.Amount,request.Date, budgetId));
 
             return NoContent();

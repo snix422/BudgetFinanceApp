@@ -1,7 +1,6 @@
 
 
-using BudgetApp.Application.Interfaces;
-using BudgetApp.Application.Services;
+
 using BudgetApp.Domain.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;

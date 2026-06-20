@@ -52,7 +52,6 @@ namespace BudgetApp.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand request)
         {
-            // Implement login logic here
             var result = await _mediator.Send(request);
 
             if (!result.IsSuccess)
@@ -64,7 +63,6 @@ namespace BudgetApp.Api.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                //SameSite = SameSiteMode.Strict,
                 SameSite = _env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict,
                 Expires = DateTimeOffset.UtcNow.AddHours(1)
             };

@@ -31,12 +31,11 @@ namespace BudgetApp.Infrastructure
 
 
 
-            // 2. Konfiguracja Identity (PRZENIESIONE Z PROGRAM.CS)
+            
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<Context>() // Upewnij się, że to nazwa Twojego Contextu
+                .AddEntityFrameworkStores<Context>() 
                 .AddDefaultTokenProviders();
 
-            // 3. Konfiguracja JWT i Auth (PRZENIESIONE Z PROGRAM.CS)
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,8 +49,8 @@ namespace BudgetApp.Infrastructure
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],     // Zmieniono builder.Configuration na configuration
-                    ValidAudience = configuration["Jwt:Audience"], // Zmieniono builder.Configuration na configuration
+                    ValidIssuer = configuration["Jwt:Issuer"],     
+                    ValidAudience = configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
                 };
 
@@ -59,7 +58,7 @@ namespace BudgetApp.Infrastructure
                 {
                     OnMessageReceived = context =>
                     {
-                        // Twoja logika ciasteczkowa - idealnie tu pasuje
+                        
                         var accessToken = context.Request.Cookies["AuthToken"];
                         if (!string.IsNullOrEmpty(accessToken))
                         {
@@ -69,7 +68,7 @@ namespace BudgetApp.Infrastructure
                     }
                 };
             });
-            // Register infrastructure services here
+            
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBudgetRepository, BudgetRepository>();

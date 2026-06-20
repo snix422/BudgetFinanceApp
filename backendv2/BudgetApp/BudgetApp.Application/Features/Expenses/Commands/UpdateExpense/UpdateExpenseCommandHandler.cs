@@ -39,18 +39,7 @@ namespace BudgetApp.Application.Features.Expenses.Commands.UpdateExpense
                 throw new NotFoundException("Expense not found or access denied.");
             }
 
-            /*if (request.BudgetId != expense.BudgetId)
-            {
-                // Jeśli tak, musimy sprawdzić, czy ma prawo do TEGO NOWEGO budżetu
-                var targetBudget = await _budgetRepository.GetByIdAsync(request.BudgetId, userIdFilter, cancellationToken);
-
-                if (targetBudget == null)
-                {
-                    throw new BadRequestException("Cannot move expense to a budget you don't own.");
-                }
-
-                // Jeśli targetBudget istnieje i jest nasz -> jest OK.
-            }*/
+           
             var originalBudgetId = expense.BudgetId;
             _mapper.Map(request, expense);
             expense.BudgetId = originalBudgetId;

@@ -28,11 +28,6 @@ namespace BudgetApp.Application.Features.Auth.Commands.Login
 
             var result = await _authService.LoginAsync(loginUserDTO);
 
-            /*if (!result.IsSuccess)
-            {
-                throw new UnauthorizedAccessException(result.Error);
-            }*/
-
             return result;
         }
     }

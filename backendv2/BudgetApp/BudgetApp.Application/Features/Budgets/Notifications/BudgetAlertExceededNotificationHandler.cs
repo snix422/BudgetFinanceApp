@@ -27,7 +27,7 @@ namespace BudgetApp.Application.Features.Budgets.Notifications
             Zaloguj się do aplikacji, aby sprawdzić szczegóły.
         ";
 
-            // Zlecamy wysyłkę
+         
             await _emailSender.SendEmailAsync(
                 notification.UserEmail,
                 subject,

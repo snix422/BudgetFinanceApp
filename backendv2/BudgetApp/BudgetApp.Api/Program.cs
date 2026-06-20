@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
 using Serilog;
 using System.Text;
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
@@ -24,10 +25,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173") 
+            policy.WithOrigins("http://localhost:5173", "http://localhost:3000") // <-- Tutaj wpisz adres Frontendu (bez / na ko�cu)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials();
+                  .AllowCredentials(); // Wa�ne, je�li u�ywasz ciasteczek (HttpOnly cookies)
         });
 });
 
@@ -43,6 +44,8 @@ builder.Services.AddHangfire(configuration => configuration
    
     .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Dodaj serwer, kt�ry faktycznie b�dzie te zadania wykonywa�
+EnsureDatabaseExists(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddHangfireServer();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -93,4 +96,31 @@ using (var scope = app.Services.CreateScope())
 
     app.Run();
 
+static void EnsureDatabaseExists(string connectionString){
+    var database = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
+    var masterConnectionString = new SqlConnectionStringBuilder(connectionString)
+    {
+        InitialCatalog = "master" // Połącz się z bazą master, aby móc tworzyć inne bazy
+    }.ConnectionString;
+
+    for(int attempt=1; ; attempt++){
+        try{
+            using var connection = new SqlConnection(masterConnectionString);
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = $"IF DB_ID(@name) IS NULL CREATE DATABASE [{database}];";
+            command.Parameters.AddWithValue("@name", database);
+            command.ExecuteNonQuery();
+            return;
+            
+        }catch(SqlException ex)when(attempt<10){
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+        }
+
+    }
+
+}
+
 public partial class Program { }
+
+

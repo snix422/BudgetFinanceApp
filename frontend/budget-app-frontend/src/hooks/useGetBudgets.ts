@@ -36,7 +36,7 @@ const useGetBudgets = () => {
       toast.success('Dodano nowy budżet!');
     },
 
-    onError: (data, newBudget, context) => {
+    onError: (_data, newBudget, context) => {
       console.log(`Błąd przy dodawaniu "${newBudget.title}":`, error);
       toast.error('Wystąpił błąd z dodaniem budżetu!');
       queryClient.setQueryData(['budgets-query-key'], context?.previousBudget);
@@ -63,7 +63,7 @@ const useGetBudgets = () => {
       return { previousBudget };
     },
 
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       console.log('Edytowano budżet pomyślnie. ID:', variables.id);
       queryClient.invalidateQueries({ queryKey: ['budgets-query-key'] });
       toast.success('Edytowano budżet pomyślnie!');
@@ -93,7 +93,7 @@ const useGetBudgets = () => {
       return { previousBudget };
     },
 
-    onSuccess: (data, deletedId) => {
+    onSuccess: (_data, deletedId) => {
       toast.success('Usunięto budżet pomyślnie');
       console.log('Usunięto budżet o ID:', deletedId);
     },

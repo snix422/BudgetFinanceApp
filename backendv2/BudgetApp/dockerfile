@@ -1,28 +1,35 @@
-# ETAP 1: Budowanie (używamy obrazu SDK - on jest duży, ma wszystko)
+# ETAP 1: Budowanie (używamy obrazu SDK)
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Najpierw kopiujemy TYLKO plik projektu i pobieramy biblioteki.
-# Dzięki temu Docker "zapamięta" ten krok. Jak zmienisz kod, a nie biblioteki,
-# to ten etap wykona się w ułamku sekundy (cache).
-COPY ["TwojaNazwaProjektu.csproj", "./"]
-RUN dotnet restore "TwojaNazwaProjektu.csproj"
+# 1. Kopiujemy plik rozwiązania (widziałam na screenie, że masz nowoczesny BudgetApp.slnx)
+COPY BudgetApp.slnx ./
 
-# Dopiero teraz kopiujemy resztę kodu
+# 2. AUTOMATYZACJA: Kopiujemy wszystkie pliki .csproj zachowując strukturę ich folderów
+COPY ["BudgetApp.Api/BudgetApp.Api.csproj", "BudgetApp.Api/"]
+COPY ["BudgetApp.Application/BudgetApp.Application.csproj", "BudgetApp.Application/"]
+COPY ["BudgetApp.Domain/BudgetApp.Domain.csproj", "BudgetApp.Domain/"]
+COPY ["BudgetApp.Infrastructure/BudgetApp.Infrastructure.csproj", "BudgetApp.Infrastructure/"]
+
+ARG VITE_API_URL=http://localhost:8080/api/
+ENV VITE_API_URL=$VITE_API_URL
+# 3. Przywracamy pakiety dla całego rozwiązania
+RUN dotnet restore "BudgetApp.Api/BudgetApp.Api.csproj"
+
+# 4. Kopiujemy całą resztę kodu źródłowego
 COPY . .
 
-# Budujemy wersję Release (zoptymalizowaną)
-RUN dotnet publish "TwojaNazwaProjektu.csproj" -c Release -o /app/publish
+# 5. Budujemy wersję Release
+RUN dotnet publish "BudgetApp.Api/BudgetApp.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# ETAP 2: Uruchomienie (używamy obrazu Runtime - jest malutki, tylko to co niezbędne)
+# ETAP 2: Uruchomienie (obraz Runtime)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
-# Kopiujemy z Etapu 1 tylko gotowe pliki .dll i configi
 COPY --from=build /app/publish .
 
-# .NET 8 domyślnie nasłuchuje na porcie 8080
+
+
 EXPOSE 8080
 
-# To jest komenda, która startuje aplikację
-ENTRYPOINT ["dotnet", "TwojaNazwaProjektu.dll"]
+ENTRYPOINT ["dotnet", "BudgetApp.Api.dll"]

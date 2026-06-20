@@ -49,7 +49,7 @@ const useGetExpenses = (budgetId: number) => {
       }
     },
 
-    onSettled(data, error, variables) {
+    onSettled(_data, _error, variables) {
       queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },
@@ -80,7 +80,7 @@ const useGetExpenses = (budgetId: number) => {
       return { previousExpense };
     },
 
-    onSuccess(data, variables) {
+    onSuccess(_data, variables) {
       console.log('Edytowano wydatek pomyślnie. ID:', variables.id);
       toast.success('Edytowano wydatek pomyślnie!');
     },
@@ -93,7 +93,7 @@ const useGetExpenses = (budgetId: number) => {
       }
     },
 
-    onSettled(data, error, variables) {
+    onSettled(_data, _error, variables) {
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
     },
@@ -122,7 +122,7 @@ const useGetExpenses = (budgetId: number) => {
         queryClient.setQueryData(['expenses-query-key'], onMutateResult.previousExpenses);
       }
     },
-    onSettled(data, error, variables) {
+    onSettled(_data, _error, variables) {
       queryClient.invalidateQueries({ queryKey: ['expenses-query-key', variables.budgetId] });
       queryClient.invalidateQueries({ queryKey: ['budget-query-key', variables.budgetId] });
     },

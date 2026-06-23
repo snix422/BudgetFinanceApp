@@ -30,11 +30,11 @@ namespace BudgetApp.Application.Features.Budgets.Queries.GetBudgetById
         {
             
             var userId = _currentUserService.UserId ?? throw new UnauthorizedException("User is not authenticated.");
-            var isAdmin = _currentUserService.userRole == "Admin";
+            var isAdmin = _currentUserService.UserRole == "Admin";
 
             var budget = isAdmin 
                 ? await _repository.GetByIdAsync(request.Id, null,  cancellationToken) 
-                : await _repository.GetByIdAndUserIdAsync(request.Id, userId, cancellationToken);  
+                : await _repository.GetByIdAsync(request.Id, userId, cancellationToken);  
             
             if (budget == null)
             {

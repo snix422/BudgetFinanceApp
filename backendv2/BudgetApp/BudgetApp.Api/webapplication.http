@@ -78,6 +78,8 @@ Cookie: {{loginJan.response.headers.Set-Cookie}}
 GET {{BudgetAppApi_HostAddress}}/api/budgets/admin/all
 
 
-
+#### Get current user info
+GET {{BudgetAppApi_HostAddress}}/api/auth/me
+Cookie: AuthToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxYmJmMzIxZi05MTFjLTQ3YWQtYjhhOC05MDA5NjY1NzY5NDEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsInN1YiI6IjFiYmYzMjFmLTkxMWMtNDdhZC1iOGE4LTkwMDk2NjU3Njk0MSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjIwMDAwMDAwMDAsImlzcyI6IkJ1ZGdldEFwcCIsImF1ZCI6IkJ1ZGdldEFwcFVzZXJzIn0.5uyaStpn9GnAIvvajezqAVi3r3958KtDvNYWJXvG-6s
 
 

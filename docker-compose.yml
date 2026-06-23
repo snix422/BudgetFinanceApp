@@ -25,6 +25,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       # ZOBACZ ZMIANĘ PONIŻEJ:
       - ConnectionStrings__DefaultConnection=Server=${DB_HOST};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};TrustServerCertificate=True;
+    secrets:
+      - jwt_key
 
   # --- 3. BAZA DANYCH (SQL Server) ---
   db:
@@ -51,3 +53,7 @@ services:
 # Definicja wolumenu (dysku)
 volumes:
   mssql_data:
+
+secrets:
+  jwt_key:
+    file: ./secrets/jwt_key.txt

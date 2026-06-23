@@ -24,7 +24,7 @@ namespace BudgetApp.Api.Middlewares
             }
             catch (Exception ex)
             {
-                HandleExceptionAsync(context, ex);
+                await HandleExceptionAsync(context, ex);
             }
            
 
@@ -55,9 +55,9 @@ namespace BudgetApp.Api.Middlewares
                     break;
 
                 case UnauthorizedAccessException :
-                case UnauthorizedException unauthorizedException:
+                case UnauthorizedException:
                     code = (int)HttpStatusCode.Unauthorized; // 401
-                    result = JsonSerializer.Serialize(new { error = unauthorizedException.Message });
+                    result = JsonSerializer.Serialize(new { error = exception.Message });
                     break;
 
                 case ForbiddenException forbiddenException:

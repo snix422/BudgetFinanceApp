@@ -16,6 +16,21 @@ using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var jwtKeyFile = builder.Configuration["Jwt:KeyFile"] ?? "/run/secrets/jwt_key"; 
+if (File.Exists(jwtKeyFile))
+{
+    builder.Configuration["Jwt:Key"] = File.ReadAllText(jwtKeyFile).Trim();
+}
+var jwtKey = builder.Configuration["Jwt:Key"];
+if(string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new Exception("JWT key is not set. Please provide a valid key in the configuration or in the secrets file.");
+}
+if (System.Text.Encoding.UTF8.GetByteCount(jwtKey) < 32)
+{
+    throw new Exception("JWT key is too short. It must be at least 32 characters long for security reasons.");
+}
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 

@@ -14,6 +14,8 @@ using Serilog;
 using System.Text;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
+using BudgetApp.Api.Hangfire;
+using Hangfire.Dashboard;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,16 @@ var smtpPasswordFile = builder.Configuration["SmtpSettings:PasswordFile"] ?? "/r
 if (File.Exists(smtpPasswordFile))
 {
     builder.Configuration["SmtpSettings:Password"] = File.ReadAllText(smtpPasswordFile).Trim();
+}
+
+var dbPasswordFile = builder.Configuration["DbSettings:PasswordFile"] ?? "/run/secrets/db_password";
+if (File.Exists(dbPasswordFile))
+{
+    var csb = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"))
+    {
+        Password = File.ReadAllText(dbPasswordFile).Trim()
+    };
+    builder.Configuration["ConnectionStrings:DefaultConnection"] = csb.ConnectionString;
 }
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
@@ -103,7 +115,14 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboard();
+IDashboardAuthorizationFilter dashboardAuth = app.Environment.IsDevelopment() 
+    ? new AllowAllDashboardAuthorizationFilter() 
+    : new AdminDashboardAuthorizationFilter();
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { dashboardAuth }
+});
+
 
 
 app.MapControllers();

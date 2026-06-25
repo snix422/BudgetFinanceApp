@@ -49,7 +49,7 @@ namespace BudgetApp.IntegrationTests
                 .Setup(m => m.Send(It.IsAny<CreateBudgetCommand>(), default))
                 .ReturnsAsync(1);
 
-            var command = new CreateBudgetDTO { Title = "Wycieczka", TotalAmount = 2000, StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(2) };
+            var command = new CreateBudgetDTO("",0,DateTime.Today, DateTime.Today.AddDays(1));
 
             // Act
             var response = await _httpClient.PostAsJsonAsync("api/budgets", command);
@@ -97,7 +97,7 @@ namespace BudgetApp.IntegrationTests
             // Jeśli masz walidację w kontrolerze (np. FluentValidation), 
             // to serwer sam zwróci 400 przed wywołaniem Mediatora.
 
-            var command = new CreateBudgetDTO { Title = "" }; // Pusty tytuł
+            var command = new CreateBudgetDTO("",0,DateTime.Today,DateTime.Today.AddDays(1)); // Pusty tytuł
 
             // Act
             var response = await _httpClient.PostAsJsonAsync("api/budgets", command);

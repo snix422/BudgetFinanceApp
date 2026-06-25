@@ -46,11 +46,8 @@ namespace BudgetApp.UnitTests
             _userServiceMock.Setup(x => x.UserId).Returns(userId);
 
             // 2. Przygotowujemy komendę (zakładam, że masz settery, jeśli nie - użyj konstruktora)
-            var command = new CreateBudgetCommand
-            {
-                Title = "Nowy Budżet",
-                TotalAmount = 1000
-            };
+            var command = new CreateBudgetCommand("",0, DateTime.Today, DateTime.Today.AddDays(1));
+
 
             // 3. Przygotowujemy encję, którą zwróci Mapper
             // WAŻNE: Ustawiamy jej ID od razu, żeby sprawdzić, czy Handler je zwróci
@@ -96,7 +93,7 @@ namespace BudgetApp.UnitTests
             // Symulujemy brak usera (null lub pusty string)
             _userServiceMock.Setup(x => x.UserId).Returns((string)null);
 
-            var command = new CreateBudgetCommand { Title = "Hacker Attempt" };
+            var command = new CreateBudgetCommand("",0,DateTime.Today, DateTime.Today.AddDays(1));
 
             // ACT
             // Używamy Func, bo spodziewamy się wyjątku

@@ -6,8 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.15.0" />
-  </ItemGroup>
+ 
 
 </Project>

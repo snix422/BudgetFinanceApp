@@ -31,6 +31,12 @@ if (System.Text.Encoding.UTF8.GetByteCount(jwtKey) < 32)
 {
     throw new Exception("JWT key is too short. It must be at least 32 characters long for security reasons.");
 }
+
+var smtpPasswordFile = builder.Configuration["SmtpSettings:PasswordFile"] ?? "/run/secrets/smtp_password";
+if (File.Exists(smtpPasswordFile))
+{
+    builder.Configuration["SmtpSettings:Password"] = File.ReadAllText(smtpPasswordFile).Trim();
+}
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
